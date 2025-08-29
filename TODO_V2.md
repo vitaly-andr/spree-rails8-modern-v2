@@ -7,16 +7,13 @@ Clean integration of Spree Commerce into Rails 8 project following official Spre
 
 ### Phase 1: Official Spree Integration
 
-#### 🔧 Step 1.0: Prepare Assets and Vite Configuration
+#### 🔧 Step 1.0: Prepare Assets Configuration
 - [x] Copy complete assets structure from working project:
 ```bash
-# Copy assets structure
+# Copy from /Users/vitaly/Development/spree-rails8-modern/app/assets/
 cp -r /Users/vitaly/Development/spree-rails8-modern/app/assets/config ./app/assets/
 cp -r /Users/vitaly/Development/spree-rails8-modern/app/assets/builds ./app/assets/
 cp -r /Users/vitaly/Development/spree-rails8-modern/app/assets/stylesheets ./app/assets/
-
-# Copy Vite configuration
-cp /Users/vitaly/Development/spree-rails8-modern/vite.config.ts ./
 ```
 - [x] Ensure `app/assets/config/manifest.js` is configured correctly:
 ```javascript
@@ -29,49 +26,9 @@ cp /Users/vitaly/Development/spree-rails8-modern/vite.config.ts ./
 
 //= link_tree ../builds
 ```
-- [x] Ensure `vite.config.ts` is configured for Rails integration:
-```typescript
-import { defineConfig } from 'vite'
-import RubyPlugin from 'vite-plugin-ruby'
-
-export default defineConfig({
-  plugins: [
-    RubyPlugin(),
-  ],
-  build: {
-    rollupOptions: {
-      input: {
-        application: './app/javascript/application.js',
-        spree_storefront: './app/javascript/spree_storefront.js'
-      }
-    }
-  },
-  server: {
-    watch: {
-      ignored: [
-        '**/doc/**',      // игнорировать документацию
-        '**/tmp/**',
-        '**/log/**',
-        '**/node_modules/**',
-        '**/public/**',
-        '**/storage/**',
-        '**/*.md',        // игнорировать markdown
-      ],
-    },
-    host: 'localhost', // <--- важно!
-    port: 3036,
-    hmr: {
-      host: 'localhost', // <--- важно!
-      port: 3036,
-    },
-  },
-})
-```
-- **Important**: 
-  - NO `//= link_directory ../javascripts .js` line in manifest.js (causes Sprockets errors with Vite)
-  - Vite config uses `app/javascript/` paths (not `app/frontend/entrypoints/`)
-- **Test**: Assets and Vite configuration ready for Spree ✅
-- **Commit**: `feat(assets): Copy working assets structure, Vite config and configure manifest.js for Spree integration` ✅
+- **Important**: NO `//= link_directory ../javascripts .js` line (causes Sprockets errors with Vite)
+- **Test**: Assets configuration ready for Spree ✅
+- **Commit**: `feat(assets): Copy working assets structure and configure manifest.js for Spree and Vite integration` ✅
 
 #### 🔧 Step 1.1: Add Spree Gems to Gemfile
 - [x] Add Spree gems following [official documentation](https://spreecommerce.org/docs/developer/advanced/adding_spree_to_rails_app)
@@ -91,10 +48,26 @@ gem 'spree_sample', spree_opts # dummy data like products, taxons, etc (optional
 
 #### 🔧 Step 1.2: Fix Spree Generator Template (CRITICAL!)
 - [x] **IMPORTANT**: Before running generators, fix the template in gem:
-  - File: `/Users/vitaly/.rvm/gems/ruby-3.4.1/gems/spree_core-5.1.5/lib/generators/spree/install/templates/config/initializers/spree.rb`
-  - Line 90: Uncomment `Spree.admin_user_class = 'Spree::AdminUser'`
+  1. **Find actual gem path**: `bundle show spree_core`
+  2. **Navigate to template**: `<gem_path>/lib/generators/spree/install/templates/config/initializers/spree.rb`
+  3. **Fix line 90**: Change `# Spree.admin_user_class = 'AdminUser'` to `Spree.admin_user_class = 'Spree::AdminUser'`
+
+```bash
+# Step 1: Find actual gem path
+SPREE_PATH=$(bundle show spree_core)
+echo "Spree core gem path: $SPREE_PATH"
+
+# Step 2: Edit the template file
+# File: $SPREE_PATH/lib/generators/spree/install/templates/config/initializers/spree.rb
+# Line 90: Change from:
+#   # Spree.admin_user_class = 'AdminUser'
+# To:
+#   Spree.admin_user_class = 'Spree::AdminUser'
+```
+
 - **Why**: Generator template has admin_user_class commented out by default
-- **Test**: Template shows uncommented admin_user_class line ✅
+- **Important**: Bundle may use gem from `bundler/gems/` (GitHub) not `gems/` (rubygems.org)
+- **Test**: Template shows uncommented admin_user_class line with correct namespace ✅
 
 #### 🔧 Step 1.3: Initialize Devise
 - [x] Initialize Devise configuration
@@ -182,7 +155,7 @@ bin/rake spree_sample:load
 ## 🚨 Critical Installation Order (MUST FOLLOW EXACTLY!)
 
 ### Correct Sequence:
-1. **Copy assets structure AND vite.config.ts** from working project ✅
+1. **Copy assets structure** from working project ✅
 2. **Add Spree gems** → `bundle install` ✅
 3. **Fix gem template** (uncomment admin_user_class in spree_core gem) ✅
 4. **Initialize Devise** → `rails generate devise:install` ✅
@@ -190,21 +163,18 @@ bin/rake spree_sample:load
 6. **Run migrations** → `rails db:migrate` ✅
 7. **Run Spree installer** → `bin/rails g spree:install --user_class=Spree::User ...` ✅
 
-### Assets & Vite Configuration Requirements:
+### Assets Structure Requirements:
 - ✅ **DO** copy complete `app/assets/` structure from working project
-- ✅ **DO** copy `vite.config.ts` from working project
 - ✅ **DO** ensure `manifest.js` excludes `javascripts` directory
 - ✅ **DO** include `builds/` directory for Vite output
 - ✅ **DO** include `spree_admin_manifest` in manifest.js
-- ✅ **DO** use `app/javascript/` paths in vite.config.ts (not `app/frontend/entrypoints/`)
 - ❌ **DON'T** use `link_directory ../javascripts .js` (causes errors)
 
 ### Common Pitfalls Avoided:
 - ❌ **DON'T** create `User` model without Spree namespace
 - ❌ **DON'T** run `spree:install` before creating Devise models
 - ❌ **DON'T** forget to fix gem template before installation
-- ❌ **DON'T** skip copying assets structure and Vite config from working project
-- ❌ **DON'T** use wrong paths in vite.config.ts
+- ❌ **DON'T** skip copying assets structure from working project
 - ✅ **DO** use `Spree::User` and `Spree::AdminUser` for proper integration
 - ✅ **DO** fix template in gem before running generators
 - ✅ **DO** follow exact installation order
