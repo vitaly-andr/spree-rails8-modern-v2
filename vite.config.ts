@@ -5,6 +5,14 @@ export default defineConfig({
   plugins: [
     RubyPlugin(),
   ],
+  build: {
+    rollupOptions: {
+      input: {
+        application: './app/javascript/application.js',
+        spree_storefront: './app/javascript/spree_storefront.js'
+      }
+    }
+  },
   server: {
     watch: {
       ignored: [
