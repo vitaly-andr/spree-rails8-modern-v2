@@ -170,7 +170,6 @@ bin/rails g spree:install --user_class=Spree::User --install_admin=true --instal
 `admin_role = Spree::Role.find_or_create_by(name: 'admin')`
 `admin_user.spree_roles << admin_role`
 
-
 After these fixes, you must log out and log in again to get admin access.
 
 ### Phase 2: Verify Spree Installation

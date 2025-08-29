@@ -8,6 +8,15 @@ Bundler.require(*Rails.groups)
 
 module Materialize1C
   class Application < Rails::Application
+    # Prevent this deprecation message: https://github.com/svenfuchs/i18n/commit/3b6e56e
+    I18n.enforce_available_locales = true
+
+    config.to_prepare do
+      # Load application's model / class decorators
+      Dir.glob(File.join(File.dirname(__FILE__), "../app/**/*_decorator*.rb")) do |c|
+        Rails.configuration.cache_classes ? require(c) : load(c)
+      end
+    end
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 8.0
 
