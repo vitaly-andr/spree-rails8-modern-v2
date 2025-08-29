@@ -25,61 +25,61 @@ default: &default
 development:
   primary:
     <<: *default
-    database: spree_rails8_modern_development
+    database: spree_rails8_modern_fresh_development
   solid_queue:
     adapter: sqlite3
-    database: db/spree_rails8_modern_solid_queue_development.sqlite3
+    database: db/spree_rails8_modern_fresh_solid_queue_development.sqlite3
   solid_cable:
     adapter: sqlite3
-    database: db/spree_rails8_modern_solid_cable_development.sqlite3
+    database: db/spree_rails8_modern_fresh_solid_cable_development.sqlite3
   solid_cache:
     adapter: sqlite3
-    database: db/spree_rails8_modern_solid_cache_development.sqlite3
+    database: db/spree_rails8_modern_fresh_solid_cache_development.sqlite3
 
 
 test:
   primary:
     <<: *default
-    database: spree_rails8_modern_test
+    database: spree_rails8_modern_fresh_test
   solid_queue:
     adapter: sqlite3
-    database: db/spree_rails8_modern_solid_queue_test.sqlite3
+    database: db/spree_rails8_modern_fresh_solid_queue_test.sqlite3
   solid_cable:
     adapter: sqlite3
-    database: db/spree_rails8_modern_solid_cable_test.sqlite3
+    database: db/spree_rails8_modern_fresh_solid_cable_test.sqlite3
   solid_cache:
     adapter: sqlite3
-    database: db/spree_rails8_modern_solid_cache_test.sqlite3
+    database: db/spree_rails8_modern_fresh_solid_cache_test.sqlite3
 
 
 production:
   primary:
     <<: *default
-    database: spree_rails8_modern_production
+    database: spree_rails8_modern_fresh_production
   solid_queue:
     adapter: sqlite3
-    database: db/spree_rails8_modern_solid_queue_production.sqlite3
+    database: db/spree_rails8_modern_fresh_solid_queue_production.sqlite3
   solid_cable:
     adapter: sqlite3
-    database: db/spree_rails8_modern_solid_cable_production.sqlite3
+    database: db/spree_rails8_modern_fresh_solid_cable_production.sqlite3
   solid_cache:
     adapter: sqlite3
-    database: db/spree_rails8_modern_solid_cache_production.sqlite3
+    database: db/spree_rails8_modern_fresh_solid_cache_production.sqlite3
 
 
 staging:
   primary:
     <<: *default
-    database: spree_rails8_modern_staging
+    database: spree_rails8_modern_fresh_staging
   solid_queue:
     adapter: sqlite3
-    database: db/spree_rails8_modern_solid_queue_staging.sqlite3
+    database: db/spree_rails8_modern_fresh_solid_queue_staging.sqlite3
   solid_cable:
     adapter: sqlite3
-    database: db/spree_rails8_modern_solid_cable_staging.sqlite3
+    database: db/spree_rails8_modern_fresh_solid_cable_staging.sqlite3
   solid_cache:
     adapter: sqlite3
-    database: db/spree_rails8_modern_solid_cache_staging.sqlite3
+    database: db/spree_rails8_modern_fresh_solid_cache_staging.sqlite3
 
 
   # The specified database role being used to connect to PostgreSQL.
