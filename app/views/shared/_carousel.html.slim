@@ -1,0 +1,242 @@
+/ Inline стили для правильного позиционирования карусели
+style type="text/css"
+  | .slide-content-wrapper {
+  |   position: absolute !important;
+  |   top: 50% !important;
+  |   left: 50% !important;
+  |   width: 100% !important;
+  |   max-width: 600px !important;
+  |   height: auto !important;
+  |   display: flex !important;
+  |   flex-direction: column !important;
+  |   align-items: center !important;
+  |   justify-content: center !important;
+  |   text-align: center !important;
+
+  | }
+  | .slide-content-wrapper:nth-child(1) {
+  |   transform: translate3d(-650px, -50%, 0) scale3d(0.8, 0.8, 1);
+  |   opacity: 0.7;
+  |   z-index: 1;
+  | }
+  | .slide-content-wrapper:nth-child(2) {
+  |   transform: translate3d(-50%, -50%, 0) scale3d(1, 1, 1);
+  |   opacity: 1;
+  |   z-index: 3;
+  | }
+  | .slide-content-wrapper:nth-child(3) {
+  |   transform: translate3d(550px, -50%, 0) scale3d(0.8, 0.8, 1);
+  |   opacity: 0.7;
+  |   z-index: 1;
+  | }
+  | 
+  | /* Стили для контента слайдов */
+  | .heading-slider {
+  |   font-family: 'Red Hat Display', sans-serif !important;
+  |   font-size: 72px !important;
+  |   font-weight: 700 !important;
+  |   line-height: 1.1 !important;
+  |   letter-spacing: -0.02em !important;
+  |   text-transform: uppercase !important;
+  |   color: #111 !important;
+  |   margin: 0 0 10px 0 !important;
+  |   text-decoration: none !important;
+  | }
+  | 
+  | .text-slide {
+  |   font-family: 'Lato', sans-serif !important;
+  |   font-size: 18px !important;
+  |   font-weight: 400 !important;
+  |   color: #666 !important;
+  |   margin: 0 0 40px 0 !important;
+  |   text-transform: lowercase !important;
+  | }
+  | 
+  | .image-slider {
+  |   width: 600px !important;
+  |   height: 400px !important;
+  |   object-fit: cover !important;
+  |   border-radius: 20px !important;
+  |   display: block !important;
+  |   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+  | }
+  | 
+  | .link-project-banner.w-inline-block {
+  |   display: inline-block !important;
+  |   text-decoration: none !important;
+  |   border-radius: 20px !important;
+  |   overflow: hidden !important;
+  |   transition: transform 300ms ease, box-shadow 300ms ease !important;
+  | }
+  | 
+  | .link-project-banner.w-inline-block:hover {
+  |   transform: scale(1.05) !important;
+  |   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15) !important;
+  | }
+  | 
+  | /* Навигационные стрелки - PRODUCTION VERSION */
+  | .home-3-slider-arrow {
+  |   position: absolute !important;
+  |   top: 50% !important;
+  |   transform: translateY(-50%) !important;
+  |   z-index: 1000 !important;
+  |   cursor: pointer !important;
+  |   width: 60px !important;
+  |   height: 60px !important;
+  |   border-radius: 50% !important;
+  |   background: rgba(255, 255, 255, 0.9) !important;
+  |   backdrop-filter: blur(10px) !important;
+  |   border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  |   display: flex !important;
+  |   align-items: center !important;
+  |   justify-content: center !important;
+  |   transition: all 300ms ease !important;
+  |   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+  |   pointer-events: auto !important;
+  | }
+  | 
+  | .home-3-slider-arrow:hover {
+  |   background: rgba(255, 255, 255, 1) !important;
+  |   transform: translateY(-50%) scale(1.1) !important;
+  |   box-shadow: 0 6px 30px rgba(0, 0, 0, 0.15) !important;
+  | }
+  | 
+  | .left-slider-arrow.w-slider-arrow-left {
+  |   left: 40px !important;
+  | }
+  | 
+  | .right-slider-arrow.w-slider-arrow-right {
+  |   right: 40px !important;
+  | }
+  | 
+  | .slide-arrow {
+  |   width: 24px !important;
+  |   height: 24px !important;
+  |   display: block !important;
+  | }
+  | 
+  | /* Точки навигации */
+  | .w-slider-nav {
+  |   position: absolute !important;
+  |   bottom: 40px !important;
+  |   left: 50% !important;
+  |   transform: translateX(-50%) !important;
+  |   display: flex !important;
+  |   gap: 12px !important;
+  |   z-index: 1000 !important;
+  | }
+  | 
+  | .w-slider-dot {
+  |   width: 12px !important;
+  |   height: 12px !important;
+  |   border-radius: 50% !important;
+  |   background: rgba(255, 255, 255, 0.5) !important;
+  |   cursor: pointer !important;
+  |   transition: all 300ms ease !important;
+  |   border: 2px solid rgba(255, 255, 255, 0.3) !important;
+  | }
+  | 
+  | .w-slider-dot.w--current {
+  |   background: rgba(255, 255, 255, 1) !important;
+  |   border-color: rgba(255, 255, 255, 1) !important;
+  |   transform: scale(1.2) !important;
+  | }
+  | 
+  | .w-slider-dot:hover {
+  |   background: rgba(255, 255, 255, 0.8) !important;
+  |   transform: scale(1.1) !important;
+  | }
+  | 
+  | /* Контейнеры карусели */
+  | .section {
+  |   position: relative !important;
+  |   width: 100% !important;
+  |   height: 100vh !important;
+  |   min-height: 600px !important;
+  |   overflow: hidden !important;
+  | }
+  | 
+  | .slide-wrapper {
+  |   position: relative !important;
+  |   width: 100% !important;
+  |   height: 100% !important;
+  | }
+  | 
+  | .slider-banner.w-slider {
+  |   position: relative !important;
+  |   width: 100% !important;
+  |   height: 100% !important;
+  |   background: #fff !important;
+  | }
+  | 
+  | .slide-mask.w-slider-mask {
+  |   position: relative !important;
+  |   width: 100% !important;
+  |   height: 100% !important;
+  |   overflow: hidden !important;
+  | }
+  | 
+  | .slide-1-banner.w-slide {
+  |   position: relative !important;
+  |   width: 100% !important;
+  |   height: 100% !important;
+  |   display: block !important;
+  | }
+
+section.section
+  .slide-wrapper data-controller="carousel" data-w-id="5262c51f-4caf-90a5-fcb0-31855299f388"
+    .slider-banner.w-slider data-delay="4000" data-animation="over" data-autoplay="false" data-easing="ease-out-quint" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="3" data-duration="0" data-infinite="true" role="region" aria-label="carousel" data-carousel-target="slider"
+      .slide-mask.w-slider-mask data-carousel-target="mask"
+        
+        / ЕДИНСТВЕННЫЙ АКТИВНЫЙ СЛАЙД (как в оригинале Webflow)
+        .slide-1-banner.w-slide data-carousel-target="slide" data-slide-index="0" aria-label="1 of 3" role="group"
+          
+          / Content wrapper 1 - previous position (Chairs & stools)
+          .slide-content-wrapper.previous data-carousel-target="content"
+            .w-dyn-list
+              .w-dyn-items role="list"
+                .w-dyn-item role="listitem"
+                  .title-center-wrapper
+                    a.link-wrapper-heading-banner.w-inline-block href="#"
+                      h1.heading-slider Chairs & stools
+                    p.text-slide by Tania Panas
+                  a.link-project-banner.w-inline-block aria-label="Portfolio" href="#"
+                    img.image-slider src="https://cdn.prod.website-files.com/66e83267028497a1351f772e/66ed381ea56678d62790e120_2150794702%20(1).jpg" loading="lazy" alt="" sizes="(max-width: 479px) 100vw, (max-width: 767px) 300px, (max-width: 991px) 500px, 600px" srcset="https://cdn.prod.website-files.com/66e83267028497a1351f772e/66ed381ea56678d62790e120_2150794702%20(1)-p-500.jpg 500w, https://cdn.prod.website-files.com/66e83267028497a1351f772e/66ed381ea56678d62790e120_2150794702%20(1)-p-800.jpg 800w, https://cdn.prod.website-files.com/66e83267028497a1351f772e/66ed381ea56678d62790e120_2150794702%20(1)-p-1080.jpg 1080w, https://cdn.prod.website-files.com/66e83267028497a1351f772e/66ed381ea56678d62790e120_2150794702%20(1).jpg 1500w"
+          
+          / Content wrapper 2 - current position (home decore) - АКТИВНЫЙ
+          .slide-content-wrapper.current data-carousel-target="content"
+            .w-dyn-list
+              .w-dyn-items role="list"
+                .w-dyn-item role="listitem"
+                  .title-center-wrapper
+                    a.heading-slider href="#" home decore
+                    p.text-slide by Sandra
+                  a.link-project-banner.w-inline-block aria-label="Portfolio" href="#"
+                    img.image-slider src="https://cdn.prod.website-files.com/66e83267028497a1351f772e/66ed3697d66d1f67878af604_2150794690%20(1).jpg" loading="lazy" alt="" sizes="(max-width: 479px) 100vw, (max-width: 767px) 300px, (max-width: 991px) 500px, 600px" srcset="https://cdn.prod.website-files.com/66e83267028497a1351f772e/66ed3697d66d1f67878af604_2150794690%20(1)-p-500.jpg 500w, https://cdn.prod.website-files.com/66e83267028497a1351f772e/66ed3697d66d1f67878af604_2150794690%20(1)-p-800.jpg 800w, https://cdn.prod.website-files.com/66e83267028497a1351f772e/66ed3697d66d1f67878af604_2150794690%20(1)-p-1080.jpg 1080w, https://cdn.prod.website-files.com/66e83267028497a1351f772e/66ed3697d66d1f67878af604_2150794690%20(1).jpg 1500w"
+          
+          / Content wrapper 3 - next position (Lamps & pendants)
+          .slide-content-wrapper.next data-carousel-target="content"
+            .w-dyn-list
+              .w-dyn-items role="list"
+                .w-dyn-item role="listitem"
+                  .title-center-wrapper
+                    a.heading-slider href="#" Lamps & pendants
+                    p.text-slide by Sandra
+                  a.link-project-banner.w-inline-block aria-label="Portfolio" href="#"
+                    img.image-slider src="https://cdn.prod.website-files.com/66e83267028497a1351f772e/66ed37bddb551da37bee1a71_27424%20(1).jpg" loading="lazy" alt=""
+
+      / Navigation arrows
+      .home-3-slider-arrow.left-slider-arrow.w-slider-arrow-left data-action="click->carousel#prev" data-carousel-target="prevButton" role="button" tabindex="0" aria-label="previous slide"
+        img.slide-arrow src="https://cdn.prod.website-files.com/66e83267028497a1351f7717/66ea98d1dd85b800ae2225c6_Arrow%201%20(1).svg" loading="lazy" alt="Icon"
+      
+      .home-3-slider-arrow.right-slider-arrow.w-slider-arrow-right data-action="click->carousel#next" data-carousel-target="nextButton" role="button" tabindex="0" aria-label="next slide"
+        img.slide-arrow src="https://cdn.prod.website-files.com/66e83267028497a1351f7717/66ea98d1ce29e80afab0eb8c_Arrow%201.svg" loading="lazy" alt="Icon"
+      
+      / Dot navigation
+      .w-slider-nav.w-round data-carousel-target="navigation"
+        .w-slider-dot.w--current data-action="click->carousel#goToSlideFromDot" data-slide-index="0" role="button" aria-label="Go to slide 1" aria-pressed="true"
+        .w-slider-dot data-action="click->carousel#goToSlideFromDot" data-slide-index="1" role="button" aria-label="Go to slide 2" aria-pressed="false"
+        .w-slider-dot data-action="click->carousel#goToSlideFromDot" data-slide-index="2" role="button" aria-label="Go to slide 3" aria-pressed="false"
+
+  .decorate-text-home-3
+

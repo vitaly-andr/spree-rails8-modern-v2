@@ -1,0 +1,19 @@
+/ Media Gallery Component - Expandable media gallery for products
+- if has_media?
+  .media-gallery class=[layout_class, scroll_class] id=component_id data-controller="media-gallery" data-media-gallery-auto-replace-value=auto_replace_main style=gallery_style
+    .media-gallery-container
+      - processed_media_items.each do |item|
+        .media-gallery-item data-media-gallery-target="item" data-action="click->media-gallery#selectMedia" data-media-url=item[:url] data-media-index=item[:index]
+          - if item[:type] == :video
+            .media-thumbnail-wrapper.video-thumbnail
+              video.media-thumbnail muted=true preload="metadata"
+                source src=item[:thumbnail]
+              .video-play-overlay
+                svg.play-icon viewBox="0 0 24 24" fill="currentColor"
+                  path d="M8 5v14l11-7z"
+          - else
+            .media-thumbnail-wrapper.image-thumbnail
+              img.media-thumbnail src=item[:thumbnail] alt=item[:alt] loading="lazy"
+          
+          - if item[:title]
+            .media-item-title = item[:title]

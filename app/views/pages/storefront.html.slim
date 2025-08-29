@@ -1,0 +1,83 @@
+
+main.min-h-screen.bg-gray-50 data-scroll-container="" data-controller="locomotive"
+  
+  section.mb-16 data-scroll-section="" data-controller="navbar-component"
+
+    = render 'shared/navbar'
+
+  section.bg-gray-100 data-scroll-section=""
+    = render Carousel::CarouselComponent.new(slides: [ \
+        { title: "Chairs & stools", subtitle: "by Tania Panas", image: "https://cdn.prod.website-files.com/66e83267028497a1351f772e/66ed381ea56678d62790e120_2150794702%20(1).jpg", alt: "Modern chairs and stools collection" }, \
+        { title: "Home decore", subtitle: "by Sandra", image: "https://cdn.prod.website-files.com/66e83267028497a1351f772e/66ed3697d66d1f67878af604_2150794690%20(1).jpg", alt: "Home decoration collection" }, \
+        { title: "Lamps & pendants", subtitle: "by Sandra", image: "https://cdn.prod.website-files.com/66e83267028497a1351f772e/66ed37bddb551da37bee1a71_27424%20(1).jpg", alt: "Modern lamps and pendant lights" }, \
+        { title: "Bistro Collection", subtitle: "by Marcus", image: vite_asset_path("assets/bistro_statuario_crop_xs_1x.jpg"), alt: "Bistro statuario collection" }, \
+        { title: "Lithic Design", subtitle: "by Elena", image: vite_asset_path("assets/staturio_lithic_crop_1x.jpg"), alt: "Staturio lithic design" }, \
+        { title: "Natural Stone", subtitle: "by David", image: vite_asset_path("assets/tres_natural_crop_xs_1x.jpg"), alt: "Tres natural stone collection" } \
+      ])
+
+
+  section.py-24.bg-white data-scroll-section=""
+    .max-w-screen-xl.mx-auto.px-4
+      .text-center.mb-16
+        h2.text-4xl.font-bold.text-gray-900.mb-4 data-scroll="" data-scroll-delay="0.1" Product Cards
+        p.text-lg.text-gray-600 data-scroll="" data-scroll-delay="0.2" Карточки товаров в стиле Madera с интерактивными элементами
+      
+      .products-grid.grid.grid-cols-1.md:grid-cols-2.lg:grid-cols-3.gap-8
+        = render CatalogCard::CatalogCardComponent.new( \
+            title: "The Cozy Lounge Chair", \
+            subtitle: "Contour tufted accent chair 29.1″W, deep blue", \
+            price: "$ 175.95 USD", \
+            image: vite_asset_path("assets/products/chair-1.webp"), \
+            href: "/product/chair-1", \
+            id: "chair-1" \
+          )
+        
+        = render CatalogCard::CatalogCardComponent.new( \
+            title: "Modern Minimalist Chair", \
+            subtitle: "Poliframe tuffed accent chair 29.1″W, jet black", \
+            price: "$ 175.95 USD", \
+            image: vite_asset_path("assets/products/chair-2.webp"), \
+            href: "/product/chair-2", \
+            id: "chair-2", \
+            on_sale: true, \
+            sale_price: "$ 139.95 USD" \
+          )
+        
+        = render CatalogCard::CatalogCardComponent.new( \
+            title: "Rectangular Coffee Table", \
+            subtitle: "Poliframe Rectangular Coffee Table, 48″W, Matte", \
+            price: "$ 82.54 USD", \
+            image: vite_asset_path("assets/products/table-1.jpg"), \
+            href: "/product/table-1", \
+            id: "table-1" \
+          )
+        
+        = render CatalogCard::CatalogCardComponent.new( \
+            title: "Wooden Wall Clock", \
+            subtitle: "Poliframe Wooden Wall Clock, 18″W, Natural Oak", \
+            price: "$ 78.88 USD", \
+            image: vite_asset_path("assets/products/clock-1.jpg"), \
+            href: "/product/clock-1", \
+            id: "clock-1" \
+          )
+        
+        = render CatalogCard::CatalogCardComponent.new( \
+            title: "Gold Table Lamp", \
+            subtitle: "Poliframe Table Lamp, 15″H, Brushed Gold", \
+            price: "$ 52.78 USD", \
+            image: vite_asset_path("assets/products/lamp-1.jpg"), \
+            href: "/product/lamp-1", \
+            id: "lamp-1", \
+            on_sale: true, \
+            sale_price: "$ 39.99 USD" \
+          )
+        
+        = render CatalogCard::CatalogCardComponent.new( \
+            title: "Wood Coffee Table", \
+            subtitle: "Poliframe tufted coffee table, 40″W, wood", \
+            price: "$ 95.99 USD", \
+            image: vite_asset_path("assets/products/table-2.jpg"), \
+            href: "/product/table-2", \
+            id: "table-2" \
+          )
+        

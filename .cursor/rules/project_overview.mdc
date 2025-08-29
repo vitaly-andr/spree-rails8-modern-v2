@@ -1,0 +1,48 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Materialize_1C Project Overview
+
+## Project Purpose
+Materialize_1C is a platform for analyzing and creating materialized views for 1C:Enterprise databases on PostgreSQL. It helps with:
+
+- Connecting to a 1C PostgreSQL database
+- Analyzing the database structure and metadata
+- Creating and managing materialized views for analytics
+- Converting cryptic 1C table/field names to human-readable formats
+- Managing and refreshing materialized views through a web interface
+
+## Key Features
+- Database structure analysis and metadata extraction
+- Mapping between SQL table names and 1C entity names
+- Table search functionality
+- Metadata import from Excel files
+
+## Project Structure
+- `app/models/db_metadata/` - Models for database metadata
+- `app/models/table_mapping.rb` - Mapping between SQL tables and 1C tables
+- `app/models/enum_mapping.rb` - Mapping for 1C enumerations
+- `app/services/db_structure_analyzer.rb` - Service to analyze 1C database structure
+- `app/services/metadata_xlsx_importer.rb` - Service to import metadata from Excel files
+- `app/controllers/` - Controllers for web interface
+
+## Database Configuration
+- Primary database: PostgreSQL (materialize1c_development)
+- Source 1C database: PostgreSQL (keramir_samara) - Read-only access
+- Additional SQLite databases for:
+  - Solid Queue (background job processing)
+  - Solid Cable (WebSocket communication)
+  - Solid Cache (caching)
+
+## Frontend Stack
+- Vite with Rails integration
+- Turbo and Stimulus for JavaScript functionality
+- Tailwind CSS for styling
+- Slim templates for views
+
+## Important Notes
+- The source 1C database (keramir_samara) is used in read-only mode
+- All database modifications should only be made to the primary database
+- When deployed, ensure SQLite files are on persistent storage

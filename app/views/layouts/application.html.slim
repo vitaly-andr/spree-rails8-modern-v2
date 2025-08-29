@@ -1,0 +1,49 @@
+doctype html
+html lang="ru"
+  head
+    meta charset="UTF-8"
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
+    title
+      = content_for?(:title) ? yield(:title) + " | Materialize 1C" : "Materialize 1C"
+    = csrf_meta_tags
+    = csp_meta_tag
+    = vite_client_tag
+    = vite_javascript_tag "application"
+    / Иконки и фавиконки
+    link rel="icon" href="/icon.svg" type="image/svg+xml"
+
+  body.bg-slate-50.text-slate-600.flex.h-screen.overflow-hidden data-controller="layout dropdown"
+    / Сайдбар (боковое меню)
+    = render "layouts/components/sidebar"
+    
+    / Основной контент
+    .flex-1.flex.flex-col.overflow-hidden
+      / Хедер
+      = render "layouts/components/header"
+      
+      / Основное содержимое с прокруткой
+      main.flex-1.overflow-y-auto.p-4.sm:p-6.lg:p-8
+        / Уведомления и флеш-сообщения
+        - if notice.present?
+          .bg-green-50.border-l-4.border-green-500.p-4.mb-6
+            .flex
+              .flex-shrink-0
+                = heroicon "check-circle", class: "h-5 w-5 text-green-500"
+              .ml-3
+                p.text-sm.text-green-700 = notice
+        
+        - if alert.present?
+          .bg-red-50.border-l-4.border-red-500.p-4.mb-6
+            .flex
+              .flex-shrink-0
+                = heroicon "exclamation-triangle", class: "h-5 w-5 text-red-500"
+              .ml-3
+                p.text-sm.text-red-700 = alert
+        
+        / Заголовок страницы
+        - if content_for?(:page_title)
+          .mb-6
+            h1.text-2xl.sm:text-3xl.font-bold.text-slate-800 = yield :page_title
+        
+        / Основной контент страницы
+        = yield

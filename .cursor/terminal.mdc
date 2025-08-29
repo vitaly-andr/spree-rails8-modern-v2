@@ -1,0 +1,65 @@
+---
+alwaysApply: true
+---
+commit_rules:
+  pre_commit_checks:
+    - "Always check git status before committing"
+    - "Review all changes with git diff only if necessary"
+    - "Group changes by type (docs, fix, feat, etc.)"
+    - "Split commits if changes affect different components"
+    - "Verify no sensitive data is being committed"
+  
+  commit_message_format:
+    types:
+      - "feat: New feature"
+      - "fix: Bug fix"
+      - "docs: Documentation changes"
+      - "style: Formatting, missing semicolons, etc"
+      - "refactor: Code restructuring"
+      - "test: Adding tests"
+      - "chore: Maintenance"
+    
+    format: "<type>(<scope>): <description>"
+    examples:
+      - "feat(auth): add password authentication"
+      - "fix(ssh): correct port configuration"
+      - "docs(readme): update installation steps"
+    
+    scope_rules:
+      - "Use lowercase"
+      - "Keep it short and descriptive"
+      - "Use component or module name"
+    
+    description_rules:
+      - "Start with lowercase"
+      - "Use imperative mood"
+      - "No period at the end"
+      - "Keep under 50 characters"
+
+  change_verification:
+    steps:
+      - "Run git status to see all changes"
+      - "Review each changed file"
+      - "Group related changes"
+      - "Split unrelated changes into separate commits"
+      - "Check for sensitive data"
+      - "Verify all necessary files are included"
+    
+    file_checks:
+      - "No .env files"
+      - "No .pem files"
+      - "No password or key files"
+      - "No large binary files"
+      - "No temporary files"
+
+  best_practices:
+    - "Make atomic commits (one logical change per commit)"
+    - "Write clear commit messages"
+    - "Group related changes"
+    - "Split large changes into smaller commits"
+    - "Review changes before committing"
+    - "Use appropriate commit type"
+    - "Include relevant scope"
+    - "Check for sensitive data"
+
+

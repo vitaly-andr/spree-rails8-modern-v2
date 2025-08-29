@@ -1,0 +1,178 @@
+main.min-h-screen.bg-white data-scroll-container="" data-controller="locomotive navbar-component"
+  
+  section.mb-8 data-scroll-section=""
+    = render 'shared/navbar'
+
+  section.py-8.bg-white data-scroll-section=""
+    / Back to catalog link
+    .max-w-7xl.mx-auto.px-4.mb-8
+      a.inline-flex.items-center.text-gray-600.hover:text-gray-900.transition-colors href="/storefront"
+        svg.w-4.h-4.mr-2 fill="none" stroke="currentColor" viewBox="0 0 24 24"
+          path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"
+        = "Back to Products"
+
+    / Dynamic product detail based on ID
+    - case @product_id
+    - when "chair-1"
+      = render ProductDetail::ProductDetailComponent.new( \
+          title: "The Cozy Lounge Chair", \
+          subtitle: "Contour tufted accent chair 29.1″W, deep blue", \
+          price: "$ 175.95 USD", \
+          image: vite_asset_path("assets/products/chair-1.webp"), \
+          images: [vite_asset_path("assets/products/chair-2.webp")], \
+          media_gallery: [ \
+            { \
+              url: vite_asset_path("assets/products/chair-2.webp"), \
+              thumbnail: vite_asset_path("assets/products/chair-2.webp"), \
+              title: "Side View", \
+              alt: "Chair side view" \
+            } \
+          ], \
+          color: "Deep Blue", \
+          material: "Fabric", \
+          width: "29.1 inches", \
+          depth: "28 inches", \
+          height: "32 inches", \
+          description: "Elevate your space with The Cozy Lounge Chair, designed to blend seamlessly into any modern décor while providing exceptional comfort and style.", \
+          features: ["High-quality fabric upholstery", "Supportive foam cushioning", "Sturdy wooden frame construction", "Non-slip rubber feet"], \
+          is_liked: true, \
+          id: "chair-1" \
+        )
+
+    - when "chair-2"
+      = render ProductDetail::ProductDetailComponent.new( \
+          title: "Modern Minimalist Chair", \
+          subtitle: "Poliframe tuffed accent chair 29.1″W, jet black", \
+          price: "$ 175.95 USD", \
+          sale_price: "$ 139.95 USD", \
+          on_sale: true, \
+          image: vite_asset_path("assets/products/chair-2.webp"), \
+          images: [vite_asset_path("assets/products/chair-1.webp")], \
+          media_gallery: [ \
+            { \
+              url: vite_asset_path("assets/products/chair-2.webp"), \
+              title: "Front View" \
+            }, \
+            { \
+              url: vite_asset_path("assets/products/lamp-1.jpg"), \
+              title: "Assembly" \
+            }, \
+            { \
+              url: vite_asset_path("assets/products/table-2.jpg"), \
+              title: "Room Setup" \
+            } \
+          ], \
+          color: "Jet Black", \
+          material: "Leather", \
+          width: "29.1 inches", \
+          depth: "28 inches", \
+          height: "32 inches", \
+          description: "Transform your living area or workspace with the Modern Minimalist Chair, expertly crafted to embody simplicity and elegance.", \
+          features: ["Premium leather upholstery", "Ergonomic design", "Durable metal frame", "360-degree swivel base"], \
+          is_liked: false, \
+          id: "chair-2" \
+        )
+
+    - when "table-1"
+      = render ProductDetail::ProductDetailComponent.new( \
+          title: "Rectangular Coffee Table", \
+          subtitle: "Poliframe Rectangular Coffee Table, 48″W, Matte", \
+          price: "$ 82.54 USD", \
+          image: vite_asset_path("assets/products/table-1.jpg"), \
+          media_gallery: [ \
+            { \
+              url: vite_asset_path("assets/products/table-1.jpg"), \
+              title: "Table Top" \
+            }, \
+            { \
+              url: vite_asset_path("assets/products/table-2.jpg"), \
+              title: "Side View" \
+            }, \
+            { \
+              url: vite_asset_path("assets/products/chair-1.webp"), \
+              title: "With Seating" \
+            }, \
+            { \
+              url: vite_asset_path("assets/products/chair-2.webp"), \
+              title: "Living Room" \
+            }, \
+            { \
+              url: vite_asset_path("assets/products/lamp-1.jpg"), \
+              title: "Styling" \
+            } \
+          ], \
+          color: "Matte Black", \
+          material: "Metal & Glass", \
+          width: "48 inches", \
+          depth: "24 inches", \
+          height: "16 inches", \
+          description: "A sleek and modern coffee table that serves as the perfect centerpiece for your living room.", \
+          features: ["Tempered glass top", "Powder-coated metal frame", "Contemporary design", "Easy to clean"], \
+          is_liked: false, \
+          id: "table-1" \
+        )
+
+    - when "clock-1"
+      = render ProductDetail::ProductDetailComponent.new( \
+          title: "Wooden Wall Clock", \
+          subtitle: "Poliframe Wooden Wall Clock, 18″W, Natural Oak", \
+          price: "$ 78.88 USD", \
+          image: vite_asset_path("assets/products/clock-1.jpg"), \
+          color: "Natural Oak", \
+          material: "Wood", \
+          width: "18 inches", \
+          depth: "2 inches", \
+          height: "18 inches", \
+          description: "Add warmth and functionality to your walls with this beautiful wooden wall clock.", \
+          features: ["Natural oak construction", "Silent quartz movement", "Large numbers", "Battery operated"], \
+          is_liked: false, \
+          id: "clock-1" \
+        )
+
+    - when "lamp-1"
+      = render ProductDetail::ProductDetailComponent.new( \
+          title: "Gold Table Lamp", \
+          subtitle: "Poliframe Table Lamp, 15″H, Brushed Gold", \
+          price: "$ 52.78 USD", \
+          sale_price: "$ 39.99 USD", \
+          on_sale: true, \
+          image: vite_asset_path("assets/products/lamp-1.jpg"), \
+          color: "Brushed Gold", \
+          material: "Metal", \
+          width: "8 inches", \
+          depth: "8 inches", \
+          height: "15 inches", \
+          description: "Illuminate your space with this elegant brushed gold table lamp.", \
+          features: ["Brushed gold finish", "Fabric lampshade", "LED compatible", "In-line switch"], \
+          is_liked: false, \
+          id: "lamp-1" \
+        )
+
+    - when "table-2"
+      = render ProductDetail::ProductDetailComponent.new( \
+          title: "Wood Coffee Table", \
+          subtitle: "Poliframe tufted coffee table, 40″W, wood", \
+          price: "$ 95.99 USD", \
+          image: vite_asset_path("assets/products/table-2.jpg"), \
+          color: "Natural Wood", \
+          material: "Solid Wood", \
+          width: "40 inches", \
+          depth: "20 inches", \
+          height: "18 inches", \
+          description: "A beautiful solid wood coffee table that brings natural warmth to your living space.", \
+          features: ["Solid wood construction", "Natural grain pattern", "Smooth finish", "Handcrafted quality"], \
+          is_liked: false, \
+          id: "table-2" \
+        )
+
+    - else
+      = render ProductDetail::ProductDetailComponent.new( \
+          title: "Product Not Found", \
+          subtitle: "This product could not be found", \
+          price: "$ 0.00 USD", \
+          image: vite_asset_path("assets/products/chair-1.webp"), \
+          description: "The requested product could not be found. Please return to the catalog.", \
+          is_liked: false, \
+          id: "not-found" \
+        )
+        

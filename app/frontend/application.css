@@ -1,0 +1,83 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* ВСЕ @import ДОЛЖНЫ БЫТЬ В НАЧАЛЕ */
+@import "./styles/navbar.css";
+@import "./styles/mobile-sidebar.css";
+@import "../components/carousel/carousel_component.css";
+@import "../components/catalog_card/catalog_card_component.css";
+@import "../components/product_detail/product_detail_component.css";
+@import "../components/media_gallery/media_gallery_component.css";
+@import "./temp/_ceramir_landing.css";
+
+/* Tailwind v4 @source для автоматического сканирования классов */
+@source "./app/views/**/*.slim";
+@source "./app/views/**/*.erb"; 
+@source "./app/components/**/*.slim";
+@source "./app/frontend/**/*.js";
+:root {
+  --gray-background: #e9e7e8;
+  --black: #111;
+  --dark-gray: #9f9d9e;
+  --black-60: #1119;
+  --light-gray: #efecf0;
+  --white: white;
+  --primary\<deleted\|variable-478a3a9e\>: #0f5cfa;
+  --transparent: #0000;
+  --red: #ec1b29;
+  --beige-dark: #ebb48c;
+  --beige-medium: #ecbe9d;
+  --beige-light: #eac79b;
+  
+  /* Шрифты для Tailwind v4 */
+  --font-sans: "Red Hat Display", sans-serif;
+  --font-navbar: "Montserrat", sans-serif;
+}
+/* Locomotive Scroll v5 - нет отдельного CSS файла */
+.decorate-footer-home-3 {
+  z-index: -1;
+  background-image: radial-gradient(circle closest-corner at 50% 50%, var(--beige-medium), var(--beige-light) 50%);
+  filter: blur(40px);
+  border-radius: 50%;
+  width: 160px;
+  height: 160px;
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  right: 0%;
+}
+
+/* Custom Locomotive Scroll styles */
+html.lenis, 
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+/* Базовые стили для контейнера */
+[data-scroll-container] {
+  overflow-x: hidden;
+}
+
+/* Smooth scroll активация */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Базовые шрифты для Tailwind v4 */
+body {
+  font-family: var(--font-sans);
+}
+
+/* Класс для навбара и подписей */
+.font-navbar {
+  font-family: var(--font-navbar);
+}
+

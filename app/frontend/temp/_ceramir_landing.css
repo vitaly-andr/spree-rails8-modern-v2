@@ -1,0 +1,109 @@
+/* ========================================
+   ВРЕМЕННЫЕ СТИЛИ ДЛЯ CERAMIR ЛЕНДИНГА
+   Взято из /Users/vitaly/Development/Ceramir/ceramir.bitrix24site.ru/index.html
+   TODO: Переделать на компонентный подход
+   ======================================== */
+
+/* Фоновые изображения должны загружаться */
+.hero-bg {
+  background-image: url('https://cdn-ru.bitrix24.ru/b34678744/landing/750/7509ecaf0e764d2208f3cdeadb4d2181/bka4cubslwer3qktn0okauewzfgs5sbt.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.team-bg {
+  background-image: url('https://cdn-ru.bitrix24.ru/b34678744/landing/631/631e168c8b0a0736541bac964d3d0457/4obzduiw0ac646welgevzamvhvvbnmxc.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.contact-bg {
+  background-image: url('https://cdn-ru.bitrix24.ru/b34678744/landing/ce5/ce5c3d94cb242989cbc84db268377da1/f8deokuelt6pxixeza6k2q1h7foivang.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Фотографии команды - прямоугольные, не круглые! */
+.team-avatar-1 {
+  background-image: url('https://via.placeholder.com/400x600/4A90E2/FFFFFF?text=А.Иванов');
+  background-size: cover;
+  background-position: center;
+}
+
+.team-avatar-2 {
+  background-image: url('https://via.placeholder.com/400x600/E24A90/FFFFFF?text=М.Смирнова');
+  background-size: cover;
+  background-position: center;
+}
+
+.team-avatar-3 {
+  background-image: url('https://via.placeholder.com/400x600/90E24A/FFFFFF?text=Д.Кузнецов');
+  background-size: cover;
+  background-position: center;
+}
+
+.team-avatar-4 {
+  background-image: url('https://via.placeholder.com/400x600/E2904A/FFFFFF?text=Е.Орлова');
+  background-size: cover;
+  background-position: center;
+}
+
+/* Z-index utilities */
+.z-10 {
+  z-index: 10;
+}
+
+.z-20 {
+  z-index: 20;
+}
+
+.z-30 {
+  z-index: 30;
+}
+
+/* Custom animations for GSAP */
+.js-animation {
+  opacity: 0;
+  transform: translateY(50px);
+}
+
+.js-animation.fadeInLeft {
+  transform: translateX(-100px);
+}
+
+.js-animation.fadeInRight {
+  transform: translateX(100px);
+}
+
+.js-animation.fadeIn {
+  transform: none;
+}
+
+/* Carousel styles */
+.js-carousel {
+  position: relative;
+  overflow: hidden;
+}
+
+.js-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.carousel-arrow-left,
+.carousel-arrow-right {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.carousel-arrow-left:hover,
+.carousel-arrow-right:hover {
+  background-color: rgba(57, 73, 160, 1) !important;
+}

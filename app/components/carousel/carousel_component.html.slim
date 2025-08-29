@@ -1,0 +1,36 @@
+/ Carousel ViewComponent - Grid layout для предотвращения наложения
+section.carousel-component class="py-[min(10vh,5rem)] w-full h-screen overflow-hidden grid grid-rows-[minmax(400px,60vh)_minmax(200px,20vh)_60px]" id="carousel-component-#{id}" style="opacity: 0;" data=carousel_data_attributes
+  / Основная область карусели
+  .vc-container class="relative w-full max-w-7xl mx-auto"
+    .vc-stage class="relative w-full h-full flex items-center justify-center"
+      - slides.each_with_index do |slide, index|
+        .vc-slide class="flex flex-col items-center" data=slide_data_attributes(index)
+          h2.vc-slide-title = slide[:title]
+          p.vc-slide-subtitle class="text-sm text-gray-500 mb-6 text-center" = slide[:subtitle]
+          .vc-slide-image-container class="w-[600px] h-[370px] max-w-[90vw] max-h-[50vh] overflow-hidden relative"
+            img.vc-slide-image class="w-full h-full object-cover" src=slide[:image] alt=(slide[:alt] || slide[:title]) loading="lazy"
+    
+    / ОДИН ОБЩИЙ Lottie canvas для всех слайдов
+    .lottie-swipe-hint class="absolute bottom-10 left-1/2 transform -translate-x-1/2 pointer-events-none opacity-0 z-20"
+      canvas data-carousel--carousel-component-target="lottieCanvas" class="w-12 h-12"
+    
+    / Навигационные стрелки
+    .vc-navigation class="absolute inset-0 flex items-center justify-center pointer-events-none z-10"
+      button.vc-nav-prev class="flex items-center justify-center pointer-events-auto absolute" role="button" tabindex="0" aria-label="previous slide" data-carousel--carousel-component-target="prevButton" data-action="click->carousel--carousel-component#previousSlide"
+        = vite_image_tag 'assets/Arrow.svg', loading: "lazy", alt: "Previous", class: "slide-arrow-left w-6 h-6"   
+      button.vc-nav-next class="flex items-center justify-center pointer-events-auto absolute" role="button" tabindex="0" aria-label="next slide" data-carousel--carousel-component-target="nextButton" data-action="click->carousel--carousel-component#nextSlide"
+        = vite_image_tag 'assets/Arrow.svg', loading: "lazy", alt: "Next", class: "slide-arrow-right w-6 h-6"     
+
+    / Декоративный круг в правом нижнем углу карусели
+    .decorate-circle class="absolute"
+
+  / Текстовая секция в отдельной Grid области
+  .text-section class="px-4 py-6 text-center max-w-[600px] mx-auto flex items-center justify-center z-10" data-w-id="fce5574a-10a8-1f48-f756-24bc6ea2a3ec"
+    h5.text-description Decorate your house as you see fit! With our grandiose collections of contemporary furniture and unique house décor we will help you make your household as comfortable as possible while.
+
+  / Точки в нижней Grid области
+  .vc-dots class="flex justify-center items-center space-x-3"
+    - slides.each_with_index do |slide, index|
+      button.vc-dot class="w-3 h-3 rounded-full border-none cursor-pointer" data-carousel--carousel-component-target="dot" data-action="click->carousel--carousel-component#goToSlide" data-slide-index=index
+
+

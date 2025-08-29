@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# rails-way: запуск Rails и Vite одновременно через foreman и Procfile.dev
+exec foreman start -f Procfile.dev

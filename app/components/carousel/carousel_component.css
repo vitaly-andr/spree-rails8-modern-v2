@@ -1,0 +1,263 @@
+@layer components {
+  /* Grid layout для предотвращения наложения */
+  .carousel-component {
+    background:var(--gray-background);
+  }
+
+  /* Слайды - базовые стили без анимаций */
+  .carousel-component .vc-slide {
+    transform-style: preserve-3d;
+  }
+
+  /* Заголовки - типографика и цвета */
+  .carousel-component .vc-slide-title {
+    text-transform: uppercase;
+    font-family: 'Red Hat Display', sans-serif;
+    font-size: 60px;
+    font-weight: 600;
+    line-height: 1.2em;
+    color: var(--black, #111);
+    margin-bottom: 1rem;
+    text-align: center;
+    order: 1;
+  }
+
+  /* Декоративный круг */
+  .decorate-circle {
+    z-index: 1;
+    background-image: linear-gradient(60deg, var(--gray-background) 33%, var(--beige-dark) 56%, var(--beige-light) 79%, var(--beige-dark));
+    opacity: .65;
+    filter: blur(10px);
+    border-radius: 50%;
+    width: 430px;
+    height: 430px;
+    /* Позиционируем в правом нижнем углу первого Grid ряда (карусели) */
+    top: auto;
+    bottom: -300px; /* Частично выходит за пределы */
+    right: 100px;  /* Частично выходит за пределы */
+    left: auto;
+  }
+
+  /* Контейнер изображения - тени и эффекты */
+  .carousel-component .vc-slide-image-container {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    order: 3;
+  }
+
+  /* Изображения - базовые стили */
+  .carousel-component .vc-slide-image {
+    display: block;
+  }
+
+  /* Навигационные кнопки - базовые стили */
+  .carousel-component .vc-nav-prev,
+  .carousel-component .vc-nav-next {
+    align-items: center;
+    justify-content: center;
+    background-color: var(--black, #000);
+    border-radius: 48px;
+    width: 60px;
+    height: 30px;
+  }
+
+  /* Позиционирование стрелок по краям изображения - адаптивно */
+  .carousel-component .vc-nav-prev,
+  .carousel-component .vc-nav-next {
+    top: 60%; /* По центру изображения по вертикали */
+    transform: translateY(-50%);
+  }
+
+  /* Для больших экранов - фиксированное позиционирование */
+  @media (min-width: 769px) {
+    .carousel-component .vc-nav-prev {
+      left: calc(50% - min(300px, 45vw)); /* Адаптивно: 600px/2 = 300px, но не больше 45vw */
+    }
+
+    .carousel-component .vc-nav-next {
+      right: calc(50% - min(300px, 45vw)); /* Аналогично для правой стрелки */
+    }
+  }
+
+  /* Для мобильных - привязка к реальному размеру изображения */
+  @media (max-width: 768px) {
+    .carousel-component .vc-nav-prev {
+      left: calc(50% - 45vw + 10px); /* 90vw/2 = 45vw + отступ */
+    }
+
+    .carousel-component .vc-nav-next {
+      right: calc(50% - 45vw + 10px); /* Аналогично */
+    }
+  }
+
+  /* SVG стрелки - цвета */
+  .carousel-component .slide-arrow-left,
+  .carousel-component .slide-arrow-right {
+    filter: brightness(0) saturate(100%) invert(100%);
+  }
+
+  /* Точки - цвета и состояния */
+  .carousel-component .vc-dot {
+    background-color: #d1d5db;
+  }
+
+  .carousel-component .vc-dot:hover {
+    background-color: #9ca3af;
+  }
+
+  .carousel-component .vc-dot.active {
+    background-color: #374151;
+  }
+
+  /* Hover эффекты кнопок */
+  .carousel-component .vc-nav-prev:hover,
+  .carousel-component .vc-nav-next:hover {
+    background: rgba(0, 0, 0, 0.4); 
+  }
+
+  /* Текстовая секция - типографика */
+  .carousel-component .text-description {
+    font-family: 'Red Hat Display', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.4em;
+    color: var(--black, #111);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Responsive для заголовков */
+  @media (max-width: 1280px) {
+    .carousel-component .vc-slide-title {
+      font-size: 48px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .carousel-component .vc-slide-title {
+      font-size: 36px;
+    }
+
+    /* По умолчанию стрелки скрыты на маленьких экранах */
+    .carousel-component .vc-nav-prev,
+    .carousel-component .vc-nav-next {
+      display: none;
+    }
+
+    /* Для маленьких экранов без touch - стрелки по краям изображения */
+    .carousel-component.no-touch .vc-nav-prev,
+    .carousel-component.no-touch .vc-nav-next {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      top: 60%; /* По центру изображения */
+      transform: translateY(-50%);
+    }
+
+    .carousel-component.no-touch .vc-nav-prev {
+      left: calc(50% - 45vw + 10px); /* Используем те же адаптивные формулы */
+    }
+
+    .carousel-component.no-touch .vc-nav-next {
+      right: calc(50% - 45vw + 10px); /* Аналогично */
+    }
+  }
+
+  @media (max-width: 480px) {
+    .carousel-component .vc-slide-title {
+      font-size: 28px;
+    }
+  }
+
+  /* Responsive для мобильных */
+  @media (max-width: 768px) {
+    .carousel-component {
+      min-height: 500px;
+      grid-template-rows: 1fr auto 60px;
+    }
+  }
+
+  /* Lottie контейнер под картинкой */
+  .carousel-component .lottie-swipe-hint {
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .carousel-component .lottie-swipe-hint canvas {
+    width: 64px !important;
+    height: 64px !important;
+    /* Добавляем светлый полупрозрачный круг */
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    /* Убираем отладочные стили */
+    display: block !important;
+    opacity: 1 !important;
+  }
+}
+
+@layer animations {
+  /* Все переходы и анимации в отдельном слое */
+  
+  /* Основная анимация opacity для карусели */
+  .carousel-component {
+    transition: opacity 0.5s ease-in-out;
+  }
+
+  /* Слайды - transitions и transforms */
+  .carousel-component .vc-slide {
+    transition: all 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+  }
+
+  /* Заголовки - плавные переходы */
+  .carousel-component .vc-slide-title {
+    transition: all 0.35s ease;
+  }
+
+  /* Изображения - hover анимации */
+  .carousel-component .vc-slide-image {
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .carousel-component .vc-slide:hover .vc-slide-image {
+    transform: scale(1.1);
+  }
+
+  /* Навигационные кнопки - transitions */
+  .carousel-component .vc-nav-prev,
+  .carousel-component .vc-nav-next {
+    transition: all .35s ease;
+  }
+
+
+
+  /* SVG стрелки - анимации */
+  .carousel-component .slide-arrow-left,
+  .carousel-component .slide-arrow-right {
+    transition: all 0.3s ease;
+  }
+
+  .carousel-component .slide-arrow-left {
+    transform: rotate(180deg);
+  }
+
+  /* Точки - анимированные изменения */
+  .carousel-component .vc-dot {
+    transition: all 0.3s ease;
+  }
+
+  .carousel-component .vc-dot.active {
+    transform: scale(1.25);
+  }
+
+  /* Эти стили убираем - они мешают скрытию стрелок на маленьких экранах */
+
+  /* Performance optimizations */
+  .carousel-component .vc-slide,
+  .carousel-component .vc-slide-image,
+  .carousel-component .vc-nav-prev,
+  .carousel-component .vc-nav-next,
+  .carousel-component .vc-dot {
+    will-change: transform;
+  }
+}

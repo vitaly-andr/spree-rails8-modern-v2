@@ -1,0 +1,97 @@
+/ Mobile Menu Overlay - светло-серый вместо черного
+.mobile-overlay.fixed.inset-0.bg-gray-200.bg-opacity-30.z-50.opacity-0.invisible.transition-all.duration-300 data-navbar-component-target="overlay" data-action="click->navbar-component#closeMobileMenu"
+
+/ Modern Sidebar Mobile Menu
+.mobile-sidebar.fixed.top-0.left-0.h-full.w-80.bg-white.transform.-translate-x-full.transition-transform.duration-300.ease-in-out.z-60.shadow-2xl.lg:hidden data-navbar-component-target="mobileMenu" data-controller="sidebar-menu"
+  / Mobile Menu Header
+  .mobile-header.flex.justify-between.items-center.p-6.border-b.border-gray-200.bg-gray-50
+    img.h-8 src="https://cdn.prod.website-files.com/66e83267028497a1351f7717/66eab46919d059fd7608e505_Logo.svg" alt="logo"
+    button.p-2.text-gray-500.hover:text-black.transition-colors.cursor-pointer data-action="click->navbar-component#closeMobileMenu"
+      svg.w-6.h-6 fill="none" stroke="currentColor" viewBox="0 0 24 24"
+        path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"
+  
+  / Mobile Menu Content - с подчеркиванием только под текстом
+  .mobile-content.flex-1.overflow-y-auto.p-6
+    / Home Link
+    a.mobile-nav-item.navbar-link-item.block.py-4.text-lg.text-gray-900.hover:text-black.font-medium.border-b.border-gray-100.transition-colors href="#"
+      .nav-text-wrap.inline-flex.flex-col.items-start
+        span.footer-link Home
+        .nav-line.h-px.bg-black.w-0.transition-all.duration-300
+    
+    / About Us Link  
+    a.mobile-nav-item.navbar-link-item.block.py-4.text-lg.text-gray-900.hover:text-black.font-medium.border-b.border-gray-100.transition-colors href="#"
+      .nav-text-wrap.inline-flex.flex-col.items-start
+        span.footer-link About Us
+        .nav-line.h-px.bg-black.w-0.transition-all.duration-300
+    
+    / Projects Link
+    a.mobile-nav-item.navbar-link-item.block.py-4.text-lg.text-gray-900.hover:text-black.font-medium.border-b.border-gray-100.transition-colors href="#"
+      .nav-text-wrap.inline-flex.flex-col.items-start
+        span.footer-link Projects
+        .nav-line.h-px.bg-black.w-0.transition-all.duration-300
+    
+    / Shop Link
+    a.mobile-nav-item.navbar-link-item.block.py-4.text-lg.text-gray-900.hover:text-black.font-medium.border-b.border-gray-100.transition-colors href="#"
+      .nav-text-wrap.inline-flex.flex-col.items-start
+        span.footer-link Shop
+        .nav-line.h-px.bg-black.w-0.transition-all.duration-300
+
+    / Demos Dropdown - подчеркивание только под текстом
+    .nav-item-collapsible
+      button.mobile-nav-item.collapsible-trigger.flex.items-center.justify-between.w-full.py-4.text-lg.text-gray-900.hover:text-black.font-medium.border-b.border-gray-100.transition-colors.cursor-pointer data-action="click->sidebar-menu#toggleSection" data-sidebar-menu-section-param="demos"
+        .nav-text-wrap.inline-flex.flex-col.items-start
+          span.footer-link Demos
+          .nav-line.h-px.bg-black.w-0.transition-all.duration-300
+        svg.collapsible-icon.w-5.h-5.transform.transition-transform.duration-200.ml-2 data-sidebar-menu-target="demosIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+          path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"
+      .collapsible-content.hidden.pl-4.pb-2 data-sidebar-menu-target="demosContent"
+        a.mobile-nav-subitem.navbar-link-item.block.py-3.text-gray-600.hover:text-black.transition-colors.cursor-pointer href="#"
+          .nav-text-wrap.inline-flex.flex-col.items-start
+            span.footer-link Home 1
+            .nav-line.h-px.bg-black.w-0.transition-all.duration-300
+        a.mobile-nav-subitem.navbar-link-item.block.py-3.text-gray-600.hover:text-black.transition-colors.cursor-pointer href="#"
+          .nav-text-wrap.inline-flex.flex-col.items-start
+            span.footer-link Home 2
+            .nav-line.h-px.bg-black.w-0.transition-all.duration-300
+        a.mobile-nav-subitem.navbar-link-item.block.py-3.text-gray-600.hover:text-black.transition-colors.cursor-pointer href="#"
+          .nav-text-wrap.inline-flex.flex-col.items-start
+            span.footer-link Home 3
+            .nav-line.h-px.bg-black.w-0.transition-all.duration-300
+
+    / All Pages Dropdown - подчеркивание только под текстом
+    .nav-item-collapsible
+      button.mobile-nav-item.collapsible-trigger.flex.items-center.justify-between.w-full.py-4.text-lg.text-gray-900.hover:text-black.font-medium.border-b.border-gray-100.transition-colors.cursor-pointer data-action="click->sidebar-menu#toggleSection" data-sidebar-menu-section-param="pages"
+        .nav-text-wrap.inline-flex.flex-col.items-start
+          span.footer-link All Pages
+          .nav-line.h-px.bg-black.w-0.transition-all.duration-300
+        svg.collapsible-icon.w-5.h-5.transform.transition-transform.duration-200.ml-2 data-sidebar-menu-target="pagesIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+          path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"
+      .collapsible-content.hidden.pl-4.pb-2 data-sidebar-menu-target="pagesContent"
+        a.mobile-nav-subitem.navbar-link-item.block.py-3.text-gray-600.hover:text-black.transition-colors.cursor-pointer href="#"
+          .nav-text-wrap.inline-flex.flex-col.items-start
+            span.footer-link Home 1
+            .nav-line.h-px.bg-black.w-0.transition-all.duration-300
+        a.mobile-nav-subitem.navbar-link-item.block.py-3.text-gray-600.hover:text-black.transition-colors.cursor-pointer href="#"
+          .nav-text-wrap.inline-flex.flex-col.items-start
+            span.footer-link About Us
+            .nav-line.h-px.bg-black.w-0.transition-all.duration-300
+        a.mobile-nav-subitem.navbar-link-item.block.py-3.text-gray-600.hover:text-black.transition-colors.cursor-pointer href="#"
+          .nav-text-wrap.inline-flex.flex-col.items-start
+            span.footer-link Testimonials
+            .nav-line.h-px.bg-black.w-0.transition-all.duration-300
+        a.mobile-nav-subitem.navbar-link-item.block.py-3.text-gray-600.hover:text-black.transition-colors.cursor-pointer href="#"
+          .nav-text-wrap.inline-flex.flex-col.items-start
+            span.footer-link Pricing
+            .nav-line.h-px.bg-black.w-0.transition-all.duration-300
+        a.mobile-nav-subitem.navbar-link-item.block.py-3.text-gray-600.hover:text-black.transition-colors.cursor-pointer href="#"
+          .nav-text-wrap.inline-flex.flex-col.items-start
+            span.footer-link FAQ
+            .nav-line.h-px.bg-black.w-0.transition-all.duration-300
+        a.mobile-nav-subitem.navbar-link-item.block.py-3.text-gray-600.hover:text-black.transition-colors.cursor-pointer href="#"
+          .nav-text-wrap.inline-flex.flex-col.items-start
+            span.footer-link Contact Us
+            .nav-line.h-px.bg-black.w-0.transition-all.duration-300
+    
+    / Contact Button
+    .mt-8
+      a.mobile-nav-item.contact-button.block.w-full.bg-black.text-white.text-center.py-4.px-6.rounded-lg.font-medium.hover:bg-gray-800.transition-colors.cursor-pointer href="#" Contact Us

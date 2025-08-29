@@ -1,0 +1,56 @@
+/ Центральный слайд - убрана избыточность
+.slider-banner.w-slider data-delay="4000" data-animation="over" data-autoplay="false" data-easing="ease-out-quint" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="3" data-duration="0" data-infinite="true" role="region" aria-label="carousel"
+  .slide-mask.w-slider-mask id="w-slider-mask-0"
+    
+    / ЕДИНСТВЕННЫЙ слайд-контейнер с тремя позициями
+    .slide-1-banner.w-slide aria-label="1 of 3" role="group" style="transition: all, transform cubic-bezier(0.23, 1, 0.32, 1); transform: translateX(0px); opacity: 1; z-index: 20;"
+      
+      / Левая позиция (previous)
+      .slide-content-wrapper.previous style="display: flex; transform: translate3d(-600px, 0px, 0px) scale3d(0.8, 0.8, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;"
+        .w-dyn-list
+          .w-dyn-items role="list"
+            .w-dyn-item role="listitem"
+              .title-center-wrapper
+                a.link-wrapper-heading-banner.w-inline-block href="/projects/enhancing-your-homes-atmosphere"
+                  h1.heading-slider Chairs & stools
+                p.text-slide by Tania Panas
+              a.link-project-banner.w-inline-block aria-label="Portfolio" href="/projects/enhancing-your-homes-atmosphere"
+                img.image-slider src="https://cdn.prod.website-files.com/66e83267028497a1351f772e/66ed381ea56678d62790e120_2150794702%20(1).jpg" loading="lazy" alt="" sizes="(max-width: 479px) 100vw, (max-width: 767px) 300px, (max-width: 991px) 500px, 600px" srcset="https://cdn.prod.website-files.com/66e83267028497a1351f772e/66ed381ea56678d62790e120_2150794702%20(1)-p-500.jpg 500w, https://cdn.prod.website-files.com/66e83267028497a1351f772e/66ed381ea56678d62790e120_2150794702%20(1)-p-800.jpg 800w, https://cdn.prod.website-files.com/66e83267028497a1351f772e/66ed381ea56678d62790e120_2150794702%20(1)-p-1080.jpg 1080w, https://cdn.prod.website-files.com/66e83267028497a1351f772e/66ed381ea56678d62790e120_2150794702%20(1).jpg 1500w"
+      
+      / Центральная позиция (current) - АКТИВНАЯ
+      .slide-content-wrapper.current style="display: flex; transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;"
+        .w-dyn-list
+          .w-dyn-items role="list"
+            .w-dyn-item role="listitem"
+              .title-center-wrapper
+                a.heading-slider href="/projects/luxury-meets-comfort-in-living-room-redesign" home decore
+                p.text-slide by Sandra
+              a.link-project-banner.w-inline-block aria-label="Portfolio" href="/projects/luxury-meets-comfort-in-living-room-redesign"
+                img.image-slider src="https://cdn.prod.website-files.com/66e83267028497a1351f772e/66ed3697d66d1f67878af604_2150794690%20(1).jpg" loading="lazy" alt="" sizes="(max-width: 479px) 100vw, (max-width: 767px) 300px, (max-width: 991px) 500px, 600px" srcset="https://cdn.prod.website-files.com/66e83267028497a1351f772e/66ed3697d66d1f67878af604_2150794690%20(1)-p-500.jpg 500w, https://cdn.prod.website-files.com/66e83267028497a1351f772e/66ed3697d66d1f67878af604_2150794690%20(1)-p-800.jpg 800w, https://cdn.prod.website-files.com/66e83267028497a1351f772e/66ed3697d66d1f67878af604_2150794690%20(1)-p-1080.jpg 1080w, https://cdn.prod.website-files.com/66e83267028497a1351f772e/66ed3697d66d1f67878af604_2150794690%20(1).jpg 1500w"
+      
+      / Правая позиция (next)
+      .slide-content-wrapper.next style="transform: translate3d(600px, 0px, 0px) scale3d(0.8, 0.8, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; display: flex;"
+        .w-dyn-list
+          .w-dyn-items role="list"
+            .w-dyn-item role="listitem"
+              .title-center-wrapper
+                a.heading-slider href="/projects/revamping-your-workspace-with-inspired-furniture" Lamps & pendants
+                p.text-slide by Sandra
+              a.link-project-banner.w-inline-block aria-label="Portfolio" href="/projects/revamping-your-workspace-with-inspired-furniture"
+                img.image-slider src="https://cdn.prod.website-files.com/66e83267028497a1351f772e/66ed37bddb551da37bee1a71_27424%20(1).jpg" loading="lazy" alt=""
+
+    / Aria live region
+    .w-slider-aria-label aria-live="off" aria-atomic="true" data-wf-ignore="" Slide 1 of 3.
+
+  / Стрелки навигации
+  .home-3-slider-arrow.left-slider-arrow.w-slider-arrow-left role="button" tabindex="0" aria-controls="w-slider-mask-0" aria-label="previous slide"
+    img.slide-arrow src="https://cdn.prod.website-files.com/66e83267028497a1351f7717/66ea98d1dd85b800ae2225c6_Arrow%201%20(1).svg" loading="lazy" alt="Icon"
+  
+  .home-3-slider-arrow.right-slider-arrow.w-slider-arrow-right role="button" tabindex="0" aria-controls="w-slider-mask-0" aria-label="next slide"
+    img.slide-arrow src="https://cdn.prod.website-files.com/66e83267028497a1351f7717/66ea98d1ce29e80afab0eb8c_Arrow%201.svg" loading="lazy" alt="Icon"
+
+  / Навигационные точки
+  .hide-nav.w-slider-nav.w-round
+    .w-slider-dot.w-active data-wf-ignore="" aria-label="Show slide 1 of 3" aria-pressed="true" role="button" tabindex="0" style="margin-left: 3px; margin-right: 3px;"
+    .w-slider-dot data-wf-ignore="" aria-label="Show slide 2 of 3" aria-pressed="false" role="button" tabindex="-1" style="margin-left: 3px; margin-right: 3px;"
+    .w-slider-dot data-wf-ignore="" aria-label="Show slide 3 of 3" aria-pressed="false" role="button" tabindex="-1" style="margin-left: 3px; margin-right: 3px;"

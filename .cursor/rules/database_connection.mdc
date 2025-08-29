@@ -1,0 +1,65 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Connecting to 1C Database with MCP Postgres
+
+This guide explains how to connect to the keramir_samara 1C database using the MCP Postgres connector.
+
+## MCP Configuration
+
+The MCP Postgres server is configured in `~/.cursor/mcp.json` with the following settings:
+
+```json
+{
+  "mcpServers": {
+    "postgres": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "postgresql://postgres:1202@192.168.1.242:5432/keramir_samara"
+      ]
+    }
+  }
+}
+```
+
+## Connecting to the Database via MCP
+
+When working with the database, you can use the MCP Postgres server to issue SQL queries directly. Here's how to use it:
+
+1. In any conversation with Cursor, mention "using postgres MCP" when asking questions about the database
+2. The MCP server will connect to the PostgreSQL database at 192.168.1.242:5432
+3. You can request information about tables, run queries, or analyze the database structure
+
+## Common SQL Queries for 1C Database Analysis
+
+Here are some useful queries for exploring the keramir_samara database:
+
+```sql
+-- List all tables in the database
+SELECT tablename FROM pg_tables WHERE schemaname = 'public';
+
+-- Get information about a specific table
+SELECT column_name, data_type, character_maximum_length
+FROM INFORMATION_SCHEMA.COLUMNS 
+WHERE table_name = 'table_name';
+
+-- Find large tables in the database
+SELECT relname AS table_name, 
+       pg_size_pretty(pg_total_relation_size(relid)) AS total_size,
+       pg_size_pretty(pg_relation_size(relid)) AS data_size
+FROM pg_catalog.pg_statio_user_tables
+ORDER BY pg_total_relation_size(relid) DESC
+LIMIT 20;
+
+-- Search for tables containing a specific pattern in their name
+SELECT tablename FROM pg_tables 
+WHERE schemaname = 'public' AND tablename LIKE '%pattern%';
+```
+
+## Using MCP Context7 for Documentation
+
+The Context7 MCP server is also configured in the workspace and can be used to retrieve up-to-date documentation. Mention "use context7" in your queries to access the latest documentation for libraries and frameworks.

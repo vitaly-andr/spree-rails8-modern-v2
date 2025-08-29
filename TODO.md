@@ -1,0 +1,1 @@
+- [ ] При деплое убедиться, что файлы SQLite (solid_queue, solid_cable, solid_cache) размещаются на persistent storage (volume), чтобы избежать потери данных.

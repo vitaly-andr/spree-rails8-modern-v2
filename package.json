@@ -1,0 +1,36 @@
+{
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.7",
+    "tailwindcss": "^4.1.7",
+    "vite": "^6.3.5",
+    "vite-plugin-ruby": "^5.1.1"
+  },
+  "dependencies": {
+    "@hotwired/stimulus": "^3.2.2",
+    "@hotwired/turbo": "^8.0.13",
+    "@hotwired/turbo-rails": "^8.0.13",
+    "@lottiefiles/dotlottie-web": "^0.50.0",
+    "@rails/activestorage": "^8.0.200",
+    "autoprefixer": "^10.4.21",
+    "gsap": "^3.13.0",
+    "locomotive-scroll": "^5.0.0-beta.21",
+    "postcss": "^8.5.3"
+  },
+  "name": "materialize_1c",
+  "version": "1.0.0",
+  "description": "**Materialize 1C** — это платформа для анализа и автоматизации работы с реальной базой данных 1С (на PostgreSQL) с помощью материализованных представлений (materialized views).",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc",
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

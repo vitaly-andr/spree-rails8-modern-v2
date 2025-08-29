@@ -1,0 +1,31 @@
+---
+description: "Base rules for all operations in Cursor.ai"
+globs: ["**/*"]
+---
+
+change_management:
+  process:
+    - "Always check current file state before proposing any changes"
+    - "First explain what is wrong and why it needs to be changed"
+    - "Propose a clear solution with alternatives if applicable"
+    - "Wait for explicit user confirmation before making any changes"
+    - "Make changes one file at a time to allow proper review and error tracking"
+    - "Never modify code or configurations unrelated to the agreed changes"
+    - "Document the changes after they are approved and implemented"
+    - "After user accepts changes (clicks Accept All), proceed with next steps without additional confirmation"
+  
+  file_state_check:
+    - "Use appropriate tools to read current file content"
+    - "Verify the actual state matches assumptions"
+    - "Check if proposed changes are really needed"
+    - "Avoid redundant modifications"
+    - "Prevent accidental overwrites of existing content"
+  
+  best_practices:
+    - "Always check official documentation before implementing solutions"
+    - "Never make changes without user confirmation"
+    - "Present all possible solutions with pros and cons"
+    - "Explain potential impact of changes"
+    - "Provide rollback steps if needed"
+    - "Keep track of all changes for documentation"
+    - "After user accepts changes, consider it as approval to continue with related tasks" 

@@ -1,0 +1,209 @@
+/* Catalog Card Component - Madera Style */
+/* Основанный на дизайн-системе Madera с современными эффектами */
+
+@layer components {
+  /* Основной контейнер карточки */
+  .catalog-card {
+    @apply relative bg-white overflow-hidden transition-all duration-300 ease-out;
+    @apply hover:shadow-xl hover:-translate-y-1;
+    border-radius: 0; /* Madera style - без скругления */
+    
+    /* Subtle border effect */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Контейнер изображения */
+  .catalog-image-container {
+    @apply relative bg-gray-50;
+    aspect-ratio: 4/3; /* Пропорции как в Madera */
+    overflow: hidden; /* Принудительно скрываем выходящие за границы части изображения */
+  }
+
+  /* Изображения */
+  .catalog-image {
+    @apply w-full h-full;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    transform: scale(0.95); /* Начальное состояние - немного уменьшено */
+    transform-origin: center center;
+  }
+
+  /* Hover эффект теперь управляется JavaScript/GSAP для плавной анимации при убирании мыши */
+
+  /* Sale Badge */
+  .sale-badge {
+    @apply absolute top-4 left-4 z-10;
+    @apply bg-red-500 text-white text-xs font-semibold px-2 py-1;
+    @apply rounded-sm shadow-md;
+  }
+
+  /* Quick Actions Overlay */
+  .catalog-actions-overlay {
+    @apply absolute top-4 right-4 z-10;
+    @apply flex flex-col gap-2;
+    @apply opacity-0 translate-y-2 transition-all duration-300 ease-out;
+  }
+
+  .catalog-card:hover .catalog-actions-overlay {
+    @apply opacity-100 translate-y-0;
+  }
+
+  .quick-view-btn,
+  .wishlist-btn {
+    @apply w-10 h-10 bg-white/90 backdrop-blur-sm;
+    @apply flex items-center justify-center;
+    @apply text-gray-700 hover:text-black;
+    @apply transition-all duration-200;
+    @apply shadow-md hover:shadow-lg;
+    @apply hover:bg-white hover:scale-110;
+  }
+
+  .icon-eye,
+  .icon-heart {
+    @apply w-5 h-5;
+  }
+
+  /* Product Info Section */
+  .catalog-info {
+    @apply p-6 space-y-4;
+  }
+
+  .catalog-text-content {
+    @apply space-y-2;
+  }
+
+  .catalog-title {
+    @apply block text-lg font-semibold text-gray-900;
+    @apply hover:text-gray-700 transition-colors duration-200;
+    @apply line-clamp-2;
+    
+    /* Madera typography style */
+    font-family: 'Red Hat Display', sans-serif;
+  }
+
+  .catalog-subtitle {
+    @apply text-sm text-gray-600 line-clamp-2;
+    font-family: 'Lato', sans-serif;
+  }
+
+  /* Price Section */
+  .catalog-price-section {
+    @apply flex items-center justify-between;
+  }
+
+  .price-wrapper {
+    @apply flex items-center gap-3;
+  }
+
+  .current-price,
+  .sale-price {
+    @apply text-xl font-bold text-gray-900;
+    font-family: 'Red Hat Display', sans-serif;
+  }
+
+  .original-price {
+    @apply text-sm text-gray-500 line-through;
+    font-family: 'Red Hat Display', sans-serif;
+  }
+
+  /* Add to Cart Button - Madera Style */
+  .catalog-cart-section {
+    @apply relative;
+  }
+
+  .add-to-cart-btn {
+    @apply relative w-full bg-transparent border-none;
+    @apply text-left text-gray-900 font-medium;
+    @apply transition-all duration-300 ease-out;
+    @apply hover:text-black;
+    @apply cursor-pointer;
+    font-family: 'Red Hat Display', sans-serif;
+    
+    /* Madera button style */
+    padding: 0;
+    background: none;
+  }
+
+  .btn-text {
+    @apply block pb-1;
+  }
+
+  .btn-underline {
+    @apply absolute bottom-0 left-0 h-0.5 bg-black;
+    @apply transition-all duration-300 ease-out;
+    width: 20%; /* Default state как в Madera */
+  }
+
+  .add-to-cart-btn:hover .btn-underline {
+    width: 100%;
+  }
+
+  /* Loading Spinner */
+  .btn-loading-spinner {
+    @apply absolute inset-0 flex items-center justify-center;
+    @apply bg-white/90 backdrop-blur-sm;
+  }
+
+  .spinner {
+    @apply w-5 h-5 animate-spin;
+  }
+
+  .spinner-circle {
+    stroke-dasharray: 31.416;
+    stroke-dashoffset: 31.416;
+    animation: spin-circle 2s linear infinite;
+  }
+
+  @keyframes spin-circle {
+    0% {
+      stroke-dashoffset: 31.416;
+    }
+    50% {
+      stroke-dashoffset: 7.854;
+    }
+    100% {
+      stroke-dashoffset: 31.416;
+    }
+  }
+
+  /* Responsive Design */
+  @media (max-width: 767px) {
+    .catalog-info {
+      @apply p-4 space-y-3;
+    }
+    
+    .catalog-title {
+      @apply text-base;
+    }
+    
+    .current-price,
+    .sale-price {
+      @apply text-lg;
+    }
+    
+    .catalog-actions-overlay {
+      @apply opacity-100 translate-y-0; /* Always visible on mobile */
+    }
+  }
+
+  /* Grid Layout Support */
+  .catalog-grid .catalog-card {
+    @apply h-full flex flex-col;
+  }
+
+  .catalog-grid .catalog-info {
+    @apply flex-1 flex flex-col justify-between;
+  }
+
+  /* Hover States for Touch Devices */
+  @media (hover: none) {
+    .catalog-card:hover .catalog-image {
+      transform: none;
+    }
+    
+    .catalog-actions-overlay {
+      @apply opacity-100 translate-y-0;
+    }
+  }
+}

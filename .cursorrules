@@ -1,0 +1,85 @@
+# ViewComponent Import Rules for Spree Rails 8 Modern
+
+## JavaScript Controller Imports
+
+### Import Path Rules
+- **From frontend/controllers to components:** ALWAYS use `../../` prefix
+  ```javascript
+  // CORRECT:
+  import ComponentController from "../../components/namespace/component_controller"
+  
+  // WRONG:
+  import ComponentController from "../components/namespace/component_controller"
+  ```
+
+- **Naming:** Always use `_controller` suffix in import path
+  ```javascript
+  // File: carousel_component_controller.js
+  import CarouselComponentController from "../../components/carousel/carousel_component_controller"
+  ```
+
+- **Stimulus Registration:** Use `--` separator for namespaced components
+  ```javascript
+  application.register("namespace--component-name", ComponentController)
+  ```
+
+## CSS Import Rules
+
+### Import Order in application.css (CRITICAL!)
+- **ALL @import statements MUST be at the TOP** (before @source and any CSS rules)
+- **PostCSS Rule:** @import must precede all other statements
+  ```css
+  // CORRECT ORDER:
+  @import "tailwindcss";
+  @import "./components/navbar.css";
+  @import "../components/carousel/carousel_component.css";
+  @import "./temp/_ceramir_landing.css";
+  
+  // THEN @source directives:
+  @source "./app/views/**/*.slim";
+  
+  // THEN CSS rules:
+  html { scroll-behavior: smooth; }
+  ```
+
+### Import Path Rules
+- **From frontend/application.css to components:** Use `../` prefix
+  ```css
+  // CORRECT:
+  @import "../components/namespace/component.css";
+  
+  // WRONG:
+  @import "../../components/namespace/component.css";
+  ```
+
+## ViewComponent Structure (Follow this pattern)
+```
+app/components/namespace/
+├── namespace_component.rb           ← module Namespace + class Component
+├── namespace_component.html.slim    ← HTML template  
+├── namespace_component.css          ← CSS styles
+└── namespace_component_controller.js ← JS controller
+```
+
+## CSS Style Rules
+
+### NEVER use !important
+- **FORBIDDEN:** `!important` in any CSS rules
+- **Solution:** Use proper CSS specificity and cascade
+- **Exception:** NONE - find alternative solutions always
+
+### CSS Architecture
+- **Layout styles:** Use Tailwind classes in .slim templates
+- **Custom styling:** Use .css files for colors, gradients, animations
+- **Z-index:** Use Tailwind classes (`z-50`, `z-[9999]`) in templates
+
+## Common Errors to Avoid
+1. Wrong path depth (`../` vs `../../`)
+2. Missing `_controller` suffix in import
+3. Using `:` instead of `--` in Stimulus registration
+4. **@import after @source or CSS rules** (PostCSS error)
+5. Wrong CSS import path (`../../` instead of `../`)
+6. **Using !important** (FORBIDDEN)
+```
+
+Теперь правила в `.cursorrules` и будут применяться ко всему проекту!

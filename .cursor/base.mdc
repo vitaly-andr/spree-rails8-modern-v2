@@ -1,0 +1,73 @@
+---
+alwaysApply: true
+---
+change_management:
+  process:
+    - "Always check current file state before proposing any changes"
+    - "First explain what is wrong and why it needs to be changed"
+    - "Propose a clear solution with alternatives if applicable"
+    - "Wait for explicit user confirmation before making any changes"
+    - "Make changes one file at a time to allow proper review and error tracking"
+    - "Never modify code or configurations unrelated to the agreed changes"
+    - "Document the changes after they are approved and implemented"
+    - "After user accepts changes (clicks Accept All), proceed with next steps without additional confirmation"
+  
+  file_state_check:
+    - "Use appropriate tools to read current file content"
+    - "Verify the actual state matches assumptions"
+    - "Check if proposed changes are really needed"
+    - "Avoid redundant modifications"
+    - "Prevent accidental overwrites of existing content"
+  
+  best_practices:
+    - "Always check official documentation before implementing solutions"
+    - "Never make changes without user confirmation"
+    - "Present all possible solutions with pros and cons"
+    - "Explain potential impact of changes"
+    - "Provide rollback steps if needed"
+    - "Keep track of all changes for documentation"
+    - "After user accepts changes, consider it as approval to continue with related tasks" 
+# КРИТИЧЕСКОЕ ПРАВИЛО
+## Запрет на упрощение кода
+
+**СТРОГО ЗАПРЕЩЕНО:**
+- Упрощать существующий код без явного разрешения пользователя
+- Предлагать "упрощенные версии" библиотек или компонентов
+- Создавать "заглушки" вместо полноценных реализаций
+- Удалять функциональность под предлогом "упрощения"
+- Самостоятельно запускать консоль, сервер или любые команды в терминале
+
+**ОБЯЗАТЕЛЬНО:**
+- Использовать оригинальные библиотеки и зависимости как есть
+- Копировать код точно из источника
+- Сохранять всю функциональность
+- Спрашивать разрешения перед любыми изменениями
+- Всегда просить пользователя запустить команды в терминале
+
+**Нарушение этого правила недопустимо!**
+
+# ПРАВИЛА ШАБЛОНОВ И ФАЙЛОВ
+
+## Использование Slim
+**ОБЯЗАТЕЛЬНО:**
+- Всегда использовать Slim вместо ERB для новых шаблонов
+- При создании представлений использовать расширение `.html.slim`
+- Следовать синтаксису Slim для всех HTML шаблонов
+
+## Работа со Storefront темами
+**При изменении существующих файлов из темы storefront:**
+- Переименовать оригинальный файл, добавив суффикс `_old`
+- Создать новый файл с оригинальным именем
+- Сохранить оригинальную функциональность в новом файле
+
+**Пример:**
+```
+# Было:
+app/views/devise/sessions/new.html.erb
+
+# Стало:
+app/views/devise/sessions/new_old.html.erb  ← оригинал
+app/views/devise/sessions/new.html.slim     ← новый файл
+```
+
+**Цель:** Сохранить возможность отката к оригинальным файлам

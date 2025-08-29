@@ -1,0 +1,242 @@
+- content_for :title, "Ceramir - Керамическая плитка и сантехника"
+
+/ Header with exact styling from original
+header.sticky.top-0.z-50[style="background: #3949a0; --bg: var(--primary);"]
+  .bg-black.bg-opacity-50.lg:bg-transparent.transition-all.duration-300.py-3.lg:py-3
+    nav.container.mx-auto.px-4.flex.items-center.justify-between[style="--navbar-color: #FFFFFF; --navbar-color--hover: #F8F8F8;"]
+      / Logo
+      a.flex.items-center[href="index.html"]
+        img.h-12.max-w-44[src="https://cdn-ru.bitrix24.ru/b34678744/landing/228/2285b9079d0dda225c23f1883115e35d/logo_keram_no_bg_1x.png" alt="Ceramir Logo"]
+      
+      / Navigation
+      ul.hidden.lg:flex.items-center.space-x-6.text-white.font-bold.text-xs.uppercase.ml-auto
+        li: a.text-white.hover:text-gray-200.p-0[href="#b180"] Главная
+        li: a.text-white.hover:text-gray-200.p-0[href="#b182"] Виды поверхности
+        li: a.text-white.hover:text-gray-200.p-0[href="#b186"] Для вдохновения
+        li: a.text-white.hover:text-gray-200.p-0[href="#b192"] Цены
+        li: a.text-white.hover:text-gray-200.p-0[href="#b194"] Лучшие сотрудники
+        li: a.text-white.hover:text-gray-200.p-0[href="#b196"] Контакты
+
+/ Hero Section with exact background
+section#b180.relative.min-h-screen.pb-20.hero-bg
+  .relative.pt-32.min-h-screen
+
+    .relative.container.mx-auto.px-4.max-w-3xl.text-center.text-white.pb-16
+      h2.js-animation.fadeInUp.text-center.uppercase.font-bold.text-4xl.lg:text-6xl.mb-8.lg:mb-16.text-white
+        | Керамическая плитка и сантехника
+
+      / Three info blocks
+      .js-animation.fadeInUp.grid.grid-cols-1.md:grid-cols-12.gap-4.mb-16
+        / Акции
+        .md:col-span-4.px-1.mb-5.md:mb-0
+          .flex.items-center
+            .flex.items-center.justify-center.mr-5.text-2xl.text-white.opacity-50
+              i.fal.fa-calendar-alt
+            .text-left.uppercase
+              .text-sm.text-white.opacity-50.mb-1 Акции
+              h3.text-sm.uppercase.text-white.mb-0 Скидки до 10% при онлайн-оплате
+
+        / Наши магазины  
+        .md:col-span-5.px-1.mb-5.md:mb-0
+          .flex.items-center
+            .flex.items-center.justify-center.mr-5.text-2xl.text-white.opacity-50
+              i.fal.fa-map-marker-alt
+            .text-left.uppercase
+              .text-sm.text-white.opacity-50.mb-1 Наши магазины
+              h3.text-sm.uppercase.text-white.mb-0 10 магазинов в Самаре
+
+        / Button
+        .md:col-span-3.px-1.text-center.md:text-right
+          a.inline-block.bg-white.text-black.font-bold.py-3.px-6.uppercase.text-sm.hover:bg-gray-100[href="#b182"]
+            | В каталог
+
+/ Hero Gallery Section - точная копия структуры оригинала
+.pb-20
+  .container.mx-auto.px-4
+      .grid.grid-cols-1.md:grid-cols-2.shadow-2xl.mx-0
+        / Image Carousel
+        .relative.bg-gray-800
+          / Рабочая карусель с GSAP
+          .js-carousel.relative.h-96.lg:h-auto.lg:min-h-96.overflow-hidden
+            img.js-slide.w-full.h-full.object-cover[src="https://cdn-ru.bitrix24.ru/b34678744/landing/27e/27ed26dfedab355c3a3aea6c5454bc6d/emola_black_1x.jpg" alt="Бесконечный интерьер"]
+            img.js-slide.w-full.h-full.object-cover[src="https://cdn-ru.bitrix24.ru/b34678744/landing/659/659699c4cf5b3e66bd7697531c48cc14/armani_grey_1x.jpg" alt="Армани Грей"]
+            / Carousel arrows
+            .carousel-arrow-left.absolute.top-1/2.left-2.transform.-translate-y-1/2.w-10.h-10.bg-blue-600.bg-opacity-80.rounded.flex.items-center.justify-center.text-white.hover:bg-opacity-100.cursor-pointer
+              i.fa.fa-angle-left
+            .carousel-arrow-right.absolute.top-1/2.right-2.transform.-translate-y-1/2.w-10.h-10.bg-blue-600.bg-opacity-80.rounded.flex.items-center.justify-center.text-white.hover:bg-opacity-100.cursor-pointer
+              i.fa.fa-angle-right
+
+        / Text Content
+        .bg-gray-900.flex.items-center.py-20.lg:py-20.px-12
+          .w-full
+            h2.js-animation.fadeInRight.uppercase.font-bold.text-white.mb-2 Эксклюзивные коллекции
+            h6.js-animation.fadeInRight.uppercase.text-white.mb-5 Качество и стиль
+            .js-animation.fadeInRight.text-white.mb-0 Исследуйте уникальные коллекции плитки из Индии с бесконечными узорами камня и дерева, сертифицированные по международным стандартам.
+
+/ Products Section - exact copy
+section#b182.py-12.lg:py-16.bg-white
+  .container.mx-auto.px-4
+    h2.js-animation.fadeIn.text-4xl.font-bold.text-right.text-gray-900.mb-8.lg:mb-12 Мы предлагаем лучшее
+
+section.bg-white.pt-4.pb-12.lg:pb-16
+  .container.mx-auto.px-4.py-8
+    .grid.grid-cols-1.md:grid-cols-3.gap-8
+      / Глянцевая плитка
+      .js-animation.fadeIn.pt-2
+        .text-left.mb-8
+          img.w-full.h-64.object-cover.mb-8[src="https://cdn-ru.bitrix24.ru/b34678744/landing/3e5/3e56aa64febe38d16e385b391d32485e/bistro_statuario_crop_xs_1x.jpg" alt=""]
+        h5.uppercase.font-bold.mb-5.text-xl Глянцевая плитка
+        .text-gray-700 Добавьте блеска вашему интерьеру с нашими глянцевыми покрытиями.
+
+      / Карвинг матовая плитка
+      .js-animation.fadeIn.pt-2
+        .text-left.mb-8
+          img.w-full.h-64.object-cover.mb-8[src="https://cdn-ru.bitrix24.ru/b34678744/landing/37a/37a0bc2e695aab0d4558e0829ea5182b/staturio_lithic_crop_1x.jpg" alt=""]
+        h5.uppercase.font-bold.mb-5.text-xl Карвинг матовая плитка
+        .text-gray-700 Идеальный выбор для минималистичного и элегантного стиля.
+
+      / Карвинг на дереве
+      .js-animation.fadeIn.pt-2
+        .text-left.mb-8
+          img.w-full.h-64.object-cover.mb-8[src="https://cdn-ru.bitrix24.ru/b34678744/landing/629/6298efe45b7b5916302d7ef077425ddd/tres_natural_crop_xs_1x.jpg" alt=""]
+        h5.uppercase.font-bold.mb-5.text-xl Карвинг на дереве
+        .text-gray-700 Тепло и уют натуральной древесины в каждой плитке.
+
+/ Inspiration Section - exact copy
+section#b186.py-12.lg:py-16.bg-white
+  .container.mx-auto.px-4.text-left.border-r-4[style="border-color: var(--primary); border-color: #3949a0;"]
+    h6.js-animation.fadeIn.font-bold.uppercase.tracking-wide.mb-5.text-blue-600[style="color: var(--primary); color: #3949a0;"] Новые тренды
+    h2.js-animation.fadeIn.text-4xl.font-bold.leading-tight.mb-2.text-gray-900 Плитка, которая вдохновляет
+
+section.bg-white.pt-4.pb-12.lg:pb-16
+  .container.mx-auto.px-4
+    .grid.grid-cols-1.lg:grid-cols-2.gap-0
+      .js-animation.fadeInLeft.min-h-96.max-h-96.lg:max-h-none.lg:min-h-96
+        .h-full.pb-4.lg:pb-0
+          .h-full.bg-cover.bg-center[style="background-image: url('https://cdn-ru.bitrix24.ru/b34678744/landing/e31/e312024b2afa8ef4944daea9bc1c70a0/8nmuh7cmqxmigmmionq1amw0mgudrwsx.jpg');"]
+
+      .js-animation.fadeInRight.min-h-96.max-h-96.lg:max-h-none.lg:min-h-96
+        .h-full.pt-4.lg:pt-0
+          .h-full.bg-cover.bg-center[style="background-image: url('https://cdn-ru.bitrix24.ru/b34678744/landing/b3d/b3dc6366c0e7882c58fcaf42f34e296b/fjyyzve3psqewif3kqizyzcf4i6p1jkt.jpg');"]
+
+/ Prices Section - exact copy
+section#b192.py-12.lg:py-16[style="background-color: #3949a0; background: var(--primary);"]
+  .container.mx-auto.px-4.text-center.text-white
+    h6.js-animation.fadeIn.font-bold.uppercase.mb-8.border-b.border-white.inline-block.pb-2 Доступные цены
+    p.js-animation.fadeIn.uppercase.text-lg.mb-12.text-gray-200 Наши предложения сочетают стиль, качество и доступную стоимость. Цены начинаются от 1499 р./м².
+
+    .grid.grid-cols-1.md:grid-cols-3.gap-8
+      / Бюджетные
+      .js-animation.fadeInRight.bg-gray-800.rounded-lg.overflow-hidden
+        .h-48.bg-cover.bg-center[style="background-image: url('https://cdn-ru.bitrix24.ru/b34678744/landing/271/2717fef53c225a61a56f77202409dfab/hawai_silver_onyx_xxs_1x.jpg');"]
+        .p-6.text-center
+          .w-16.h-16.bg-gray-700.rounded-full.mx-auto.mb-4.flex.items-center.justify-center.text-2xl.-mt-8 🏷️
+          h6.font-bold.uppercase.mb-2 Бюджетные
+          p.text-gray-400.text-sm.uppercase.mb-4 Оптимальное сочетание цены и качества.
+          .text-2xl.font-bold.mb-4 1499
+          p.text-xs.uppercase.mb-4 От 1499 р.
+          a.border.border-white.text-white.py-2.px-4.rounded.uppercase.text-sm.hover:bg-white.hover:text-black[href="#"] Купить
+
+      / Немного дороже
+      .js-animation.fadeInRight.bg-gray-800.rounded-lg.overflow-hidden
+        .h-48.bg-cover.bg-center[style="background-image: url('https://cdn-ru.bitrix24.ru/b34678744/landing/1dc/1dc7b18fa4bdd81cc31d8e0c5466d5a5/emola_black_crop2_xxs_1x.jpg');"]
+        .p-6.text-center
+          .w-16.h-16.bg-gray-700.rounded-full.mx-auto.mb-4.flex.items-center.justify-center.text-2xl.-mt-8 💎
+          h6.font-bold.uppercase.mb-2 Немного дороже
+          p.text-gray-400.text-sm.uppercase.mb-4 Очень тонкая полировка и дорогие материалы
+          .text-2xl.font-bold.mb-4 1790
+          p.text-xs.uppercase.mb-4 От 1790 р.
+          a.border.border-white.text-white.py-2.px-4.rounded.uppercase.text-sm.hover:bg-white.hover:text-black[href="#"] Купить
+
+      / Для олигархов
+      .js-animation.fadeInRight.bg-gray-800.rounded-lg.overflow-hidden
+        .h-48.bg-cover.bg-center[style="background-image: url('https://cdn-ru.bitrix24.ru/b34678744/landing/451/451524c99300ac1cdb537e39bd220728/unreal_interior_1x.png');"]
+        .p-6.text-center
+          .w-16.h-16.bg-gray-700.rounded-full.mx-auto.mb-4.flex.items-center.justify-center.text-2xl.-mt-8 ⭐
+          h6.font-bold.uppercase.mb-2 Для олигархов
+          p.text-gray-400.text-sm.uppercase.mb-4 Уникальные коллекции для создания неповторимого интерьера...
+          p.text-orange-500.font-bold.text-sm.mb-4 Простите, но мы не обманываем клиентов и у нас нет таких коллекций!
+          .text-2xl.font-bold.mb-4 4999
+          p.text-xs.uppercase.mb-4 От 4999 р.
+          a.border.border-white.text-white.py-2.px-4.rounded.uppercase.text-sm.hover:bg-white.hover:text-black[href="#"] Купить
+
+/ Team Section - exact copy with better background
+section#b194.py-20.team-bg.relative
+  .bg-black.bg-opacity-40.py-20.absolute.inset-0
+  .relative.z-30.py-20
+    .container.mx-auto.px-4.text-center.text-white
+      h6.js-animation.fadeInUp.font-bold.uppercase.mb-4[style="color: #3949a0;"] Эксперты в дизайне
+      h2.js-animation.fadeInUp.text-4xl.font-bold.mb-4 Наша команда
+      p.js-animation.fadeInUp.text-gray-300.mb-12 Мы гордимся нашей командой профессионалов, которые помогут вам выбрать идеальную плитку и сантехнику для вашего дома.
+
+      .grid.grid-cols-2.md:grid-cols-4.gap-8.mt-20.relative.z-10
+        .js-animation.fadeIn.text-center
+          img.w-32.h-48.rounded.mx-auto.mb-4.object-cover.relative.z-20[src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=128&h=192&fit=crop&crop=face" alt="Алексей Иванов"]
+          .text-sm.font-bold.uppercase.mb-2[style="color: #3949a0;"] Менеджер
+          h4.text-lg.font-bold.mb-2 Алексей Иванов
+          p.text-gray-300.text-sm Специалист по продажам
+
+        .js-animation.fadeIn.text-center
+          img.w-32.h-48.rounded.mx-auto.mb-4.object-cover.relative.z-20[src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=128&h=192&fit=crop&crop=face" alt="Марина Смирнова"]
+          .text-sm.font-bold.uppercase.mb-2[style="color: #3949a0;"] Дизайнер
+          h4.text-lg.font-bold.mb-2 Марина Смирнова
+          p.text-gray-300.text-sm Эксперт по дизайну
+
+        .js-animation.fadeIn.text-center
+          img.w-32.h-48.rounded.mx-auto.mb-4.object-cover.relative.z-20[src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=128&h=192&fit=crop&crop=face" alt="Дмитрий Кузнецов"]
+          .text-sm.font-bold.uppercase.mb-2[style="color: #3949a0;"] Технолог
+          h4.text-lg.font-bold.mb-2 Дмитрий Кузнецов
+          p.text-gray-300.text-sm Технолог производства
+
+        .js-animation.fadeIn.text-center
+          img.w-32.h-48.rounded.mx-auto.mb-4.object-cover.relative.z-20[src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=128&h=192&fit=crop&crop=face" alt="Екатерина Орлова"]
+          .text-sm.font-bold.uppercase.mb-2[style="color: #3949a0;"] Консультант
+          h4.text-lg.font-bold.mb-2 Екатерина Орлова
+          p.text-gray-300.text-sm Консультант по продукции
+
+/ Contact Section
+section#b196.contact-bg
+  .bg-black.bg-opacity-70.py-20
+    .container.mx-auto.px-4
+      .grid.grid-cols-1.lg:grid-cols-2.gap-12.items-start
+        .text-white
+          h2.js-animation.fadeInUp.text-4xl.font-bold.mb-6 Свяжитесь с нами
+          p.js-animation.fadeInUp.text-lg.text-gray-300.mb-8 Мы всегда готовы ответить на ваши вопросы и помочь с выбором.
+          h4.js-animation.fadeInUp.text-xl.font-bold.mb-6 Контактная информация
+
+          .js-animation.fadeInUp.space-y-4
+            .flex.items-center.space-x-4
+              .w-8.h-8.flex.items-center.justify-center 📞
+              p.text-gray-300 Позвоните нам или напишите, и мы поможем вам выбрать лучшее.
+
+            .flex.items-center.space-x-4
+              .w-8.h-8.flex.items-center.justify-center 📞
+              a.text-gray-300.hover:text-white[href="tel:+7-987-444-44-76"] Позвонить
+
+            .flex.items-center.space-x-4
+              .w-8.h-8.flex.items-center.justify-center ✉️
+              a.text-gray-300.hover:text-white[href="#"] Написать
+
+            .flex.items-center.space-x-4
+              .w-8.h-8.flex.items-center.justify-center 💬
+              a.text-gray-300.hover:text-white[href="#"] Задать вопрос
+
+            .flex.items-center.space-x-4
+              .w-8.h-8.flex.items-center.justify-center ℹ️
+              a.text-gray-300.hover:text-white[href="#"] Получить консультацию
+
+        / CRM Form placeholder
+        .js-animation.fadeInUp.bg-transparent.border.border-white.border-opacity-20.p-8.rounded
+          .text-white.text-center
+            p CRM-форма появится здесь
+
+/ Footer
+footer.bg-black.text-white.py-8
+  .container.mx-auto.px-4.text-center
+    .text-sm.text-gray-400.mb-4
+      | Заряжено 
+      img.inline.h-4[src="https://b24-8rd06b.bitrix24.ru/bitrix/images/landing/copyright/logo_ru.svg?1" alt="Битрикс24"]
+      |  — Бесплатные Сайты и CRM. 
+      a.text-blue-400.hover:text-blue-300[href="https://www.bitrix24.ru/features/sites.php"] Создать сайт
+    .text-xs.text-gray-500
+      | Rails #{Rails.version} | Ruby #{RUBY_VERSION}

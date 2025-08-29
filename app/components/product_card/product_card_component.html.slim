@@ -1,0 +1,55 @@
+/ Product Card Component - Madera Style
+/ Красивая карточка товара с hover эффектами и анимациями
+
+.product-card id=component_id data-controller="product-card" class="product-card-#{id}"
+  / Product Image Container
+  .product-image-container
+    a href=href class="product-link" aria-label="View #{title}"
+      img.product-image src=image alt=alt loading="lazy"
+      
+      / Sale Badge
+      - if on_sale && sale_discount_percent
+        .sale-badge
+          = "-#{sale_discount_percent}%"
+    
+    / Quick Actions Overlay
+    .product-actions-overlay
+      button.quick-view-btn data-action="click->product-card#quickView" aria-label="Quick view #{title}"
+        svg.icon-eye viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
+          circle cx="12" cy="12" r="3"
+      
+      button.wishlist-btn data-action="click->product-card#toggleWishlist" aria-label="Add to wishlist"
+        svg.icon-heart viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+
+  / Product Info
+  .product-info
+    .product-text-content
+      a.product-title href=href
+        = title
+      
+      - if subtitle
+        .product-subtitle
+          = subtitle
+    
+    / Price Section
+    .product-price-section
+      - if on_sale && sale_price
+        .price-wrapper
+          .sale-price = sale_price
+          .original-price = price
+      - else
+        .current-price = price
+    
+    / Add to Cart Button
+    .product-cart-section
+      button.add-to-cart-btn data-action="click->product-card#addToCart" aria-label="Add #{title} to cart"
+        span.btn-text Add to Cart
+        .btn-underline
+        
+        / Loading state
+        .btn-loading-spinner style="display: none;"
+          svg.spinner viewBox="0 0 24 24"
+            circle.spinner-circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="4"
+

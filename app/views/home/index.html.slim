@@ -1,0 +1,29 @@
+/ Use Tailwind CSS classes for styling
+.container.mx-auto.p-8
+  h1.text-3xl.font-bold.mb-6.text-center
+    = @welcome_message
+
+  p.text-lg.text-gray-700.mb-8.text-center
+    | This is the main page of the application. From here, you will be able to navigate to different visualization tools and settings for your 1C database.
+
+  - if @links.any?
+    .grid.grid-cols-1.md:grid-cols-2.gap-4
+      - @links.each do |link|
+        a.block.p-6.bg-white.border.border-gray-200.rounded-lg.shadow.hover:bg-gray-100.dark:bg-gray-800.dark:border-gray-700.dark:hover:bg-gray-700[href=link[:path]]
+          h5.mb-2.text-2xl.font-bold.tracking-tight.text-gray-900.dark:text-white
+            = link[:name]
+          p.font-normal.text-gray-700.dark:text-gray-400
+            | Click here to go to
+            =< link[:name].downcase
+            | .
+  - else
+    p.text-center.text-gray-500
+      | No links available yet. Future navigation links will appear here.
+
+  / You can add more Tailwind-styled content below
+  .mt-12.text-center
+    p.text-sm.text-gray-500
+      | Rails version:
+      =< Rails.version
+      | | Ruby version:
+      =< RUBY_VERSION

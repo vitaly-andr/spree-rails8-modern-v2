@@ -1,0 +1,27 @@
+# Local project rules for spree-rails8-modern
+
+## Rails Development Rules
+
+### Credentials Management
+- Always use Cursor for editing Rails credentials: `EDITOR="cursor --wait" rails credentials:edit`
+- Never use nano, vim, or other terminal editors for credentials
+- Cursor provides better security, syntax highlighting, and validation
+
+### Database Development
+- Development database: spree_rails8_modern_development
+- PostgreSQL server: 192.168.1.242:5432
+- User: postgres, Password: 1202
+- Use credentials file for sensitive information
+
+### Spree Integration
+- Follow incremental approach: start with minimal functionality
+- Test each step before proceeding
+- Use modern Rails 8 + Vite + Tailwind stack
+- Avoid breaking existing functionality
+
+### Terminal Commands
+- Always check git status before making changes
+- Use conventional commit messages
+- Test database connectivity before running migrations
+- Use bundle exec for rails commands when needed
+

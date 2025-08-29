@@ -1,0 +1,35 @@
+/ Верхняя панель приложения (адаптировано из Mosaic Dashboard)
+header.bg-white.border-b.border-slate-200.sticky.top-0.z-30
+  .px-4.sm:px-6.lg:px-8
+    .flex.items-center.justify-between.h-16
+      / Левая часть (включая кнопку мобильного меню)
+      .flex
+        / Кнопка для мобильного меню
+        button.text-slate-500.hover:text-slate-600.lg:hidden.mr-2 data-action="click->layout#toggleSidebar"
+          img.h-6.w-6 src="#{vite_asset_path('icons/menu.svg')}" alt="Меню"
+        
+        / Строка поиска
+        .hidden.sm:flex.sm:items-center
+          form action="#{db_metadata_index_path}" method="get" class="relative mr-4"
+            label.sr-only for="search" Поиск
+            input#search.w-full.border-0.focus:ring-2.focus:ring-blue-500.pl-10.pr-4.py-2.rounded-lg.bg-slate-100.placeholder-slate-400 type="search" name="query" value="#{params[:query]}" placeholder="Поиск таблиц..."
+            .absolute.inset-y-0.left-0.flex.items-center.pl-3
+              img.h-5.w-5.text-slate-400 src="#{vite_asset_path('icons/search.svg')}" alt="Поиск"
+      
+      / Правая часть (профиль и действия)
+      .flex.items-center.space-x-3
+        / Селектор базы данных
+        select.w-44.border-slate-200.rounded-md.text-sm.focus:border-blue-500.focus:ring-blue-500 name="connection"
+          option value="source_1c" selected=true Keramir-Samara
+        
+        / Кнопка действий
+        .relative
+          button.flex.items-center.justify-center.w-10.h-10.rounded-full.text-slate-500.ml-2.bg-slate-100.hover:bg-slate-200 type="button" data-action="click->dropdown#toggle" data-dropdown-target="button"
+            svg.h-5.w-5.fill-current viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
+              path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"
+            
+          / Выпадающее меню (скрыто по умолчанию)
+          div.hidden.absolute.right-0.mt-2.w-48.bg-white.rounded-lg.shadow-lg.py-1.z-10 data-dropdown-target="menu"
+            a.flex.items-center.px-4.py-2.text-sm.text-slate-700.hover:bg-slate-100 href="#{analyze_db_metadata_path}" data-method="post"
+              img.h-5.w-5.mr-2.text-slate-400 src="#{vite_asset_path('icons/refresh.svg')}" alt="Обновить"
+              span Обновить структуру БД

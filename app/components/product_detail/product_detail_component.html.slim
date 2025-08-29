@@ -1,0 +1,98 @@
+/ Product Detail Component - Matching Original Madera Design
+section.section.shop
+  .w-layout-blockcontainer.base-container.w-container
+    .shop-details-wrapper id=component_id data-controller="product-detail" class="product-detail-#{id}" data-in-stock=in_stock data-product-detail-product-id-value=id data-product-detail-product-name-value=title data-product-detail-product-price-value=price data-product-detail-is-liked-value=is_liked
+      / Left Side - Product Images
+      .more-image-products-block
+        / Main product image
+        a.lightbox-main-product.w-inline-block.w-lightbox href="#" id="main-product-#{id}" data-action="click->product-detail#openImageModal"
+          img.image-main-product src=image alt=alt loading="lazy" data-product-detail-target="mainImage"
+        
+        / Media Gallery Section
+        - if has_media_gallery?
+          = render MediaGallery::MediaGalleryComponent.new( \
+              media_items: media_gallery, \
+              id: "product-#{id}", \
+              layout: :horizontal, \
+              max_height: 100, \
+              enable_scroll: true, \
+              auto_replace_main: true \
+            )
+
+      / Right Side - Product Information  
+      .shop-details-content-block
+        .product-details-top-details
+          .product-details-name
+            .product-title-wrapper
+              h1.product-name = title
+              / Like Button
+              button.wishlist-btn data-action="click->product-detail#toggleWishlist" aria-label="Add to wishlist" data-product-detail-target="wishlistBtn"
+                svg.icon-heart viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style=heart_icon_style data-product-detail-target="heartIcon"
+                  path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+            - if subtitle
+              p = subtitle
+          
+          .price-wrapper
+            - if on_sale && sale_price
+              h4 = sale_price
+              - if original_price || price
+                h5.compare-price = original_price || price
+            - else
+              h4 = price
+
+        / Product specifications
+        - if has_specifications?
+          .info-grid-wrapper
+            - specifications.each do |spec|
+              .info-grid-product
+                .info-title-product = "#{spec[:label]}:"
+                p = spec[:value]
+
+        / Purchase section
+        .default-state-cart
+          - if in_stock
+            / Quantity input
+            input.quantity-product id="quantity-#{id}" data-target="product-detail.quantityInput" type="number" value=default_quantity min="1" max="99" placeholder="1"
+            
+            / Add to cart section
+            .add-to-cart-wrap
+              button.primary-button data-action="click->product-detail#addToCart" aria-label="Add #{title} to cart"
+                = "Add to Cart"
+              
+              button.primary-button-black data-action="click->product-detail#buyNow" aria-label="Buy #{title} now"  
+                = "Buy Now"
+          - else
+            / Out of stock state
+            p This product is out of stock.
+            button.primary-button-black data-action="click->product-detail#notifyWhenAvailable"
+              = "Notify when available"
+
+    / Full-width Description section below main content
+    .product-description-section
+      .tabs.w-tabs data-controller="tabs"
+        .tabs-menu-product.w-tab-menu role="tablist"
+          a.tab-link-product.w-inline-block.w-tab-link.w--current data-w-tab="Tab 1" data-action="click->tabs#selectTab" data-tab="description"
+            = "DESCRIPTION"
+          - if has_features?
+            a.tab-link-product.w-inline-block.w-tab-link data-w-tab="Tab 2" data-action="click->tabs#selectTab" data-tab="features"  
+              = "FEATURES"
+          a.tab-link-product.w-inline-block.w-tab-link data-w-tab="Tab 3" data-action="click->tabs#selectTab" data-tab="additional"
+            = "ADDITIONAL INFORMATION"
+
+        .tab-content-wrap.w-tab-content
+          .tab-pane-product.w-tab-pane.w--tab-active data-w-tab="Tab 1" data-tab="description"
+            = simple_format(description.present? ? description : default_description)
+            
+          - if has_features?
+            .tab-pane-product.w-tab-pane data-w-tab="Tab 2" data-tab="features"
+              ul
+                - features.each do |feature|
+                  li = feature
+          
+          .tab-pane-product.w-tab-pane data-w-tab="Tab 3" data-tab="additional"
+            - if has_specifications?
+              - specifications.each do |spec|
+                .info-grid-product
+                  .info-title-product = "#{spec[:label]}:"
+                  p = spec[:value]
+                  

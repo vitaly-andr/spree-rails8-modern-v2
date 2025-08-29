@@ -1,0 +1,31 @@
+-# rails-way: Тестовая страница комплексной проверки frontend-стека
+
+.container.mx-auto.p-8
+  h1.text-2xl.font-bold.mb-6.text-center Тест frontend-стека (Turbo, Stimulus, Tailwind, Vite, статика)
+
+  = turbo_frame_tag "image_frame" do
+    .flex.flex-col.items-center(
+      data-controller="switch-image"
+      data-switch-image-pic1-value=vite_asset_path('assets/pic1.webp')
+      data-switch-image-pic2-value=vite_asset_path('assets/pic2.webp')
+    )
+      img#main-image.rounded.shadow-lg.mb-4(
+        src=vite_asset_path('assets/pic1.webp')
+        alt="Картинка"
+        width="200"
+        data-switch-image-target="image"
+      )
+      button#switch-image-btn.bg-blue-500.text-white.font-bold.py-2.px-4.rounded.hover:bg-blue-600.transition(data-action="click->switch-image#swap") Сменить картинку
+
+  .mt-8.flex.flex-col.items-center(data-controller="counter")
+    button.bg-green-500.text-white.font-bold.py-2.px-4.rounded.hover:bg-green-600.transition(data-action="click->counter#increment")
+      | Нажми меня (Stimulus)
+    p.mt-2.text-lg.font-mono
+      | Счётчик:
+      span#counter-value(data-counter-target="value") 0
+
+  .mt-8.flex.justify-center
+    img.rounded-full.shadow-md[src=vite_asset_path('assets/pic2.webp') alt="Вторая картинка (через vite_asset_path)" width="100"]
+
+  p.mt-8.text-gray-500.text-center
+    | Все стили и картинки обслуживаются через Vite, JS и Turbo работают через vite_rails.

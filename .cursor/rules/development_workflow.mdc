@@ -1,0 +1,105 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Development Workflow for Materialize_1C
+
+## Getting Started
+
+1. **Setup the Database**
+   ```bash
+   # Create the database
+   rails db:create db:migrate
+   ```
+
+2. **Start the Server**
+   ```bash
+   # Start the Rails server and Vite dev server
+   bin/dev
+   ```
+
+3. **Access the Application**
+   - Open http://localhost:3000 in your browser
+
+## Key Development Tasks
+
+### Database Analysis
+To analyze the 1C database structure:
+1. Navigate to `/db_metadata`
+2. Click "Analyze DB Structure"
+
+### Metadata Import
+To import metadata from Excel files:
+1. Navigate to `/metadata_imports/new`
+2. Upload an Excel file with table mappings
+3. Click "Import"
+
+### Table Search
+To search for tables in the 1C database:
+1. Navigate to `/table_search`
+2. Enter search terms
+3. View results
+
+## Frontend Development
+
+### Frontend Assets Location
+- JavaScript: `app/frontend/entrypoints`
+- CSS: `app/frontend/stylesheets`
+- Images: `app/frontend/assets`
+
+### Using Vite with Rails
+- All frontend assets are managed by Vite
+- Vite development server runs alongside Rails server
+- Use the `vite_javascript_tag` and `vite_stylesheet_tag` helpers in views
+
+Example:
+```erb
+<%= vite_javascript_tag 'application' %>
+<%= vite_stylesheet_tag 'application' %>
+```
+
+### Stimulus Controllers
+- Located in `app/frontend/controllers`
+- Register controllers in `app/frontend/controllers/index.js`
+
+## Database Conventions
+
+### Creating New Migrations
+```bash
+# Create a new migration
+rails g migration CreateNewTable
+```
+
+### Working with Materialized Views
+- Use the Scenic gem patterns for creating and updating materialized views
+- Store view definitions in `db/views/`
+- Version view definitions to track changes
+
+## Testing
+
+- Models: `test/models/`
+- Controllers: `test/controllers/`
+- System tests: `test/system/`
+
+Run tests with:
+```bash
+rails test
+```
+
+## Deployment
+The application is containerized using Docker:
+
+```bash
+# Build the Docker image
+docker build -t materialize_1c .
+
+# Run the container
+docker run -p 3000:3000 materialize_1c
+```
+
+Deployment is managed with Kamal:
+```bash
+kamal setup
+kamal deploy
+```
