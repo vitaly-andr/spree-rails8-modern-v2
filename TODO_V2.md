@@ -90,21 +90,55 @@ rails generate devise:install
 - [x] Enable both admin and storefront
 - [x] Use Devise for authentication
 ```bash
-bin/rails g spree:install --user_class=Spree::User --install_admin=true --install_storefront=true --authentication=devise --admin_email=vitaly.andr@gmail.com --admin_password=Prime3432! --auto_accept --enforce_available_locales=true
+bin/rails g spree:install --user_class=Spree::User --install_admin=true --install_storefront=true --authentication=devise --auto_accept --enforce_available_locales=true
 ```
 - **Generator Options Explained**:
   - `--user_class=Spree::User`: Use Spree::User model (proper Spree integration)
   - `--install_admin=true`: Install Admin Panel
   - `--install_storefront=true`: Install Storefront
   - `--authentication=devise`: Use Devise for authentication
-  - `--admin_email`: Set admin user email
-  - `--admin_password`: Set admin user password
   - `--auto_accept`: Auto-accept prompts
   - `--enforce_available_locales=true`: Enforce locale validation
+- **IMPORTANT**: `--admin_email` and `--admin_password` options are **ignored** by the seed. Default admin user will be created.
 - **Test**: Generator completes without errors ✅
 - **Commit**: `feat(spree): Run official Spree install generator with Spree::User model integration` ✅
 
-#### 🔧 Step 1.6: Add Internationalization Support
+#### 🔧 Step 1.6: Fix Devise Routes (CRITICAL!)
+- [x] **IMPORTANT**: After installation, generators might add incorrect routes. Clean up `config/routes.rb`:
+  1.  **Remove duplicate** `devise_for` calls at the end of the file.
+  2.  **Ensure correct admin routes** are at the top, outside the `Spree::Core::Engine.add_routes` block.
+- **Correct `config/routes.rb` Structure**:
+```ruby
+Rails.application.routes.draw do
+  # Admin authentication
+  devise_for :admin_users,
+    class_name: "Spree::AdminUser",
+    controllers: {
+      sessions: "spree/admin/user_sessions",
+      passwords: "spree/admin/user_passwords"
+    },
+    skip: :registrations,
+    path: :admin_users
+
+  # This line mounts Spree's routes at the root of your application.
+  mount Spree::Core::Engine, at: "/"
+
+  Spree::Core::Engine.add_routes do
+    # Storefront routes
+    scope "(:locale)", locale: /#{Spree.available_locales.join('|')}/, defaults: { locale: nil } do
+      devise_for(
+        Spree.user_class.model_name.singular_route_key,
+        # ... (storefront devise config)
+      )
+    end
+  end
+  # ... (other app routes)
+end
+```
+- **Test**: Admin panel accessible at `/admin` and redirects to `/admin_users/sign_in` ✅
+- **Commit**: `fix(routes): correct devise routes for admin panel` ✅
+
+#### 🔧 Step 1.7: Add Internationalization Support
 - [x] Add `spree_i18n` gem to Gemfile for Russian localization
 - [x] Run `bundle install` to install spree_i18n
 - [x] **Note**: `spree_i18n:install` generator is empty - gem works automatically via Rails Engine
@@ -112,7 +146,7 @@ bin/rails g spree:install --user_class=Spree::User --install_admin=true --instal
 - **Test**: I18n support installed correctly ✅
 - **Commit**: `feat(i18n): Add spree_i18n for Russian localization support` ✅
 
-#### 🔧 Step 1.7: Add Sample Data (Optional)
+#### 🔧 Step 1.8: Add Sample Data (Optional)
 - [ ] Load sample products, categories, and checkout flow
 ```bash
 bin/rake spree_sample:load
@@ -120,16 +154,35 @@ bin/rake spree_sample:load
 - **Test**: Sample data loads successfully ⏳
 - **Commit**: `feat(spree): Add sample data for development and testing` ⏳
 
+#### 🔧 Step 1.6: Run Spree Installer
+
+Now, with everything correctly prepared, we run the main installer. It will use our pre-configured models and initializer.
+
+```bash
+bin/rails g spree:install --user_class=Spree::User --install_admin=true --install_storefront=true --authentication=devise --auto_accept --enforce_available_locales=true
+```
+
+**NOTE:** The installer automatically creates an admin user (`spree@example.com`). However, to grant access, two manual steps are required:
+
+1.  **We added `Spree::UserMethods`:** Manually edit `app/models/spree/admin_user.rb` and add `include Spree::UserMethods`.
+2.  **We added the role in the console:** Run `rails console` and assign the admin role with `Spree.admin_user_class.find_by(email: 'spree@example.com').add_role('admin')`.
+`admin_user = Spree::AdminUser.find_by(email: 'spree@example.com')`
+`admin_role = Spree::Role.find_or_create_by(name: 'admin')`
+`admin_user.spree_roles << admin_role`
+
+
+After these fixes, you must log out and log in again to get admin access.
+
 ### Phase 2: Verify Spree Installation
 
 #### ✅ Step 2.1: Test Admin Dashboard
 - [x] Start Rails server: `bin/dev`
 - [x] Navigate to: http://localhost:5100/admin
-- [x] Login with configured credentials:
-  - Email: `vitaly.andr@gmail.com`
-  - Password: `Prime3432!`
+- [x] Login with **default** credentials (options in generator are ignored):
+  - Email: `spree@example.com`
+  - Password: `spree123`
 - [ ] Verify admin dashboard loads correctly
-- [ ] Check basic admin functionality (products, orders, users)
+- [ ] Change default password after first login
 - **Test**: Admin dashboard fully functional ⏳
 - **Commit**: `test(spree): Verify admin dashboard functionality` ⏳
 
@@ -162,6 +215,7 @@ bin/rake spree_sample:load
 5. **Create User models** → `rails generate devise Spree::AdminUser` + `rails generate devise Spree::User` ✅
 6. **Run migrations** → `rails db:migrate` ✅
 7. **Run Spree installer** → `bin/rails g spree:install --user_class=Spree::User ...` ✅
+8. **Fix Devise Routes** → Manually edit `config/routes.rb` ✅
 
 ### Assets Structure Requirements:
 - ✅ **DO** copy complete `app/assets/` structure from working project
@@ -175,6 +229,7 @@ bin/rake spree_sample:load
 - ❌ **DON'T** run `spree:install` before creating Devise models
 - ❌ **DON'T** forget to fix gem template before installation
 - ❌ **DON'T** skip copying assets structure from working project
+- ❌ **DON'T** leave incorrect routes generated by Devise
 - ✅ **DO** use `Spree::User` and `Spree::AdminUser` for proper integration
 - ✅ **DO** fix template in gem before running generators
 - ✅ **DO** follow exact installation order
