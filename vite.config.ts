@@ -5,11 +5,16 @@ export default defineConfig({
   plugins: [
     RubyPlugin(),
   ],
+  resolve: {
+    alias: {
+      'spree': '/app/frontend/spree'
+    }
+  },
   build: {
     rollupOptions: {
       input: {
-        application: './app/javascript/application.js',
-        spree_storefront: './app/javascript/spree_storefront.js'
+        application: './app/frontend/entrypoints/application.js',
+        spree: './app/frontend/entrypoints/spree.js'
       }
     }
   },

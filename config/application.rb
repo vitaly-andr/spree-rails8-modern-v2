@@ -6,7 +6,7 @@ require "rails/all"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module Materialize1C
+module BauPortalOnline
   class Application < Rails::Application
     # Prevent this deprecation message: https://github.com/svenfuchs/i18n/commit/3b6e56e
     I18n.enforce_available_locales = true

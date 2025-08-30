@@ -1,0 +1,24 @@
+// Spree vendor libraries
+// This file imports all JavaScript libraries that Spree depends on
+
+console.log('📚 Loading Spree vendor libraries...')
+
+// Core libraries that Spree uses
+import 'swiper/bundle'
+import 'photoswipe'
+import 'photoswipe/lightbox'
+import 'nouislider'
+
+// Credit card validation libraries
+import 'card-validator'
+import 'credit-card-type'
+
+// Headroom.js for header behavior
+import 'headroom.js'
+
+// Stimulus components that Spree uses
+import '@stimulus-components/carousel'
+import '@stimulus-components/read-more'
+import '@stimulus-components/scroll-to'
+
+console.log('✅ Spree vendor libraries loaded')

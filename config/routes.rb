@@ -1,17 +1,4 @@
 Rails.application.routes.draw do
-  # Admin authentication
-  devise_for :admin_users,
-    class_name: "Spree::AdminUser",
-    controllers: {
-      sessions: "spree/admin/user_sessions",
-      passwords: "spree/admin/user_passwords"
-    },
-    skip: :registrations,
-    path: :admin_users
-
-  # This line mounts Spree's routes at the root of your application.
-  mount Spree::Core::Engine, at: "/"
-
   Spree::Core::Engine.add_routes do
     # Storefront routes
     scope "(:locale)", locale: /#{Spree.available_locales.join('|')}/, defaults: { locale: nil } do
@@ -28,6 +15,20 @@ Rails.application.routes.draw do
       )
     end
   end
+  # Admin authentication
+  devise_for :admin_users,
+    class_name: "Spree::AdminUser",
+    controllers: {
+      sessions: "spree/admin/user_sessions",
+      passwords: "spree/admin/user_passwords"
+    },
+    skip: :registrations,
+    path: :admin_users
+
+  # This line mounts Spree's routes at the root of your application.
+  mount Spree::Core::Engine, at: "/"
+
+
 
   # rails-way: тестовый маршрут для проверки frontend-стека
   get "/test_frontend" => "pages#test_frontend"
