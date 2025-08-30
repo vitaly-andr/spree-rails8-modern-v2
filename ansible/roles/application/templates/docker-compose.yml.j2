@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  web:
+    image: {{ docker_registry_username }}/{{ app_name }}:latest
+    container_name: {{ app_name }}
+    restart: unless-stopped
+    ports:
+      - "{{ app_port }}:3000"
+    environment:
+      - RAILS_ENV={{ rails_env }}
+      - RAILS_MASTER_KEY={{ rails_master_key }}
+      - RAILS_LOG_LEVEL={{ log_level }}
+      - RAILS_SERVE_STATIC_FILES=true
+      - DATABASE_URL=sqlite3:/rails/storage/databases/{{ app_name }}.sqlite3
+      - WEB_CONCURRENCY={{ puma_workers }}
+      - RAILS_MAX_THREADS={{ puma_threads.split(':')[1] }}
+      - SOLID_QUEUE_IN_PUMA=true
+    volumes:
+      - "{{ app_directory }}/storage:/rails/storage"
+      - "{{ app_directory }}/logs:/rails/log"
+    deploy:
+      resources:
+        limits:
+          memory: {{ max_memory }}
+          cpus: '{{ max_cpus }}'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  default:
+    name: {{ app_name }}-network

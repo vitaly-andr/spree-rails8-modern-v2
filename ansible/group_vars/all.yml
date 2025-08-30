@@ -1,0 +1,28 @@
+---
+# Global variables for all environments
+
+# System settings
+timezone: "Europe/Helsinki"
+locale: "en_US.UTF-8"
+
+# Firewall settings (Hetzner external firewall)
+ufw_enabled: false  # External Hetzner firewall is used
+ufw_allow_ssh: false
+ufw_allow_http: false
+ufw_allow_https: false
+
+# Docker settings
+docker_version: "24.0.7"
+docker_compose_version: "2.23.3"
+docker_registry: "docker.io"
+docker_users:
+  - "{{ app_user }}"
+
+# Application settings
+app_port: 3000
+database_adapter: "sqlite3"  # Use SQLite for staging simplicity
+app_directory: "/home/{{ app_user }}/{{ app_name }}"
+
+# Backup settings
+backup_retention_days: 7
+backup_compression: true

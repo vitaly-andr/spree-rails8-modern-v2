@@ -1,0 +1,12 @@
+#!/bin/bash
+# Cleanup old backups for {{ app_name }}
+
+BACKUP_DIR="{{ backup_location }}"
+RETENTION_DAYS={{ backup_retention_days }}
+
+echo "Cleaning up backups older than ${RETENTION_DAYS} days..."
+
+find "${BACKUP_DIR}" -name "{{ app_name }}_backup_*.tar.gz" -type f -mtime +${RETENTION_DAYS} -delete
+
+echo "Cleanup completed. Current backups:"
+ls -la "${BACKUP_DIR}"/{{ app_name }}_backup_*.tar.gz 2>/dev/null || echo "No backups found"

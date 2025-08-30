@@ -1,0 +1,44 @@
+---
+- name: Install Certbot
+  apt:
+    name:
+      - certbot
+      - python3-certbot-nginx
+    state: present
+  when: ssl_enabled
+  tags: [ssl]
+
+- name: Stop Nginx for certificate generation
+  systemd:
+    name: nginx
+    state: stopped
+  when: ssl_enabled
+  tags: [ssl]
+
+- name: Generate SSL certificate
+  command: >
+    certbot certonly --standalone
+    --email {{ lets_encrypt_email }}
+    --agree-tos
+    --non-interactive
+    --domains {{ server_name }}
+  args:
+    creates: "/etc/letsencrypt/live/{{ server_name }}/fullchain.pem"
+  when: ssl_enabled
+  tags: [ssl]
+
+- name: Start Nginx
+  systemd:
+    name: nginx
+    state: started
+  when: ssl_enabled
+  tags: [ssl]
+
+- name: Setup SSL certificate renewal
+  cron:
+    name: "Renew SSL certificates"
+    minute: "0"
+    hour: "2"
+    job: "certbot renew --quiet && systemctl reload nginx"
+  when: ssl_enabled
+  tags: [ssl]
