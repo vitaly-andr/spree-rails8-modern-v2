@@ -1,0 +1,1 @@
+/Users/vitaly/.rvm/gems/ruby-3.4.1/bundler/gems/spree-c26eb9a1fe88/core/vendor/javascript/tailwindcss-stimulus-components.js

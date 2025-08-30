@@ -1,0 +1,165 @@
+---
+alwaysApply: true
+---
+
+# Spree Internationalization Rules
+
+## Translation Guidelines
+
+### Translation Usage
+- Use Rails i18n for internationalization
+- Use `Spree.t` for translations instead of `I18n.t`
+- Try to use existing translations as much as possible
+- Do not repeat translations in multiple files
+
+### Translation File Organization
+- Keep admin translations in `admin/config/locales/en.yml`
+- Keep storefront translations in `storefront/config/locales/en.yml`
+- Keep all other translations in `config/locales/en.yml`
+
+### Translation Best Practices
+```ruby
+# ✅ Correct translation usage
+Spree.t(:product_name)
+Spree.t('admin.products.index.title')
+
+# ❌ Incorrect - use Spree.t instead
+I18n.t(:product_name)
+t(:product_name)
+```
+
+## Locale Management
+
+### Supported Locales
+- Configure supported locales in Spree configuration
+- Use proper locale fallbacks
+- Implement locale switching functionality
+- Store user locale preferences
+
+### Content Translation
+- Use Mobility gem for model translations
+- Translate product names, descriptions, and metadata
+- Implement category and taxonomy translations
+- Provide fallback content for missing translations
+
+## Multi-language Support
+
+### Database Design
+- Use Mobility gem for translatable content
+- Store translations in separate tables
+- Index translated fields appropriately
+- Handle locale-specific URLs
+
+### Frontend Implementation
+- Implement locale switching UI
+- Use proper hreflang tags for SEO
+- Handle RTL languages appropriately
+- Provide language-specific formatting
+
+## Currency & Regional Settings
+
+### Multi-currency Support
+- Configure supported currencies
+- Implement currency conversion
+- Display prices in user's currency
+- Handle currency-specific formatting
+
+### Regional Customization
+- Configure shipping methods per region
+- Implement region-specific tax calculation
+- Provide localized payment methods
+- Handle different address formats
+
+## Error Handling
+
+### Translation Errors
+- Handle missing translation keys gracefully
+- Provide meaningful fallbacks
+- Log translation errors appropriately
+- Use translation key validation in development
+
+### Locale Validation
+- Validate supported locales
+- Handle invalid locale requests
+- Provide proper error messages
+- Implement locale detection logic# Spree Internationalization Rules
+
+## Translation Guidelines
+
+### Translation Usage
+- Use Rails i18n for internationalization
+- Use `Spree.t` for translations instead of `I18n.t`
+- Try to use existing translations as much as possible
+- Do not repeat translations in multiple files
+
+### Translation File Organization
+- Keep admin translations in `admin/config/locales/en.yml`
+- Keep storefront translations in `storefront/config/locales/en.yml`
+- Keep all other translations in `config/locales/en.yml`
+
+### Translation Best Practices
+```ruby
+# ✅ Correct translation usage
+Spree.t(:product_name)
+Spree.t('admin.products.index.title')
+
+# ❌ Incorrect - use Spree.t instead
+I18n.t(:product_name)
+t(:product_name)
+```
+
+## Locale Management
+
+### Supported Locales
+- Configure supported locales in Spree configuration
+- Use proper locale fallbacks
+- Implement locale switching functionality
+- Store user locale preferences
+
+### Content Translation
+- Use Mobility gem for model translations
+- Translate product names, descriptions, and metadata
+- Implement category and taxonomy translations
+- Provide fallback content for missing translations
+
+## Multi-language Support
+
+### Database Design
+- Use Mobility gem for translatable content
+- Store translations in separate tables
+- Index translated fields appropriately
+- Handle locale-specific URLs
+
+### Frontend Implementation
+- Implement locale switching UI
+- Use proper hreflang tags for SEO
+- Handle RTL languages appropriately
+- Provide language-specific formatting
+
+## Currency & Regional Settings
+
+### Multi-currency Support
+- Configure supported currencies
+- Implement currency conversion
+- Display prices in user's currency
+- Handle currency-specific formatting
+
+### Regional Customization
+- Configure shipping methods per region
+- Implement region-specific tax calculation
+- Provide localized payment methods
+- Handle different address formats
+
+## Error Handling
+
+### Translation Errors
+- Handle missing translation keys gracefully
+- Provide meaningful fallbacks
+- Log translation errors appropriately
+- Use translation key validation in development
+
+### Locale Validation
+- Validate supported locales
+- Handle invalid locale requests
+- Provide proper error messages
+- Implement locale detection logic

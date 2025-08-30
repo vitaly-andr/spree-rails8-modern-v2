@@ -1,0 +1,237 @@
+---
+alwaysApply: false
+---
+
+# Spree Sample Data Rules
+
+## Sample Data Architecture
+
+### Core Principles
+- Sample gem provides dummy data for development and testing
+- Includes products, categories, orders, and user data
+- Uses factories and seeds for data generation
+- Supports different sample data sets for various scenarios
+
+### Sample Data Types
+- Product catalog with variants and images
+- Taxonomies and taxons for categorization
+- Sample orders with different states
+- User accounts and addresses
+- Payment methods and shipping options
+
+## Sample Data Loading
+
+### Loading Samples
+- Use `Spree::Sample.load_sample('all')` to load all sample data
+- Load specific sample types: `products`, `taxons`, `orders`, etc.
+- Support for incremental sample loading
+- Environment-specific sample data sets
+
+```ruby
+# ✅ Loading sample data
+# Load all sample data
+Spree::Sample.load_sample('all')
+
+# Load specific sample types
+Spree::Sample.load_sample('products')
+Spree::Sample.load_sample('taxons')
+Spree::Sample.load_sample('orders')
+```
+
+### Sample Data Structure
+- Organized by data type in `db/samples/` directory
+- Each sample file focuses on specific models
+- Dependencies between sample files managed automatically
+- Support for custom sample data extensions
+
+## Product Samples
+
+### Product Creation
+- Sample products with realistic names and descriptions
+- Multiple product variants with different options
+- Product images and media attachments
+- Product properties and specifications
+
+```ruby
+# ✅ Sample product creation
+products = [
+  {
+    name: 'Ruby on Rails T-Shirt',
+    description: 'A comfortable t-shirt for Rails developers',
+    price: 19.99,
+    sku: 'ROR-001',
+    weight: 0.5,
+    height: 1,
+    width: 1,
+    depth: 1
+  }
+]
+
+products.each do |product_attrs|
+  product = Spree::Product.create!(product_attrs)
+  # Add variants, images, properties, etc.
+end
+```
+
+### Variant Samples
+- Size, color, and style variants
+- Realistic pricing variations
+- Stock levels and inventory tracking
+- Variant-specific images and properties
+
+## Category Samples
+
+### Taxonomy Creation
+- Hierarchical category structures
+- Realistic category names and descriptions
+- SEO-friendly category URLs
+- Category-specific properties and filters
+
+```ruby
+# ✅ Sample taxonomy creation
+taxonomy = Spree::Taxonomy.create!(name: 'Categories')
+
+clothing = taxonomy.taxons.create!(
+  name: 'Clothing',
+  description: 'All clothing items'
+)
+
+shirts = clothing.children.create!(
+  name: 'Shirts',
+  description: 'T-shirts and dress shirts'
+)
+```
+
+## Order Samples
+
+### Order States
+- Sample orders in different states (cart, complete, shipped, etc.)
+- Realistic order progression and timestamps
+- Payment and shipping information
+- Order adjustments and promotions
+
+### Order Complexity
+- Single and multi-item orders
+- Orders with different payment methods
+- International and domestic shipping
+- Returns and exchanges
+
+## User Samples
+
+### Customer Accounts
+- Sample customer accounts with realistic data
+- Multiple addresses per customer
+- Order history and preferences
+- Customer groups and segments
+
+### Admin Users
+- Sample admin accounts with different permission levels
+- Role-based access control examples
+- Admin-specific preferences and settings
+
+## Development Usage
+
+### Development Environment
+- Quick setup for new development environments
+- Consistent sample data across team members
+- Testing different scenarios and edge cases
+- Demo data for presentations and showcases
+
+### Testing Support
+- Sample data for automated testing
+- Consistent test fixtures
+- Performance testing with realistic data volumes
+- Edge case testing scenarios
+
+## Customization
+
+### Custom Sample Data
+- Extend sample data with business-specific content
+- Override default sample data with custom versions
+- Add industry-specific product catalogs
+- Implement locale-specific sample data
+
+```ruby
+# ✅ Custom sample data extension
+module CustomSamples
+  def self.load_custom_products
+    # Load business-specific products
+    custom_products.each do |product_data|
+      create_custom_product(product_data)
+    end
+  end
+
+  private
+
+  def self.custom_products
+    # Define custom product data
+  end
+
+  def self.create_custom_product(data)
+    # Create product with custom attributes
+  end
+end
+```
+
+### Sample Data Management
+- Version control for sample data changes
+- Environment-specific sample configurations
+- Sample data cleanup and reset procedures
+- Documentation for sample data usage
+
+## Performance Considerations
+
+### Loading Performance
+- Optimize sample data loading for large datasets
+- Use bulk insert operations where possible
+- Minimize database queries during loading
+- Progress tracking for long-running sample loads
+
+### Memory Management
+- Efficient memory usage during sample loading
+- Garbage collection optimization
+- Streaming large datasets
+- Resource cleanup after loading
+
+## Testing Sample Data
+
+### Sample Data Validation
+- Verify sample data integrity after loading
+- Test sample data relationships and constraints
+- Validate sample data completeness
+- Performance testing with sample data
+
+```ruby
+# ✅ Sample data testing
+RSpec.describe 'Sample Data Loading' do
+  it 'loads all sample data successfully' do
+    expect { Spree::Sample.load_sample('all') }.not_to raise_error
+    
+    expect(Spree::Product.count).to be > 0
+    expect(Spree::Taxon.count).to be > 0
+    expect(Spree::Order.count).to be > 0
+  end
+
+  it 'creates valid product relationships' do
+    Spree::Sample.load_sample('products')
+    
+    products = Spree::Product.all
+    expect(products).to all(be_valid)
+    expect(products.map(&:variants).flatten).to all(be_valid)
+  end
+end
+```
+
+## Documentation
+
+### Sample Data Documentation
+- Document available sample data types
+- Provide usage examples and best practices
+- Explain sample data relationships and dependencies
+- Include troubleshooting guides for common issues
+
+### Maintenance
+- Regular updates to sample data content
+- Compatibility with new Spree versions
+- Community contributions to sample data
+- Quality assurance for sample data accuracy

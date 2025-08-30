@@ -1,0 +1,195 @@
+---
+alwaysApply: false
+---
+
+# Spree Error Handling Rules
+
+## Exception Management
+
+### Error Reporting
+- Use Rails error reporter: https://guides.rubyonrails.org/error_reporting.html
+- Use appropriate exception classes
+- Provide meaningful error messages
+- Implement proper error recovery where possible
+
+```ruby
+# ✅ Proper error handling
+def process_payment
+  payment_service.call
+rescue Spree::PaymentProcessingError => e
+  Rails.error.report e
+  flash[:error] = I18n.t('spree.payment_processing_failed')
+  false
+end
+```
+
+### Custom Exception Classes
+- Create specific exception classes for different error types
+- Inherit from appropriate base exception classes
+- Include relevant context in exception messages
+- Use exception hierarchies for error categorization
+
+## Error Recovery Strategies
+
+### Graceful Degradation
+- Implement fallback mechanisms for non-critical failures
+- Provide alternative workflows when primary fails
+- Maintain system stability during partial failures
+- Log errors for debugging while continuing operation
+
+### User Experience
+- Provide clear, actionable error messages to users
+- Avoid exposing technical details to end users
+- Implement proper error page designs
+- Guide users toward resolution steps
+
+## Validation & Input Handling
+
+### Model Validations
+- Implement comprehensive validation rules
+- Provide clear validation error messages
+- Use Rails validation helpers appropriately
+- Handle edge cases in validation logic
+
+### Parameter Validation
+- Validate all user inputs thoroughly
+- Use strong parameters consistently
+- Sanitize inputs to prevent security issues
+- Provide meaningful validation feedback
+
+## Logging & Monitoring
+
+### Error Logging
+- Log errors with appropriate severity levels
+- Include relevant context and stack traces
+- Use structured logging for better analysis
+- Implement log rotation and retention policies
+
+### Monitoring Integration
+- Integrate with error monitoring services
+- Set up alerts for critical errors
+- Track error rates and patterns
+- Monitor system health metrics
+
+## API Error Handling
+
+### API Response Format
+- Use consistent error response formats
+- Include error codes and messages
+- Provide helpful debugging information
+- Follow REST API error conventions
+
+### Status Code Usage
+- Use appropriate HTTP status codes
+- Provide consistent error responses
+- Include error details in response body
+- Handle different error scenarios appropriately
+
+## Development & Testing
+
+### Error Testing
+- Test error scenarios thoroughly
+- Verify error handling paths
+- Test error recovery mechanisms
+- Ensure proper error propagation
+
+### Development Tools
+- Use proper debugging tools
+- Implement development error pages
+- Provide detailed error information in development
+- Use appropriate logging levels for different environments# Spree Error Handling Rules
+
+## Exception Management
+
+### Error Reporting
+- Use Rails error reporter: https://guides.rubyonrails.org/error_reporting.html
+- Use appropriate exception classes
+- Provide meaningful error messages
+- Implement proper error recovery where possible
+
+```ruby
+# ✅ Proper error handling
+def process_payment
+  payment_service.call
+rescue Spree::PaymentProcessingError => e
+  Rails.error.report e
+  flash[:error] = I18n.t('spree.payment_processing_failed')
+  false
+end
+```
+
+### Custom Exception Classes
+- Create specific exception classes for different error types
+- Inherit from appropriate base exception classes
+- Include relevant context in exception messages
+- Use exception hierarchies for error categorization
+
+## Error Recovery Strategies
+
+### Graceful Degradation
+- Implement fallback mechanisms for non-critical failures
+- Provide alternative workflows when primary fails
+- Maintain system stability during partial failures
+- Log errors for debugging while continuing operation
+
+### User Experience
+- Provide clear, actionable error messages to users
+- Avoid exposing technical details to end users
+- Implement proper error page designs
+- Guide users toward resolution steps
+
+## Validation & Input Handling
+
+### Model Validations
+- Implement comprehensive validation rules
+- Provide clear validation error messages
+- Use Rails validation helpers appropriately
+- Handle edge cases in validation logic
+
+### Parameter Validation
+- Validate all user inputs thoroughly
+- Use strong parameters consistently
+- Sanitize inputs to prevent security issues
+- Provide meaningful validation feedback
+
+## Logging & Monitoring
+
+### Error Logging
+- Log errors with appropriate severity levels
+- Include relevant context and stack traces
+- Use structured logging for better analysis
+- Implement log rotation and retention policies
+
+### Monitoring Integration
+- Integrate with error monitoring services
+- Set up alerts for critical errors
+- Track error rates and patterns
+- Monitor system health metrics
+
+## API Error Handling
+
+### API Response Format
+- Use consistent error response formats
+- Include error codes and messages
+- Provide helpful debugging information
+- Follow REST API error conventions
+
+### Status Code Usage
+- Use appropriate HTTP status codes
+- Provide consistent error responses
+- Include error details in response body
+- Handle different error scenarios appropriately
+
+## Development & Testing
+
+### Error Testing
+- Test error scenarios thoroughly
+- Verify error handling paths
+- Test error recovery mechanisms
+- Ensure proper error propagation
+
+### Development Tools
+- Use proper debugging tools
+- Implement development error pages
+- Provide detailed error information in development
+- Use appropriate logging levels for different environments

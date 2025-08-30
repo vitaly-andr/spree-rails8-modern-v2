@@ -1,7 +1,5 @@
 ---
-description: 
-globs: 
-alwaysApply: true
+alwaysApply: false
 ---
 # Connecting to 1C Database with MCP Postgres
 

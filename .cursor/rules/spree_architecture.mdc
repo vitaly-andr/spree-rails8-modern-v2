@@ -1,0 +1,163 @@
+---
+alwaysApply: true
+---
+
+# Spree Architecture Rules
+
+## Core Architecture Principles
+
+### Framework & Structure
+- Spree is built on Ruby on Rails and follows MVC architecture
+- All Spree code must be namespaced under `Spree::` module
+- Spree is distributed as Rails engines with separate gems (core, admin, api, storefront, emails, etc.)
+- Follow Rails conventions and the Rails Security Guide
+- Prefer Rails idioms and standard patterns over custom solutions
+
+### Code Organization
+- Place all models in `app/models/spree/` directory
+- Place all controllers in `app/controllers/spree/` directory  
+- Place all views in `app/views/spree/` directory
+- Place all services in `app/services/spree/` directory
+- Place all mailers in `app/mailers/spree/` directory
+- Place all API serializers in `app/serializers/spree/` directory
+- Place all helpers in `app/helpers/spree/` directory
+- Place all jobs in `app/jobs/spree/` directory
+- Place all presenters in `app/presenters/spree/` directory
+- Use consistent file naming: `spree/product.rb` for `Spree::Product` class
+- Group related functionality into concerns when appropriate
+
+### Naming Conventions & File Paths
+- Models: `app/models/spree/product.rb`
+- Controllers: `app/controllers/spree/admin/products_controller.rb`
+- Views: `app/views/spree/admin/products/`
+- Decorators: `app/models/spree/product_decorator.rb`
+
+### Class Structure
+```ruby
+# ✅ Correct naming
+module Spree
+  class Product < Spree.base_class
+  end
+end
+
+module Spree
+  module Admin
+    class ProductsController < ResourceController
+    end
+  end
+end
+
+# ❌ Incorrect - missing namespace
+class Product < ApplicationRecord
+end
+```
+
+Always inherit from `Spree.base_class` when creating models.
+
+## Spree Components
+
+### Core Components
+- **Core**: Foundation of Spree, models, services, and backend logic
+- **Admin Dashboard**: Control center for managing products, orders, customers
+- **Storefront**: Public-facing part where customers browse and purchase
+- **Emails**: Built-in transactional email support
+- **Storefront API**: Programmatic interaction with the store
+- **Platform API**: Comprehensive endpoints for managing all aspects
+- **Webhooks**: Real-time notifications to external systems
+
+### Controller Hierarchy
+- **`ApplicationController`**: Global base controller for non-Spree parts
+- **`Spree::BaseController`**: Foundation for all Spree controllers
+- **`Spree::StoreController`**: Most important for storefront (includes cart, theme, etc.)
+- **Admin controllers**: Inherit from `Spree::Admin::ResourceController`
+- **API controllers**: Inherit from `Spree::Api::V2::BaseController`
+
+### Layout Architecture
+- **`application.html.slim`**: Global application layout (NOT for Spree storefront)
+- **`spree/storefront.html.erb`**: Default layout for entire Spree storefront
+
+## Golden Rules
+
+1. **Any controller that renders a storefront page MUST inherit from `Spree::StoreController`**
+2. **Do not call `Spree::User` directly, use `Spree.user_class` instead**
+3. **Do not call `Spree::AdminUser` directly, use `Spree.admin_user_class` instead**
+4. **All Spree code is prefixed with `Spree` namespace to avoid conflicts**# Spree Architecture Rules
+
+## Core Architecture Principles
+
+### Framework & Structure
+- Spree is built on Ruby on Rails and follows MVC architecture
+- All Spree code must be namespaced under `Spree::` module
+- Spree is distributed as Rails engines with separate gems (core, admin, api, storefront, emails, etc.)
+- Follow Rails conventions and the Rails Security Guide
+- Prefer Rails idioms and standard patterns over custom solutions
+
+### Code Organization
+- Place all models in `app/models/spree/` directory
+- Place all controllers in `app/controllers/spree/` directory  
+- Place all views in `app/views/spree/` directory
+- Place all services in `app/services/spree/` directory
+- Place all mailers in `app/mailers/spree/` directory
+- Place all API serializers in `app/serializers/spree/` directory
+- Place all helpers in `app/helpers/spree/` directory
+- Place all jobs in `app/jobs/spree/` directory
+- Place all presenters in `app/presenters/spree/` directory
+- Use consistent file naming: `spree/product.rb` for `Spree::Product` class
+- Group related functionality into concerns when appropriate
+
+### Naming Conventions & File Paths
+- Models: `app/models/spree/product.rb`
+- Controllers: `app/controllers/spree/admin/products_controller.rb`
+- Views: `app/views/spree/admin/products/`
+- Decorators: `app/models/spree/product_decorator.rb`
+
+### Class Structure
+```ruby
+# ✅ Correct naming
+module Spree
+  class Product < Spree.base_class
+  end
+end
+
+module Spree
+  module Admin
+    class ProductsController < ResourceController
+    end
+  end
+end
+
+# ❌ Incorrect - missing namespace
+class Product < ApplicationRecord
+end
+```
+
+Always inherit from `Spree.base_class` when creating models.
+
+## Spree Components
+
+### Core Components
+- **Core**: Foundation of Spree, models, services, and backend logic
+- **Admin Dashboard**: Control center for managing products, orders, customers
+- **Storefront**: Public-facing part where customers browse and purchase
+- **Emails**: Built-in transactional email support
+- **Storefront API**: Programmatic interaction with the store
+- **Platform API**: Comprehensive endpoints for managing all aspects
+- **Webhooks**: Real-time notifications to external systems
+
+### Controller Hierarchy
+- **`ApplicationController`**: Global base controller for non-Spree parts
+- **`Spree::BaseController`**: Foundation for all Spree controllers
+- **`Spree::StoreController`**: Most important for storefront (includes cart, theme, etc.)
+- **Admin controllers**: Inherit from `Spree::Admin::ResourceController`
+- **API controllers**: Inherit from `Spree::Api::V2::BaseController`
+
+### Layout Architecture
+- **`application.html.slim`**: Global application layout (NOT for Spree storefront)
+- **`spree/storefront.html.erb`**: Default layout for entire Spree storefront
+
+## Golden Rules
+
+1. **Any controller that renders a storefront page MUST inherit from `Spree::StoreController`**
+2. **Do not call `Spree::User` directly, use `Spree.user_class` instead**
+3. **Do not call `Spree::AdminUser` directly, use `Spree.admin_user_class` instead**
+4. **All Spree code is prefixed with `Spree` namespace to avoid conflicts**

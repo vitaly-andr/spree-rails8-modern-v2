@@ -1,0 +1,248 @@
+---
+alwaysApply: true
+---
+
+# Spree Storefront Rules
+
+## Storefront Architecture
+
+### Core Principles
+- Storefront is the customer-facing part of Spree
+- Built as a separate Rails engine (`spree_storefront`)
+- Uses theme-based architecture for customization
+- Implements responsive design with mobile-first approach
+
+### Controller Structure
+- All storefront controllers inherit from `Spree::StoreController`
+- Includes cart management, theme support, and customer helpers
+- Implements proper SEO and analytics integration
+- Supports guest and authenticated user workflows
+
+```ruby
+# ✅ Proper storefront controller structure
+module Spree
+  class ProductsController < StoreController
+    before_action :load_product, only: [:show]
+    
+    def show
+      @variants = @product.variants_including_master
+      @product_properties = @product.product_properties.includes(:property)
+      @taxon = params[:taxon_id].present? ? Spree::Taxon.find(params[:taxon_id]) : @product.taxons.first
+    end
+
+    private
+
+    def load_product
+      @product = Spree::Product.friendly.find(params[:id])
+    end
+  end
+end
+```
+
+## Theme System
+
+### Theme Architecture
+- Themes control layout, styling, and component structure
+- Use `Spree::ThemeConcern` for theme management
+- Access current theme via `current_theme` helper
+- Support for theme-specific assets and views
+
+### Theme Customization
+- Override views by placing them in `app/views/spree/`
+- Use theme-specific partials and layouts
+- Implement theme-specific styling and JavaScript
+- Support for multiple themes per store
+
+```erb
+<!-- ✅ Theme-aware view structure -->
+<%= render "themes/#{current_theme.name}/products/show", product: @product %>
+```
+
+## Frontend Assets
+
+### JavaScript Structure
+- Use Stimulus controllers for interactive components
+- Place controllers in `app/javascript/spree/storefront/controllers/`
+- Use Importmap for dependency management
+- Implement progressive enhancement
+
+### CSS/SCSS Structure
+- Theme-based CSS organization
+- Use Tailwind CSS for utility-first styling
+- Component-specific stylesheets
+- Responsive design patterns
+
+```javascript
+// ✅ Proper Stimulus controller structure
+import { Controller } from "@hotwired/stimulus"
+
+export default class extends Controller {
+  static targets = ["quantity", "addToCart"]
+  static values = { variantId: Number }
+
+  connect() {
+    this.updateAddToCartState()
+  }
+
+  updateQuantity(event) {
+    const quantity = parseInt(event.target.value)
+    this.updateAddToCartState(quantity)
+  }
+
+  addToCart(event) {
+    event.preventDefault()
+    // Add to cart logic
+  }
+}
+```
+
+## Product Display
+
+### Product Views
+- Implement product detail pages with image galleries
+- Support for product variants and options
+- Display product properties and specifications
+- Include related products and recommendations
+
+### Product Lists
+- Category and taxonomy-based product listings
+- Search and filtering functionality
+- Pagination and sorting options
+- SEO-optimized URLs and meta tags
+
+## Shopping Cart
+
+### Cart Management
+- Use `current_order` helper for cart access
+- Implement AJAX-based cart updates
+- Support for guest and authenticated carts
+- Cart persistence across sessions
+
+```erb
+<!-- ✅ Cart item display -->
+<%= form_with model: line_item, url: line_item_path(line_item), method: :patch, local: false do |f| %>
+  <%= f.number_field :quantity, value: line_item.quantity, min: 1, 
+                      data: { action: "change->cart#updateQuantity" } %>
+  <%= f.submit "Update", class: "btn btn-sm btn-outline-secondary" %>
+<% end %>
+```
+
+## Checkout Process
+
+### Checkout Flow
+- Multi-step checkout process (Address, Delivery, Payment, Confirm)
+- Support for guest checkout
+- Address validation and management
+- Payment method integration
+
+### Checkout Customization
+- Override checkout steps as needed
+- Implement custom validation logic
+- Support for promotional codes and discounts
+- Order confirmation and email notifications
+
+## User Account
+
+### Account Management
+- User registration and authentication
+- Order history and tracking
+- Address book management
+- Wishlist functionality
+
+### Account Views
+- Dashboard with order summary
+- Detailed order views with tracking
+- Profile management forms
+- Account settings and preferences
+
+## SEO & Analytics
+
+### SEO Optimization
+- Proper meta tags and structured data
+- SEO-friendly URLs with FriendlyId
+- Sitemap and robots.txt generation
+- Open Graph and Twitter Card support
+
+### Analytics Integration
+- Google Analytics 4 support
+- E-commerce tracking events
+- Custom event tracking
+- Performance monitoring
+
+```erb
+<!-- ✅ SEO meta tags -->
+<% content_for :head do %>
+  <meta name="description" content="<%= @product.description.truncate(160) %>">
+  <meta property="og:title" content="<%= @product.name %>">
+  <meta property="og:description" content="<%= @product.description.truncate(160) %>">
+  <meta property="og:image" content="<%= @product.images.first&.url(:large) %>">
+<% end %>
+```
+
+## Mobile Optimization
+
+### Responsive Design
+- Mobile-first CSS approach
+- Touch-friendly interface elements
+- Optimized images and assets
+- Progressive Web App features
+
+### Performance
+- Lazy loading for images
+- Minified and compressed assets
+- CDN integration for static files
+- Caching strategies for dynamic content
+
+## Testing
+
+### Feature Testing
+- Use Capybara for end-to-end testing
+- Test complete user journeys
+- Mobile and desktop viewport testing
+- Cross-browser compatibility testing
+
+```ruby
+# ✅ Proper storefront feature spec
+require 'spec_helper'
+
+RSpec.describe 'Product Details', type: :feature do
+  let(:product) { create(:product, :with_images) }
+
+  scenario 'viewing product details' do
+    visit spree.product_path(product)
+    
+    expect(page).to have_content(product.name)
+    expect(page).to have_content(product.description)
+    expect(page).to have_css('.product-images img')
+    expect(page).to have_button('Add to Cart')
+  end
+end
+```
+
+## Accessibility
+
+### WCAG Compliance
+- Proper semantic HTML structure
+- ARIA labels and roles
+- Keyboard navigation support
+- Screen reader compatibility
+
+### Accessibility Testing
+- Automated accessibility testing
+- Manual testing with screen readers
+- Color contrast validation
+- Focus management testing
+
+## Internationalization
+
+### Multi-language Support
+- Locale-specific content and URLs
+- Currency and number formatting
+- Date and time localization
+- RTL language support
+
+### Translation Management
+- Use `Spree.t` for all translatable strings
+- Organize translations by feature
+- Support for pluralization rules
+- Fallback language handling
