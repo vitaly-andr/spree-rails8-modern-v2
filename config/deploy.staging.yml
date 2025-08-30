@@ -1,0 +1,104 @@
+# Staging environment configuration for Spree Rails 8
+service: spree-rails8-staging
+
+# Use a staging-specific image tag
+image: viandrianoff/spree-rails8-staging
+
+# Deploy to our staging server
+servers:
+  web:
+    - 95.217.223.50
+  job:
+    hosts:
+      - 95.217.223.50
+    cmd: bin/jobs
+
+# SSL is handled by Nginx (configured by Ansible)
+# We'll use HTTP internally since Nginx handles HTTPS termination
+proxy:
+  ssl: false
+  host: staging.andrianoff.online
+
+# Docker Hub registry
+registry:
+  username: viandrianoff
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+# Environment variables for staging
+env:
+  secret:
+    - RAILS_MASTER_KEY
+  clear:
+    RAILS_ENV: staging
+    RAILS_LOG_LEVEL: info
+    DATABASE_URL: sqlite3:/rails/storage/databases/staging.sqlite3
+    
+    # Solid Queue configuration
+    SOLID_QUEUE_IN_PUMA: true
+    JOB_CONCURRENCY: 2
+    
+    # Web server configuration
+    WEB_CONCURRENCY: 2
+    
+    # Vite configuration
+    VITE_API_URL: https://staging.andrianoff.online
+    
+    # Disable asset compilation in staging (use precompiled assets)
+    RAILS_SERVE_STATIC_FILES: true
+    RAILS_LOG_TO_STDOUT: true
+
+# Useful aliases for staging management
+aliases:
+  console: app exec --interactive --reuse "bin/rails console"
+  shell: app exec --interactive --reuse "bash"
+  logs: app logs -f
+  dbc: app exec --interactive --reuse "bin/rails dbconsole"
+  staging: app exec --interactive --reuse "bin/rails console -e staging"
+  vite: app exec --interactive --reuse "bin/rails vite:install"
+
+# Persistent storage for SQLite database and Active Storage
+volumes:
+  - "spree_staging_storage:/rails/storage"
+
+# Asset path for fingerprinted assets
+asset_path: /rails/public/assets
+
+# Image builder configuration
+builder:
+  arch: amd64
+  # Build locally for staging (faster iteration)
+  local: true
+
+# Use deploy user (created by Ansible)
+ssh:
+  user: deploy
+
+# Health check endpoint
+healthcheck:
+  path: /up
+  port: 80
+  max_attempts: 3
+  interval: 30s
+  grace_period: 10s
+
+# Rolling deployment configuration
+deploy:
+  strategy: rolling
+  max_parallel: 1
+  wait_time: 30
+  max_consecutive_failures: 2
+
+# # Accessory services (optional for staging)
+# accessories:
+#   # SQLite database (handled by volumes)
+#   # Solid Cache for Redis (required for Spree)
+#   solid_cache:
+#     image: redis:7.0-alpine
+#     host: 95.217.223.50
+#     port: "127.0.0.1:6379:6379"
+#     env:
+#       clear:
+#         REDIS_PASSWORD: ""
+#     directories:
+#       - data:/data

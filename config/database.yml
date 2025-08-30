@@ -36,6 +36,21 @@ development:
     adapter: sqlite3
     database: db/spree_rails8_modern_fresh_solid_cache_development.sqlite3
 
+staging:
+  primary:
+    adapter: sqlite3
+    database: storage/databases/staging.sqlite3
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+    timeout: 5000
+  solid_queue:
+    adapter: sqlite3
+    database: storage/databases/solid_queue_staging.sqlite3
+  solid_cable:
+    adapter: sqlite3
+    database: storage/databases/solid_cable_staging.sqlite3
+  solid_cache:
+    adapter: sqlite3
+    database: storage/databases/solid_cache_staging.sqlite3
 
 test:
   primary:
@@ -67,19 +82,7 @@ production:
     database: db/spree_rails8_modern_fresh_solid_cache_production.sqlite3
 
 
-staging:
-  primary:
-    <<: *default
-    database: spree_rails8_modern_fresh_staging
-  solid_queue:
-    adapter: sqlite3
-    database: db/spree_rails8_modern_fresh_solid_queue_staging.sqlite3
-  solid_cable:
-    adapter: sqlite3
-    database: db/spree_rails8_modern_fresh_solid_cable_staging.sqlite3
-  solid_cache:
-    adapter: sqlite3
-    database: db/spree_rails8_modern_fresh_solid_cache_staging.sqlite3
+
 
 
   # The specified database role being used to connect to PostgreSQL.

@@ -11,6 +11,10 @@ development:
 test:
   <<: *default
 
+staging:
+  database: solid_cache  # This connects to the solid_cache database
+  <<: *default
+
 production:
   database: cache
   <<: *default
