@@ -3,6 +3,9 @@
 
 console.log('📚 Loading Spree vendor libraries...')
 
+// Rails request library for AJAX calls
+import '@rails/request.js'
+
 // Core libraries that Spree uses
 import 'swiper/bundle'
 import 'photoswipe'
@@ -20,5 +23,8 @@ import 'headroom.js'
 import '@stimulus-components/carousel'
 import '@stimulus-components/read-more'
 import '@stimulus-components/scroll-to'
+
+// Kanety accordion component
+import '@kanety/stimulus-accordion'
 
 console.log('✅ Spree vendor libraries loaded')
