@@ -1,0 +1,275 @@
+---
+alwaysApply: true
+---
+
+# Spree Testing Rules
+
+## Test Application Setup
+
+### Creating Test App
+To run tests you need to create test app with `bundle exec rake test_app` in every gem directory (eg. admin, api, core, etc.)
+
+This will create a dummy rails application and run migrations. If there's already a dummy app in the gem directory, you can skip this step.
+
+## Test Structure
+
+### Testing Framework
+- Use RSpec for testing
+- Place specs in appropriate directories matching app structure
+- Use Spree's factory bot definitions
+- Follow Rails testing conventions
+
+### Controller Testing
+- For controller specs always add `render_views` to the test
+- For controller spec authentication use `stub_authorization!`
+- Test both success and failure scenarios
+- Verify proper parameter handling
+
+```ruby
+# ✅ Proper controller spec structure
+require 'spec_helper'
+
+RSpec.describe Spree::Admin::ProductsController, type: :controller do
+  render_views
+  
+  before { stub_authorization! }
+  
+  describe '#create' do
+    context 'with valid parameters' do
+      it 'creates a new product' do
+        expect {
+          post :create, params: { product: valid_attributes }
+        }.to change(Spree::Product, :count).by(1)
+      end
+    end
+  end
+end
+```
+
+### Model Testing
+```ruby
+# ✅ Proper model spec structure
+require 'spec_helper'
+
+RSpec.describe Spree::Product, type: :model do
+  let(:product) { create(:product) }
+  
+  describe '#custom_method' do
+    it 'returns expected result' do
+      expect(product.custom_method).to eq('EXPECTED')
+    end
+  end
+  
+  describe 'validations' do
+    it { is_expected.to validate_presence_of(:name) }
+    it { is_expected.to validate_uniqueness_of(:slug) }
+  end
+  
+  describe 'associations' do
+    it { is_expected.to have_many(:variants) }
+  end
+end
+```
+
+## Factory Usage
+
+### Factory Guidelines
+- Use `create` for persisted objects in tests
+- Use `build` for non-persisted objects (recommended as it's much faster than `create`)
+- Add new factories in `lib/spree/testing_support/factories/`
+- Use meaningful factory attributes
+
+```ruby
+# ✅ Proper factory usage
+let(:product) { create(:product, name: 'Test Product') }
+let(:variant) { build(:variant, product: product) }
+```
+
+### Factory Best Practices
+- Keep factories simple and focused
+- Use traits for variations
+- Avoid complex factory dependencies
+- Use sequences for unique values
+
+## Test Categories
+
+### Unit Tests
+- Test individual methods and behaviors
+- Mock external dependencies
+- Focus on single responsibility
+- Use descriptive test names
+
+### Integration Tests
+- Test complete workflows
+- Test API endpoints end-to-end
+- Verify proper data flow
+- Test authentication and authorization
+
+### System Tests
+- Test user interactions
+- Use Capybara for browser testing
+- Test JavaScript functionality
+- Verify complete user journeys
+
+## Test Data Management
+
+### Database Cleanup
+- Use database_cleaner gem
+- Clean database between tests
+- Use transactions for speed
+- Reset sequences appropriately
+
+### Test Isolation
+- Ensure tests don't depend on each other
+- Use proper setup and teardown
+- Mock external services
+- Use consistent test data
+
+## Performance Testing
+
+### Test Performance
+- Keep test suite fast
+- Use `build` instead of `create` when possible
+- Mock expensive operations
+- Profile slow tests
+
+### CI/CD Considerations
+- Ensure tests run reliably in CI
+- Use appropriate test parallelization
+- Handle flaky tests properly
+- Maintain test coverage metrics# Spree Testing Rules
+
+## Test Application Setup
+
+### Creating Test App
+To run tests you need to create test app with `bundle exec rake test_app` in every gem directory (eg. admin, api, core, etc.)
+
+This will create a dummy rails application and run migrations. If there's already a dummy app in the gem directory, you can skip this step.
+
+## Test Structure
+
+### Testing Framework
+- Use RSpec for testing
+- Place specs in appropriate directories matching app structure
+- Use Spree's factory bot definitions
+- Follow Rails testing conventions
+
+### Controller Testing
+- For controller specs always add `render_views` to the test
+- For controller spec authentication use `stub_authorization!`
+- Test both success and failure scenarios
+- Verify proper parameter handling
+
+```ruby
+# ✅ Proper controller spec structure
+require 'spec_helper'
+
+RSpec.describe Spree::Admin::ProductsController, type: :controller do
+  render_views
+  
+  before { stub_authorization! }
+  
+  describe '#create' do
+    context 'with valid parameters' do
+      it 'creates a new product' do
+        expect {
+          post :create, params: { product: valid_attributes }
+        }.to change(Spree::Product, :count).by(1)
+      end
+    end
+  end
+end
+```
+
+### Model Testing
+```ruby
+# ✅ Proper model spec structure
+require 'spec_helper'
+
+RSpec.describe Spree::Product, type: :model do
+  let(:product) { create(:product) }
+  
+  describe '#custom_method' do
+    it 'returns expected result' do
+      expect(product.custom_method).to eq('EXPECTED')
+    end
+  end
+  
+  describe 'validations' do
+    it { is_expected.to validate_presence_of(:name) }
+    it { is_expected.to validate_uniqueness_of(:slug) }
+  end
+  
+  describe 'associations' do
+    it { is_expected.to have_many(:variants) }
+  end
+end
+```
+
+## Factory Usage
+
+### Factory Guidelines
+- Use `create` for persisted objects in tests
+- Use `build` for non-persisted objects (recommended as it's much faster than `create`)
+- Add new factories in `lib/spree/testing_support/factories/`
+- Use meaningful factory attributes
+
+```ruby
+# ✅ Proper factory usage
+let(:product) { create(:product, name: 'Test Product') }
+let(:variant) { build(:variant, product: product) }
+```
+
+### Factory Best Practices
+- Keep factories simple and focused
+- Use traits for variations
+- Avoid complex factory dependencies
+- Use sequences for unique values
+
+## Test Categories
+
+### Unit Tests
+- Test individual methods and behaviors
+- Mock external dependencies
+- Focus on single responsibility
+- Use descriptive test names
+
+### Integration Tests
+- Test complete workflows
+- Test API endpoints end-to-end
+- Verify proper data flow
+- Test authentication and authorization
+
+### System Tests
+- Test user interactions
+- Use Capybara for browser testing
+- Test JavaScript functionality
+- Verify complete user journeys
+
+## Test Data Management
+
+### Database Cleanup
+- Use database_cleaner gem
+- Clean database between tests
+- Use transactions for speed
+- Reset sequences appropriately
+
+### Test Isolation
+- Ensure tests don't depend on each other
+- Use proper setup and teardown
+- Mock external services
+- Use consistent test data
+
+## Performance Testing
+
+### Test Performance
+- Keep test suite fast
+- Use `build` instead of `create` when possible
+- Mock expensive operations
+- Profile slow tests
+
+### CI/CD Considerations
+- Ensure tests run reliably in CI
+- Use appropriate test parallelization
+- Handle flaky tests properly
+- Maintain test coverage metrics

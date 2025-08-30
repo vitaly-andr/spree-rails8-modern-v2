@@ -1,3 +1,6 @@
 
 vite: bin/vite dev
 web: bin/rails s -b 0.0.0.0 -p 5100
+
+storefront_css: bin/rails tailwindcss:watch
+admin_css: bin/rails dartsass:watch

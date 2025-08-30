@@ -1,0 +1,237 @@
+---
+alwaysApply: true
+---
+
+# Spree Core Rules
+
+## Core Architecture
+
+### Foundation Components
+- Core is the foundation of Spree containing models, services, and business logic
+- All other Spree gems depend on Core
+- Contains essential models: Product, Variant, Order, User, etc.
+- Provides base controllers and helpers for other engines
+
+### Model Structure
+- All models inherit from `Spree.base_class` (usually `ApplicationRecord`)
+- Use concerns for shared functionality
+- Implement proper associations with `class_name` and `dependent` options
+- Include `Spree::Metadata` for models needing custom attributes
+
+```ruby
+# ✅ Proper core model structure
+module Spree
+  class Product < Spree.base_class
+    include Spree::Metadata
+    include Spree::ProductScopes
+    
+    has_many :variants, class_name: 'Spree::Variant', dependent: :destroy
+    has_many :product_properties, class_name: 'Spree::ProductProperty', dependent: :destroy
+    
+    validates :name, presence: true
+    validates :slug, presence: true, uniqueness: { scope: spree_base_uniqueness_scope }
+  end
+end
+```
+
+## Service Objects
+
+### Service Pattern
+- Use service objects for complex business logic
+- Place services in `app/services/spree/`
+- Follow single responsibility principle
+- Return consistent result objects
+
+```ruby
+# ✅ Proper service structure
+module Spree
+  class Cart::AddItem
+    def initialize(order:, variant:, quantity: 1, options: {})
+      @order = order
+      @variant = variant
+      @quantity = quantity
+      @options = options
+    end
+
+    def call
+      # Business logic here
+      ServiceResult.new(success: true, value: line_item)
+    rescue StandardError => e
+      ServiceResult.new(success: false, error: e.message)
+    end
+
+    private
+
+    attr_reader :order, :variant, :quantity, :options
+  end
+end
+```
+
+## Finders
+
+### Finder Pattern
+- Use finder objects for complex queries
+- Inherit from `Spree::BaseFinder`
+- Implement chainable scopes
+- Support filtering and sorting
+
+```ruby
+# ✅ Proper finder structure
+module Spree
+  class Products::Finder < BaseFinder
+    def initialize(scope: Product.all, params: {})
+      @scope = scope
+      @params = params
+    end
+
+    def call
+      products = by_name(scope)
+      products = by_price_range(products)
+      products = by_availability(products)
+      products
+    end
+
+    private
+
+    def by_name(scope)
+      return scope unless params[:name].present?
+      scope.where('name ILIKE ?', "%#{params[:name]}%")
+    end
+  end
+end
+```
+
+## Configuration & Preferences
+
+### Spree Configuration
+- Use `Spree::Config` for global settings
+- Define preferences in initializers
+- Support environment-specific overrides
+
+```ruby
+# ✅ Configuration usage
+Spree::Config[:allow_guest_checkout] = true
+Spree::Config[:currency] = 'USD'
+```
+
+### Model Preferences
+- Use `Spree::Preferences::Preferable` for model-specific settings
+- Define preference types and defaults
+- Support serialization and validation
+
+## Database Patterns
+
+### Migration Guidelines
+- Prefix all table names with `spree_`
+- Use proper indexing for performance
+- Add `deleted_at` for soft delete support
+- Follow Rails migration conventions
+
+```ruby
+# ✅ Proper core migration
+class CreateSpreeProducts < ActiveRecord::Migration[7.0]
+  def change
+    create_table :spree_products do |t|
+      t.string :name, null: false
+      t.text :description
+      t.string :slug, null: false
+      t.boolean :active, default: true
+      t.datetime :available_on
+      t.datetime :deleted_at
+      t.timestamps
+    end
+    
+    add_index :spree_products, :slug, unique: true
+    add_index :spree_products, :deleted_at
+  end
+end
+```
+
+## State Machines
+
+### Order State Management
+- Use state machines for order workflow
+- Define proper state transitions
+- Implement state-specific validations
+- Support custom state extensions
+
+```ruby
+# ✅ State machine usage
+module Spree
+  class Order < Spree.base_class
+    state_machine :state, initial: :cart do
+      event :next do
+        transition from: :cart, to: :address
+        transition from: :address, to: :delivery
+        transition from: :delivery, to: :payment
+        transition from: :payment, to: :confirm
+        transition from: :confirm, to: :complete
+      end
+    end
+  end
+end
+```
+
+## Testing Support
+
+### Factory Definitions
+- Define factories in `lib/spree/testing_support/factories/`
+- Use traits for variations
+- Keep factories simple and focused
+- Support association building
+
+```ruby
+# ✅ Proper factory definition
+FactoryBot.define do
+  factory :product, class: 'Spree::Product' do
+    sequence(:name) { |n| "Product ##{n}" }
+    description { 'A product description' }
+    price { 19.99 }
+    active { true }
+    available_on { 1.year.ago }
+
+    trait :with_variants do
+      after(:create) do |product|
+        create_list(:variant, 3, product: product)
+      end
+    end
+  end
+end
+```
+
+## Performance Optimization
+
+### Query Optimization
+- Use proper eager loading with `includes`
+- Implement database-level constraints
+- Use scopes for reusable queries
+- Consider counter caches for expensive counts
+
+### Caching Strategies
+- Implement fragment caching for expensive views
+- Use Rails.cache for application-level caching
+- Consider cache invalidation strategies
+- Use database query caching appropriately
+
+## Error Handling
+
+### Exception Management
+- Use Rails error reporter for exception tracking
+- Define custom exception classes
+- Implement proper error recovery
+- Provide meaningful error messages
+
+```ruby
+# ✅ Proper error handling
+module Spree
+  class InsufficientStockError < StandardError
+    attr_reader :variant, :quantity_on_hand
+
+    def initialize(variant, quantity_on_hand)
+      @variant = variant
+      @quantity_on_hand = quantity_on_hand
+      super("Insufficient stock for #{variant.name}")
+    end
+  end
+end
+```

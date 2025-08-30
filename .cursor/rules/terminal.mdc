@@ -1,9 +1,6 @@
 ---
-description: "using terminal in contest of cursor.ai and ansible"
-globs: ["**/*"]
-alwaysApply: false
+alwaysApply: true
 ---
-
 commit_rules:
   pre_commit_checks:
     - "Always check git status before committing"

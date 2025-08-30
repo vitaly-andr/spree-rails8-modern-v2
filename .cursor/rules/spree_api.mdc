@@ -1,0 +1,365 @@
+---
+alwaysApply: true
+---
+
+# Spree API Rules
+
+## API Architecture
+
+### Core Principles
+- RESTful API design following JSON:API specification
+- Versioned API endpoints (v2 is current)
+- OAuth2 authentication for secure access
+- Comprehensive serialization with fast_jsonapi
+
+### API Structure
+- Platform API: Complete store management functionality
+- Storefront API: Customer-facing shopping functionality
+- Webhook API: Real-time event notifications
+- Admin API: Administrative operations
+
+```ruby
+# ✅ Proper API controller structure
+module Spree
+  module Api
+    module V2
+      class ProductsController < BaseController
+        before_action :load_product, only: [:show, :update, :destroy]
+
+        def index
+          products = collection_finder.call
+          render json: serialize_collection(products)
+        end
+
+        def show
+          render json: serialize_resource(@product)
+        end
+
+        private
+
+        def load_product
+          @product = Spree::Product.friendly.find(params[:id])
+        end
+
+        def collection_finder
+          Spree::Products::Finder.new(scope: scope, params: finder_params)
+        end
+      end
+    end
+  end
+end
+```
+
+## Authentication & Authorization
+
+### OAuth2 Implementation
+- Token-based authentication using Doorkeeper
+- Scoped access tokens for different API operations
+- Refresh token support for long-lived sessions
+- Rate limiting and throttling
+
+### API Permissions
+- Role-based access control
+- Resource-specific permissions
+- Store-scoped access for multi-tenant setups
+- Admin vs customer API access levels
+
+```ruby
+# ✅ API authentication setup
+module Spree
+  module Api
+    module V2
+      class BaseController < ActionController::API
+        include Spree::Api::V2::Authentication
+        include Spree::Api::V2::Authorization
+
+        before_action :authenticate_user
+        before_action :authorize_action
+
+        private
+
+        def authenticate_user
+          doorkeeper_authorize! if doorkeeper_token
+        end
+      end
+    end
+  end
+end
+```
+
+## Serialization
+
+### JSON:API Serializers
+- Use fast_jsonapi for consistent serialization
+- Include relationships and meta information
+- Support for sparse fieldsets and includes
+- Pagination metadata in responses
+
+```ruby
+# ✅ Proper API serializer structure
+module Spree
+  module Api
+    module V2
+      class ProductSerializer
+        include FastJsonapi::ObjectSerializer
+
+        attributes :name, :description, :slug, :price, :currency
+        
+        has_many :variants, serializer: :variant
+        has_many :images, serializer: :image
+        has_many :product_properties, serializer: :product_property
+
+        attribute :display_price do |product|
+          product.display_price.to_s
+        end
+
+        meta do |product|
+          {
+            total_variants: product.variants.count,
+            in_stock: product.in_stock?
+          }
+        end
+      end
+    end
+  end
+end
+```
+
+## Error Handling
+
+### API Error Responses
+- Consistent error response format
+- HTTP status codes following REST conventions
+- Detailed error messages with error codes
+- Validation error handling
+
+```ruby
+# ✅ API error handling
+module Spree
+  module Api
+    module V2
+      module ErrorHandling
+        extend ActiveSupport::Concern
+
+        included do
+          rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+          rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
+        end
+
+        private
+
+        def record_not_found(exception)
+          render json: {
+            error: 'Record not found',
+            message: exception.message
+          }, status: :not_found
+        end
+
+        def record_invalid(exception)
+          render json: {
+            error: 'Validation failed',
+            details: exception.record.errors.full_messages
+          }, status: :unprocessable_entity
+        end
+      end
+    end
+  end
+end
+```
+
+## Platform API
+
+### Store Management
+- Complete CRUD operations for all resources
+- Bulk operations for efficiency
+- Advanced filtering and searching
+- Export and import functionality
+
+### Order Management
+- Order lifecycle management
+- Payment processing integration
+- Shipping and fulfillment operations
+- Returns and refunds handling
+
+## Storefront API
+
+### Shopping Cart
+- Cart creation and management
+- Line item operations (add, update, remove)
+- Cart totals and tax calculations
+- Guest and authenticated cart handling
+
+### Checkout Process
+- Multi-step checkout API
+- Address validation and management
+- Payment method selection
+- Order completion and confirmation
+
+```ruby
+# ✅ Storefront API example
+module Spree
+  module Api
+    module V2
+      module Storefront
+        class CartController < BaseController
+          def show
+            render json: serialize_resource(current_order)
+          end
+
+          def add_item
+            result = cart_add_item_service.call
+            
+            if result.success?
+              render json: serialize_resource(current_order)
+            else
+              render json: { error: result.error }, status: :unprocessable_entity
+            end
+          end
+
+          private
+
+          def cart_add_item_service
+            Spree::Cart::AddItem.new(
+              order: current_order,
+              variant: variant,
+              quantity: params[:quantity].to_i
+            )
+          end
+        end
+      end
+    end
+  end
+end
+```
+
+## API Documentation
+
+### OpenAPI Specification
+- Complete API documentation using OpenAPI 3.0
+- Interactive API documentation with Swagger UI
+- Code examples in multiple languages
+- Postman collection generation
+
+### Documentation Maintenance
+- Keep documentation in sync with code changes
+- Version-specific documentation
+- Migration guides between API versions
+- Best practices and usage examples
+
+## Testing
+
+### API Testing
+- Comprehensive request/response testing
+- Authentication and authorization testing
+- Error scenario testing
+- Performance and load testing
+
+```ruby
+# ✅ API testing example
+require 'spec_helper'
+
+RSpec.describe 'Products API', type: :request do
+  let(:user) { create(:user) }
+  let(:token) { create(:oauth_access_token, resource_owner_id: user.id) }
+  let(:headers) { { 'Authorization' => "Bearer #{token.token}" } }
+
+  describe 'GET /api/v2/products' do
+    let!(:products) { create_list(:product, 3) }
+
+    it 'returns products list' do
+      get '/api/v2/products', headers: headers
+      
+      expect(response).to have_http_status(:ok)
+      expect(json_response['data']).to have(3).items
+      expect(json_response['data'].first['type']).to eq('product')
+    end
+  end
+
+  describe 'POST /api/v2/products' do
+    let(:product_params) do
+      {
+        name: 'New Product',
+        description: 'Product description',
+        price: 19.99
+      }
+    end
+
+    it 'creates a new product' do
+      post '/api/v2/products', 
+           params: { product: product_params }, 
+           headers: headers
+
+      expect(response).to have_http_status(:created)
+      expect(json_response['data']['attributes']['name']).to eq('New Product')
+    end
+  end
+end
+```
+
+## Performance Optimization
+
+### Query Optimization
+- Efficient database queries with proper includes
+- Pagination for large result sets
+- Caching strategies for frequently accessed data
+- Database indexing for API queries
+
+### Response Optimization
+- Gzip compression for API responses
+- ETags for conditional requests
+- Partial content support
+- Response time monitoring
+
+## Webhooks
+
+### Webhook System
+- Event-driven webhook notifications
+- Configurable webhook endpoints
+- Retry logic for failed deliveries
+- Webhook signature verification
+
+```ruby
+# ✅ Webhook implementation
+module Spree
+  class WebhookService
+    def initialize(event:, payload:)
+      @event = event
+      @payload = payload
+    end
+
+    def call
+      webhook_subscribers.each do |subscriber|
+        deliver_webhook(subscriber)
+      end
+    end
+
+    private
+
+    def webhook_subscribers
+      Spree::WebhookSubscriber.active.for_event(@event)
+    end
+
+    def deliver_webhook(subscriber)
+      WebhookDeliveryJob.perform_later(
+        subscriber: subscriber,
+        event: @event,
+        payload: @payload
+      )
+    end
+  end
+end
+```
+
+## API Versioning
+
+### Version Management
+- Semantic versioning for API releases
+- Backward compatibility maintenance
+- Deprecation notices and migration paths
+- Version-specific feature flags
+
+### Migration Support
+- Clear migration guides between versions
+- Automated migration tools where possible
+- Support timeline for deprecated versions
+- Breaking change communication
