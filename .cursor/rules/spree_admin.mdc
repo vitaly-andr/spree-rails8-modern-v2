@@ -1,0 +1,154 @@
+---
+alwaysApply: true
+---
+
+# Spree Admin Dashboard Rules
+
+## Admin Dashboard Architecture
+
+### Core Principles
+- Admin dashboard is built as a separate Rails engine (`spree_admin`)
+- Uses modern UI components with Bootstrap-based styling
+- Implements Turbo Rails (Hotwire) for dynamic interactions
+- Follows RESTful resource patterns with `Spree::Admin::ResourceController`
+
+### Controller Structure
+- All admin controllers inherit from `Spree::Admin::ResourceController`
+- Automatic CRUD operations with sensible defaults
+- Built-in authorization using CanCanCan
+- Automatic parameter filtering and strong parameters
+
+```ruby
+# ✅ Proper admin controller structure
+module Spree
+  module Admin
+    class ProductsController < ResourceController
+      private
+
+      def permitted_resource_params
+        params.require(:product).permit(Spree::PermittedAttributes.product_attributes)
+      end
+    end
+  end
+end
+```
+
+## Form Building
+
+### Form Builder Usage
+- Always use `Spree::Admin::FormBuilder` for consistent styling
+- Available form methods: `spree_text_field`, `spree_rich_text_area`, `spree_check_box`
+- Use card-based layout for form sections
+
+```erb
+<!-- ✅ Proper admin form structure -->
+<%= form_with model: [:admin, @product], builder: Spree::Admin::FormBuilder do |f| %>
+  <div class="card mb-4">
+    <div class="card-header">
+      <h5 class="card-title"><%= Spree.t(:general_settings) %></h5>
+    </div>
+    <div class="card-body">
+      <%= f.spree_text_field :name %>
+      <%= f.spree_rich_text_area :description %>
+      <%= f.spree_check_box :active %>
+    </div>
+  </div>
+<% end %>
+```
+
+## Asset Management
+
+### JavaScript Structure
+- Use Stimulus controllers for interactive components
+- Place controllers in `app/javascript/spree/admin/controllers/`
+- Use Importmap for JavaScript dependencies
+- Follow Stimulus naming conventions
+
+### CSS/SCSS Structure
+- Main stylesheet: `app/assets/stylesheets/spree/admin/application.scss`
+- Component-based CSS organization
+- Use Bootstrap utilities and components
+- Custom components in `app/assets/stylesheets/spree/admin/components/`
+
+## UI Components
+
+### Navigation
+- Use `Spree::Admin::NavigationHelper` for menu items
+- Register navigation items in engine initializers
+- Support for nested menu structures
+- Icon support using Heroicons
+
+### Tables and Lists
+- Use `Spree::Admin::BaseHelper` for table helpers
+- Implement sorting and filtering with Ransack
+- Pagination with Kaminari
+- Bulk operations support
+
+### Modals and Overlays
+- Use `Spree::Admin::ModalHelper` for modal dialogs
+- Turbo Frame integration for dynamic content
+- Consistent modal styling and behavior
+
+## Testing
+
+### Controller Testing
+- Always include `render_views` in controller specs
+- Use `stub_authorization!` for authentication bypass
+- Test both success and failure scenarios
+
+```ruby
+# ✅ Proper admin controller spec
+require 'spec_helper'
+
+RSpec.describe Spree::Admin::ProductsController, type: :controller do
+  render_views
+  
+  before { stub_authorization! }
+  
+  describe '#create' do
+    context 'with valid parameters' do
+      it 'creates a new product' do
+        expect {
+          post :create, params: { product: valid_attributes }
+        }.to change(Spree::Product, :count).by(1)
+      end
+    end
+  end
+end
+```
+
+### Feature Testing
+- Use Capybara for integration testing
+- Test complete admin workflows
+- Use `Spree::Admin::TestingSupport::CapybaraUtils` for common actions
+
+## Customization
+
+### Extending Admin Controllers
+- Override specific actions when needed
+- Use `before_action` callbacks for custom logic
+- Maintain RESTful patterns
+
+### Custom Admin Views
+- Override views by placing them in `app/views/spree/admin/`
+- Use partial overrides for small changes
+- Maintain consistent styling with existing components
+
+### Adding New Admin Sections
+- Create new controllers inheriting from `ResourceController`
+- Register navigation items
+- Follow existing patterns for consistency
+
+## Performance
+
+### Asset Optimization
+- Use Sprockets for asset compilation
+- Minimize JavaScript and CSS bundles
+- Optimize images and icons
+- Use CDN for static assets in production
+
+### Database Queries
+- Use includes/preload to avoid N+1 queries
+- Implement proper indexing for admin queries
+- Use scopes for reusable query patterns
+- Consider caching for expensive operations

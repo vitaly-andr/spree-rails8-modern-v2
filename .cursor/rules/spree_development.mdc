@@ -1,0 +1,285 @@
+---
+alwaysApply: true
+---
+
+# Spree Development Rules
+
+## Model Development
+
+### Model Patterns
+- Use ActiveRecord associations appropriately, always pass `class_name` and `dependent` options
+- Implement concerns for shared functionality
+- Use scopes for reusable query patterns
+- Include `Spree::Metadata` concern for models that need metadata support
+- For uniqueness validation, always use `scope: spree_base_uniqueness_scope`
+
+```ruby
+# ✅ Good model structure
+class Spree::Product < ApplicationRecord
+  include Spree::Metadata
+  
+  has_many :variants, class_name: 'Spree::Variant', dependent: :destroy
+  has_many :product_properties, class_name: 'Spree::ProductProperty', dependent: :destroy
+  has_many :properties, through: :product_properties, source: :property
+  
+  scope :available, -> { where(available_on: ..Time.current) }
+  
+  validates :name, presence: true
+  validates :slug, presence: true, uniqueness: { scope: spree_base_uniqueness_scope }
+end
+```
+
+## Controller Development
+
+### Controller Inheritance
+- Admin controllers inherit from `Spree::Admin::ResourceController` (handles CRUD)
+- API controllers inherit from `Spree::Api::V2::BaseController`
+- Storefront controllers inherit from `Spree::StoreController`
+
+### Parameter Handling
+- Always use strong parameters
+- Always use `Spree::PermittedAttributes` to define allowed parameters
+
+```ruby
+# ✅ Proper parameter handling
+def permitted_product_params
+  params.require(:product).permit(Spree::PermittedAttributes.product_attributes)
+end
+```
+
+## Authentication Architecture
+
+### Dual Authentication System
+Spree uses **two separate authentication systems** via Devise:
+
+#### 1. Storefront Users (customers)
+- **Model**: `User` (inherits from `Spree.base_class`)
+- **Routes**: `/user/sign_in`, `/user/sign_up`, `/user/password/new`
+- **Controllers**: `spree/user_sessions`, `spree/user_passwords`, `spree/user_registrations`
+- **Purpose**: Customer registration and login
+- **Functions**: Orders, addresses, wishlist, profile
+
+#### 2. Admin Users (administrators)
+- **Model**: `AdminUser` (inherits from `ApplicationRecord`)
+- **Routes**: `/admin_user/sign_in`, `/admin_user/password/new`
+- **Controllers**: `spree/admin/user_sessions`, `spree/admin/user_passwords`
+- **Purpose**: Admin panel access
+- **Functions**: Product management, orders, settings
+
+### Critical Generator
+```bash
+rails generate spree:storefront:devise
+```
+This command solves most authentication problems and should be run after main Spree installation.
+
+## Customization & Extensions
+
+### Decorators (Use Sparingly)
+- Decorators should be a **last resort** - they make upgrades difficult
+- Use `Module.prepend` pattern for decorators
+- Name decorator files with `_decorator.rb` suffix
+
+```ruby
+# ✅ Proper decorator structure
+module Spree
+  module ProductDecorator
+    def custom_method
+      # Custom functionality
+      name.upcase
+    end
+    
+    def existing_method
+      # Extend existing method
+      result = super
+      # Additional logic
+      result
+    end
+  end
+
+  Product.prepend(ProductDecorator)
+end
+```
+
+### Alternative Customization Methods
+1. **Store settings**: Change in admin panel without code
+2. **Configuration**: Global application configuration via preferences
+3. **Dependencies**: Swap core classes and services
+4. **Checkout flow**: Customize to fit business needs
+
+## Security Guidelines
+
+### Authentication & Authorization
+- Follow Rails Security Guide principles
+- Use strong parameters consistently
+- Implement proper authorization checks
+- Validate all user inputs
+- Admin controllers inheriting from `Spree::Admin::ResourceController` automatically secure all actions
+- Use CanCanCan for authorization
+- Authentication handled by app developers (Devise installer provided)
+
+### Parameter Security
+- Never permit mass assignment without validation
+- Use allowlists, not blocklists for parameters
+- Sanitize user inputs appropriately
+
+## Performance & Best Practices
+
+### Query Optimization
+- Use includes/preload to avoid N+1 queries
+- Implement proper database indexing
+- Use scopes for reusable query logic
+- Consider caching for expensive operations
+
+```ruby
+# ✅ Optimized queries
+products = Spree::Product.includes(:variants, :images)
+                         .where(available_on: ..Time.current)
+                         .order(:name)
+```
+
+### Code Quality
+- Follow Ruby style guidelines
+- Keep methods small and focused
+- Use meaningful variable and method names
+- Write self-documenting code with appropriate comments
+- Avoid deep nesting and complex conditionals# Spree Development Rules
+
+## Model Development
+
+### Model Patterns
+- Use ActiveRecord associations appropriately, always pass `class_name` and `dependent` options
+- Implement concerns for shared functionality
+- Use scopes for reusable query patterns
+- Include `Spree::Metadata` concern for models that need metadata support
+- For uniqueness validation, always use `scope: spree_base_uniqueness_scope`
+
+```ruby
+# ✅ Good model structure
+class Spree::Product < ApplicationRecord
+  include Spree::Metadata
+  
+  has_many :variants, class_name: 'Spree::Variant', dependent: :destroy
+  has_many :product_properties, class_name: 'Spree::ProductProperty', dependent: :destroy
+  has_many :properties, through: :product_properties, source: :property
+  
+  scope :available, -> { where(available_on: ..Time.current) }
+  
+  validates :name, presence: true
+  validates :slug, presence: true, uniqueness: { scope: spree_base_uniqueness_scope }
+end
+```
+
+## Controller Development
+
+### Controller Inheritance
+- Admin controllers inherit from `Spree::Admin::ResourceController` (handles CRUD)
+- API controllers inherit from `Spree::Api::V2::BaseController`
+- Storefront controllers inherit from `Spree::StoreController`
+
+### Parameter Handling
+- Always use strong parameters
+- Always use `Spree::PermittedAttributes` to define allowed parameters
+
+```ruby
+# ✅ Proper parameter handling
+def permitted_product_params
+  params.require(:product).permit(Spree::PermittedAttributes.product_attributes)
+end
+```
+
+## Authentication Architecture
+
+### Dual Authentication System
+Spree uses **two separate authentication systems** via Devise:
+
+#### 1. Storefront Users (customers)
+- **Model**: `User` (inherits from `Spree.base_class`)
+- **Routes**: `/user/sign_in`, `/user/sign_up`, `/user/password/new`
+- **Controllers**: `spree/user_sessions`, `spree/user_passwords`, `spree/user_registrations`
+- **Purpose**: Customer registration and login
+- **Functions**: Orders, addresses, wishlist, profile
+
+#### 2. Admin Users (administrators)
+- **Model**: `AdminUser` (inherits from `ApplicationRecord`)
+- **Routes**: `/admin_user/sign_in`, `/admin_user/password/new`
+- **Controllers**: `spree/admin/user_sessions`, `spree/admin/user_passwords`
+- **Purpose**: Admin panel access
+- **Functions**: Product management, orders, settings
+
+### Critical Generator
+```bash
+rails generate spree:storefront:devise
+```
+This command solves most authentication problems and should be run after main Spree installation.
+
+## Customization & Extensions
+
+### Decorators (Use Sparingly)
+- Decorators should be a **last resort** - they make upgrades difficult
+- Use `Module.prepend` pattern for decorators
+- Name decorator files with `_decorator.rb` suffix
+
+```ruby
+# ✅ Proper decorator structure
+module Spree
+  module ProductDecorator
+    def custom_method
+      # Custom functionality
+      name.upcase
+    end
+    
+    def existing_method
+      # Extend existing method
+      result = super
+      # Additional logic
+      result
+    end
+  end
+
+  Product.prepend(ProductDecorator)
+end
+```
+
+### Alternative Customization Methods
+1. **Store settings**: Change in admin panel without code
+2. **Configuration**: Global application configuration via preferences
+3. **Dependencies**: Swap core classes and services
+4. **Checkout flow**: Customize to fit business needs
+
+## Security Guidelines
+
+### Authentication & Authorization
+- Follow Rails Security Guide principles
+- Use strong parameters consistently
+- Implement proper authorization checks
+- Validate all user inputs
+- Admin controllers inheriting from `Spree::Admin::ResourceController` automatically secure all actions
+- Use CanCanCan for authorization
+- Authentication handled by app developers (Devise installer provided)
+
+### Parameter Security
+- Never permit mass assignment without validation
+- Use allowlists, not blocklists for parameters
+- Sanitize user inputs appropriately
+
+## Performance & Best Practices
+
+### Query Optimization
+- Use includes/preload to avoid N+1 queries
+- Implement proper database indexing
+- Use scopes for reusable query logic
+- Consider caching for expensive operations
+
+```ruby
+# ✅ Optimized queries
+products = Spree::Product.includes(:variants, :images)
+                         .where(available_on: ..Time.current)
+                         .order(:name)
+```
+
+### Code Quality
+- Follow Ruby style guidelines
+- Keep methods small and focused
+- Use meaningful variable and method names
+- Write self-documenting code with appropriate comments
+- Avoid deep nesting and complex conditionals

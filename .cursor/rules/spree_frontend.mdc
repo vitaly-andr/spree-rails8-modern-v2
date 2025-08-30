@@ -1,0 +1,231 @@
+---
+alwaysApply: true
+---
+
+# Spree Frontend Rules
+
+## Storefront Development
+
+### Styling Guidelines
+- Use Tailwind CSS for styling
+- Follow responsive design principles
+- Implement proper SEO meta tags
+- Ensure accessibility compliance
+- Use semantic HTML elements
+- Implement proper ARIA attributes
+
+### Theme Architecture
+- Storefront uses theme-based architecture
+- Themes control layout, styling, and components
+- Use `Spree::ThemeConcern` for theme management
+- Access current theme via `current_theme` helper
+
+### Layout Structure
+- Use `spree/storefront.html.erb` as base layout
+- Include theme sections (header, footer, etc.)
+- Implement proper navigation structure
+- Use responsive grid systems
+
+## Admin Interface
+
+### Admin Styling Conventions
+- Use Spree's admin styling conventions
+- Use Turbo Rails features (Hotwire) as much as possible
+- Re-usable components should be helpers
+- Use `Spree::Admin::FormBuilder` methods for form fields
+- Follow UX patterns established in core admin
+- Use Stimulus controllers for JavaScript interactions
+
+### Form Structure
+
+#### Create New Resource Form
+```erb
+<!-- ✅ Proper admin form structure -->
+<%= render 'spree/admin/shared/new_resource' %>
+```
+
+#### Edit Resource Form
+```erb
+<%= render 'spree/admin/shared/edit_resource' %>
+```
+
+#### Reusable Form Partial
+Place in `app/views/spree/admin/products/_form.html.erb`:
+
+```erb
+<div class="card mb-4">
+  <div class="card-header">
+    <h5 class="card-title">
+      <%= Spree.t(:general_settings) %>
+    </h5>
+  </div>
+
+  <div class="card-body">
+    <%= f.spree_text_field :name %>
+    <%= f.spree_rich_text_area :description %>
+    <%= f.spree_check_box :active %>
+  </div>
+</div>
+```
+
+### Form Builder Methods
+- Use `Spree::Admin::FormBuilder` for consistent form styling
+- Available methods: `spree_text_field`, `spree_rich_text_area`, `spree_check_box`
+- Follow established form patterns for consistency
+
+## JavaScript & Stimulus
+
+### Stimulus Controllers
+- Use Stimulus for JavaScript interactions
+- Place controllers in appropriate directories
+- Follow Stimulus naming conventions
+- Implement proper event handling
+
+### Turbo Integration
+- Leverage Turbo Rails features for dynamic updates
+- Use Turbo Frames for partial page updates
+- Implement Turbo Streams for real-time updates
+- Follow Hotwire best practices
+
+## Accessibility & SEO
+
+### Accessibility Requirements
+- Implement proper ARIA labels and roles
+- Ensure keyboard navigation support
+- Use semantic HTML elements
+- Provide alternative text for images
+- Maintain proper color contrast ratios
+
+### SEO Best Practices
+- Implement proper meta tags
+- Use structured data markup
+- Ensure proper heading hierarchy
+- Optimize page loading performance
+- Implement canonical URLs
+
+## Performance Optimization
+
+### Asset Management
+- Optimize images and media files
+- Use appropriate image formats
+- Implement lazy loading for images
+- Minimize CSS and JavaScript bundles
+
+### Caching Strategy
+- Use fragment caching for expensive views
+- Implement proper cache invalidation
+- Consider CDN for static assets
+- Use Rails caching mechanisms appropriately# Spree Frontend Rules
+
+## Storefront Development
+
+### Styling Guidelines
+- Use Tailwind CSS for styling
+- Follow responsive design principles
+- Implement proper SEO meta tags
+- Ensure accessibility compliance
+- Use semantic HTML elements
+- Implement proper ARIA attributes
+
+### Theme Architecture
+- Storefront uses theme-based architecture
+- Themes control layout, styling, and components
+- Use `Spree::ThemeConcern` for theme management
+- Access current theme via `current_theme` helper
+
+### Layout Structure
+- Use `spree/storefront.html.erb` as base layout
+- Include theme sections (header, footer, etc.)
+- Implement proper navigation structure
+- Use responsive grid systems
+
+## Admin Interface
+
+### Admin Styling Conventions
+- Use Spree's admin styling conventions
+- Use Turbo Rails features (Hotwire) as much as possible
+- Re-usable components should be helpers
+- Use `Spree::Admin::FormBuilder` methods for form fields
+- Follow UX patterns established in core admin
+- Use Stimulus controllers for JavaScript interactions
+
+### Form Structure
+
+#### Create New Resource Form
+```erb
+<!-- ✅ Proper admin form structure -->
+<%= render 'spree/admin/shared/new_resource' %>
+```
+
+#### Edit Resource Form
+```erb
+<%= render 'spree/admin/shared/edit_resource' %>
+```
+
+#### Reusable Form Partial
+Place in `app/views/spree/admin/products/_form.html.erb`:
+
+```erb
+<div class="card mb-4">
+  <div class="card-header">
+    <h5 class="card-title">
+      <%= Spree.t(:general_settings) %>
+    </h5>
+  </div>
+
+  <div class="card-body">
+    <%= f.spree_text_field :name %>
+    <%= f.spree_rich_text_area :description %>
+    <%= f.spree_check_box :active %>
+  </div>
+</div>
+```
+
+### Form Builder Methods
+- Use `Spree::Admin::FormBuilder` for consistent form styling
+- Available methods: `spree_text_field`, `spree_rich_text_area`, `spree_check_box`
+- Follow established form patterns for consistency
+
+## JavaScript & Stimulus
+
+### Stimulus Controllers
+- Use Stimulus for JavaScript interactions
+- Place controllers in appropriate directories
+- Follow Stimulus naming conventions
+- Implement proper event handling
+
+### Turbo Integration
+- Leverage Turbo Rails features for dynamic updates
+- Use Turbo Frames for partial page updates
+- Implement Turbo Streams for real-time updates
+- Follow Hotwire best practices
+
+## Accessibility & SEO
+
+### Accessibility Requirements
+- Implement proper ARIA labels and roles
+- Ensure keyboard navigation support
+- Use semantic HTML elements
+- Provide alternative text for images
+- Maintain proper color contrast ratios
+
+### SEO Best Practices
+- Implement proper meta tags
+- Use structured data markup
+- Ensure proper heading hierarchy
+- Optimize page loading performance
+- Implement canonical URLs
+
+## Performance Optimization
+
+### Asset Management
+- Optimize images and media files
+- Use appropriate image formats
+- Implement lazy loading for images
+- Minimize CSS and JavaScript bundles
+
+### Caching Strategy
+- Use fragment caching for expensive views
+- Implement proper cache invalidation
+- Consider CDN for static assets
+- Use Rails caching mechanisms appropriately

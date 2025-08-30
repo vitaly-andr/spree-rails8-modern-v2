@@ -1,0 +1,165 @@
+---
+alwaysApply: true
+---
+
+# Spree Database Rules
+
+## Migration Patterns
+
+### Migration Best Practices
+- Follow Rails migration conventions
+- Use proper indexing for performance
+- **Do not include foreign key constraints**
+- Use descriptive migration names with timestamps
+- Try to limit number of migrations to 1 per feature
+- Avoid using default values in migrations
+- Always add `null: false` to required columns
+- Add unique indexes to columns that are used for uniqueness validation
+- By default add `deleted_at` column to all tables that have soft delete functionality (we use `paranoia` gem)
+
+```ruby
+# ✅ Proper migration structure
+class CreateSpreeMetafields < ActiveRecord::Migration[7.0]
+  def change
+    create_table :spree_metafields do |t|
+      t.string :key, null: false
+      t.text :value, null: false
+      t.string :kind, null: false
+      t.string :visibility, null: false
+      t.references :owner, polymorphic: true, null: false
+      t.timestamps
+    end
+    
+    add_index :spree_metafields, [:owner_type, :owner_id, :key, :visibility], 
+              name: 'index_spree_metafields_on_owner_and_key_and_visibility'
+  end
+end
+```
+
+## Database Design
+
+### Column Guidelines
+- Use appropriate column types and constraints
+- Implement proper foreign key relationships
+- Consider indexing for query performance
+- Use polymorphic associations when appropriate
+- Add `deleted_at` column for soft delete functionality (paranoia gem)
+
+### Indexing Strategy
+- Add indexes for frequently queried columns
+- Use composite indexes for multi-column queries
+- Consider unique indexes for uniqueness constraints
+- Name indexes descriptively for maintenance
+
+### Soft Delete Support
+- Use `paranoia` gem for soft delete functionality
+- Add `deleted_at` column to tables that need soft delete
+- Ensure proper scoping in queries to exclude deleted records
+
+## Data Integrity
+
+### Validation Rules
+- Always validate presence of required fields
+- Use uniqueness validations with proper scope
+- Implement format validations for structured data
+- Add custom validations for business logic
+
+### Association Guidelines
+- Always specify `class_name` and `dependent` options
+- Use appropriate association types (has_many, belongs_to, etc.)
+- Consider inverse relationships for performance
+- Use polymorphic associations for flexible relationships
+
+## Performance Considerations
+
+### Query Optimization
+- Use proper indexing strategy
+- Avoid N+1 queries with includes/preload
+- Consider database-level constraints
+- Use scopes for reusable query patterns
+
+### Caching Strategy
+- Implement appropriate caching for expensive queries
+- Use Rails caching mechanisms
+- Consider fragment caching for views
+- Implement cache invalidation strategies# Spree Database Rules
+
+## Migration Patterns
+
+### Migration Best Practices
+- Follow Rails migration conventions
+- Use proper indexing for performance
+- **Do not include foreign key constraints**
+- Use descriptive migration names with timestamps
+- Try to limit number of migrations to 1 per feature
+- Avoid using default values in migrations
+- Always add `null: false` to required columns
+- Add unique indexes to columns that are used for uniqueness validation
+- By default add `deleted_at` column to all tables that have soft delete functionality (we use `paranoia` gem)
+
+```ruby
+# ✅ Proper migration structure
+class CreateSpreeMetafields < ActiveRecord::Migration[7.0]
+  def change
+    create_table :spree_metafields do |t|
+      t.string :key, null: false
+      t.text :value, null: false
+      t.string :kind, null: false
+      t.string :visibility, null: false
+      t.references :owner, polymorphic: true, null: false
+      t.timestamps
+    end
+    
+    add_index :spree_metafields, [:owner_type, :owner_id, :key, :visibility], 
+              name: 'index_spree_metafields_on_owner_and_key_and_visibility'
+  end
+end
+```
+
+## Database Design
+
+### Column Guidelines
+- Use appropriate column types and constraints
+- Implement proper foreign key relationships
+- Consider indexing for query performance
+- Use polymorphic associations when appropriate
+- Add `deleted_at` column for soft delete functionality (paranoia gem)
+
+### Indexing Strategy
+- Add indexes for frequently queried columns
+- Use composite indexes for multi-column queries
+- Consider unique indexes for uniqueness constraints
+- Name indexes descriptively for maintenance
+
+### Soft Delete Support
+- Use `paranoia` gem for soft delete functionality
+- Add `deleted_at` column to tables that need soft delete
+- Ensure proper scoping in queries to exclude deleted records
+
+## Data Integrity
+
+### Validation Rules
+- Always validate presence of required fields
+- Use uniqueness validations with proper scope
+- Implement format validations for structured data
+- Add custom validations for business logic
+
+### Association Guidelines
+- Always specify `class_name` and `dependent` options
+- Use appropriate association types (has_many, belongs_to, etc.)
+- Consider inverse relationships for performance
+- Use polymorphic associations for flexible relationships
+
+## Performance Considerations
+
+### Query Optimization
+- Use proper indexing strategy
+- Avoid N+1 queries with includes/preload
+- Consider database-level constraints
+- Use scopes for reusable query patterns
+
+### Caching Strategy
+- Implement appropriate caching for expensive queries
+- Use Rails caching mechanisms
+- Consider fragment caching for views
+- Implement cache invalidation strategies

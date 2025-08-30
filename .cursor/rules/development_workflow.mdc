@@ -1,9 +1,7 @@
 ---
-description:
-globs:
-alwaysApply: false
+alwaysApply: true
 ---
-# Development Workflow for Materialize_1C
+# Development Workflow
 
 ## Getting Started
 
@@ -20,26 +18,8 @@ alwaysApply: false
    ```
 
 3. **Access the Application**
-   - Open http://localhost:3000 in your browser
+   - Open http://localhost:5100 in your browser
 
-## Key Development Tasks
-
-### Database Analysis
-To analyze the 1C database structure:
-1. Navigate to `/db_metadata`
-2. Click "Analyze DB Structure"
-
-### Metadata Import
-To import metadata from Excel files:
-1. Navigate to `/metadata_imports/new`
-2. Upload an Excel file with table mappings
-3. Click "Import"
-
-### Table Search
-To search for tables in the 1C database:
-1. Navigate to `/table_search`
-2. Enter search terms
-3. View results
 
 ## Frontend Development
 
@@ -71,32 +51,6 @@ Example:
 rails g migration CreateNewTable
 ```
 
-### Working with Materialized Views
-- Use the Scenic gem patterns for creating and updating materialized views
-- Store view definitions in `db/views/`
-- Version view definitions to track changes
-
-## Testing
-
-- Models: `test/models/`
-- Controllers: `test/controllers/`
-- System tests: `test/system/`
-
-Run tests with:
-```bash
-rails test
-```
-
-## Deployment
-The application is containerized using Docker:
-
-```bash
-# Build the Docker image
-docker build -t materialize_1c .
-
-# Run the container
-docker run -p 3000:3000 materialize_1c
-```
 
 Deployment is managed with Kamal:
 ```bash

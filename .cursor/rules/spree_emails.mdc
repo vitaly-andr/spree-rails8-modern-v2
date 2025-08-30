@@ -1,0 +1,246 @@
+---
+alwaysApply: true
+---
+
+# Spree Emails Rules
+
+## Email Architecture
+
+### Core Principles
+- Emails engine provides transactional email functionality
+- Built as a separate Rails engine (`spree_emails`)
+- Includes order confirmations, shipping notifications, and admin alerts
+- Uses Action Mailer with customizable templates
+
+### Mailer Structure
+- All mailers inherit from `Spree::BaseMailer`
+- Support for HTML and text email formats
+- Internationalization support for email content
+- Template-based email generation
+
+```ruby
+# ✅ Proper email mailer structure
+module Spree
+  class OrderMailer < BaseMailer
+    def confirm_email(order, resend = false)
+      @order = order.respond_to?(:id) ? order : Spree::Order.find(order)
+      @store = @order.store
+      
+      subject = build_subject(Spree.t('order_mailer.confirm_email.subject'), @order.number)
+      
+      mail(to: @order.email, from: from_address(@store), subject: subject)
+    end
+
+    private
+
+    def build_subject(subject_text, order_number)
+      "#{@store.name} #{subject_text} ##{order_number}"
+    end
+  end
+end
+```
+
+## Email Templates
+
+### Template Structure
+- HTML templates in `app/views/spree/[mailer_name]/`
+- Text templates with `.text.erb` extension
+- Shared partials in `app/views/spree/shared/`
+- Responsive email design patterns
+
+### Template Customization
+- Override templates by placing them in host application
+- Use store-specific branding and styling
+- Support for dynamic content and personalization
+- Multi-language template support
+
+```erb
+<!-- ✅ Proper email template structure -->
+<%= render 'spree/shared/email_header', store: @store %>
+
+<div class="email-body">
+  <h1><%= Spree.t('order_mailer.confirm_email.dear_customer') %></h1>
+  
+  <p><%= Spree.t('order_mailer.confirm_email.order_summary_intro', number: @order.number) %></p>
+  
+  <%= render 'spree/shared/purchased_items_table', order: @order %>
+  
+  <div class="order-total">
+    <strong><%= Spree.t(:total) %>: <%= @order.display_total %></strong>
+  </div>
+</div>
+
+<%= render 'spree/shared/email_footer', store: @store %>
+```
+
+## Email Types
+
+### Order Emails
+- Order confirmation emails
+- Payment confirmation notifications
+- Order cancellation notifications
+- Store owner order notifications
+
+### Shipping Emails
+- Shipment confirmation emails
+- Tracking information updates
+- Delivery confirmation notifications
+- Shipping delay notifications
+
+### Administrative Emails
+- Low stock alerts
+- New order notifications for admins
+- Payment failure notifications
+- System maintenance notifications
+
+## Email Configuration
+
+### SMTP Setup
+- Configure SMTP settings in Rails application
+- Support for multiple email providers
+- Environment-specific email configurations
+- Email delivery testing and debugging
+
+```ruby
+# ✅ Email configuration example
+# config/environments/production.rb
+config.action_mailer.delivery_method = :smtp
+config.action_mailer.smtp_settings = {
+  address: ENV['SMTP_ADDRESS'],
+  port: ENV['SMTP_PORT'],
+  domain: ENV['SMTP_DOMAIN'],
+  user_name: ENV['SMTP_USERNAME'],
+  password: ENV['SMTP_PASSWORD'],
+  authentication: 'plain',
+  enable_starttls_auto: true
+}
+```
+
+### Email Preferences
+- User email subscription preferences
+- Email frequency settings
+- Opt-out mechanisms
+- GDPR compliance features
+
+## Email Styling
+
+### CSS Inlining
+- Use CSS inlining for email compatibility
+- Responsive email design patterns
+- Cross-client email testing
+- Fallback styling for older email clients
+
+### Brand Consistency
+- Store logo and branding integration
+- Consistent color schemes and typography
+- Custom email headers and footers
+- Brand-specific email signatures
+
+## Email Testing
+
+### Mailer Testing
+- Test email content and formatting
+- Verify email delivery functionality
+- Test internationalization features
+- Mock external email services
+
+```ruby
+# ✅ Proper email testing
+require 'spec_helper'
+
+RSpec.describe Spree::OrderMailer, type: :mailer do
+  let(:order) { create(:completed_order_with_totals) }
+
+  describe '#confirm_email' do
+    let(:mail) { described_class.confirm_email(order) }
+
+    it 'renders the headers' do
+      expect(mail.subject).to include(order.number)
+      expect(mail.to).to eq([order.email])
+      expect(mail.from).to eq([order.store.mail_from_address])
+    end
+
+    it 'renders the body' do
+      expect(mail.body.encoded).to include(order.number)
+      expect(mail.body.encoded).to include(order.display_total.to_s)
+    end
+  end
+end
+```
+
+### Email Previews
+- Use Action Mailer previews for development
+- Preview emails with sample data
+- Test different email scenarios
+- Visual email testing tools
+
+```ruby
+# ✅ Email preview setup
+class OrderPreview < ActionMailer::Preview
+  def confirm_email
+    order = Spree::Order.complete.last || FactoryBot.create(:completed_order_with_totals)
+    Spree::OrderMailer.confirm_email(order)
+  end
+
+  def cancel_email
+    order = Spree::Order.complete.last || FactoryBot.create(:completed_order_with_totals)
+    Spree::OrderMailer.cancel_email(order)
+  end
+end
+```
+
+## Email Delivery
+
+### Delivery Methods
+- SMTP delivery for production
+- Development email testing tools
+- Email queue management
+- Delivery failure handling
+
+### Email Tracking
+- Email open tracking
+- Click tracking for email links
+- Bounce and unsubscribe handling
+- Email analytics and reporting
+
+## Internationalization
+
+### Multi-language Emails
+- Locale-specific email templates
+- Translation management for email content
+- Currency and date formatting in emails
+- Cultural considerations for email design
+
+### Email Localization
+- Use `Spree.t` for all translatable strings
+- Support for RTL languages in emails
+- Locale-specific email addresses
+- Time zone considerations for email timing
+
+## Security & Compliance
+
+### Email Security
+- SPF and DKIM configuration
+- Email encryption for sensitive data
+- Secure email transmission protocols
+- Anti-spam compliance measures
+
+### Privacy Compliance
+- GDPR compliance for email data
+- User consent management
+- Data retention policies for emails
+- Email preference management
+
+## Performance Optimization
+
+### Email Performance
+- Optimize email template rendering
+- Efficient database queries for email data
+- Background job processing for emails
+- Email delivery queue management
+
+### Monitoring
+- Email delivery monitoring
+- Bounce rate tracking
+- Email performance metrics
+- Error logging and alerting
