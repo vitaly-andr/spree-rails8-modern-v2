@@ -38,6 +38,4 @@ node_modules
 
 
 /config/credentials/staging.key
-
-# Kamal secrets
-.kamal/secrets
+/config/master.key
