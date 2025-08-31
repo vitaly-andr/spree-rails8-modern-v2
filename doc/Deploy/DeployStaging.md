@@ -140,7 +140,7 @@ production:
 - **NPM dependencies installation** (for Vite and other tools)
 - **NO asset precompilation during build** (moved to post-deploy)
 - Non-root user (rails:1000)
-- Exposes port 80
+- Exposes port 3000
 
 ### 2. Key Dockerfile Improvements
 
@@ -177,28 +177,35 @@ No such file or directory @ rb_sysopen - app/frontend/spree/gem/@rails--request.
 
 For staging, use: `viandrianoff/spree-rails8-staging:latest`
 
-## 📁 Kamal Configuration Files
+## 📁 Kamal Configuration Files (UPDATED)
 
-### 1. Main Deploy Config: `config/deploy.staging.yml`
+### 1. Main Deploy Config: `config/deploy.yml`
 
-**Already configured correctly:**
+**Updated configuration with SSL and Cloudflare support:**
 
 ```yaml
 service: spree-rails8-staging
 image: viandrianoff/spree-rails8-staging
 
+# ARM64 architecture for Hetzner ARM server
+builder:
+  arch: arm64
+
+# Deploy to our staging server with deploy user
 servers:
   web:
-    - 95.217.223.50
+    - deploy@95.217.223.50
   job:
     hosts:
-      - 95.217.223.50
+      - deploy@95.217.223.50
     cmd: bin/jobs
 
-# SSL handled by Nginx (Ansible)
+# Kamal-proxy with SSL and Cloudflare integration
 proxy:
-  ssl: false
+  ssl: true                    # ← Enable SSL (Let's Encrypt certificates)
+  forward_headers: true        # ← Forward Cloudflare headers to Rails
   host: staging.andrianoff.online
+  app_port: 3000              # ← Port where Rails app listens inside container
 
 # Docker Hub registry
 registry:
@@ -216,10 +223,214 @@ env:
     SOLID_QUEUE_IN_PUMA: true
     JOB_CONCURRENCY: 2
     WEB_CONCURRENCY: 2
+    # PORT: 3000  ← NOT needed - Puma uses default from config/puma.rb
 
 # Persistent storage
 volumes:
   - "spree_staging_storage:/rails/storage"
+```
+
+### 2. Proxy Configuration Explained
+
+#### `ssl: true`
+- **Purpose**: Enables automatic SSL certificate generation via Let's Encrypt
+- **Ports**: kamal-proxy listens on ports 80 (HTTP) and 443 (HTTPS)
+- **Certificates**: Automatically obtained and renewed for the specified host
+- **Requirement**: Domain must point to the server IP for Let's Encrypt validation
+
+#### `forward_headers: true` (CRITICAL for Cloudflare)
+- **Purpose**: Forwards HTTP headers from Cloudflare to Rails application
+- **Why needed**: Without this, Rails sees Cloudflare IPs instead of real user IPs
+
+**Headers forwarded:**
+
+**Impact on Rails:**
+```ruby
+# Without forward_headers: true
+request.remote_ip  # → Cloudflare IP (useless)
+request.ssl?       # → false (incorrect)
+
+# With forward_headers: true
+request.remote_ip  # → Real user IP (correct)
+request.ssl?       # → true (correct)
+```
+
+#### `app_port: 3000`
+- **Purpose**: Tells kamal-proxy which port to forward requests to inside the container
+- **Must match**: The port where Puma listens inside the Docker container
+- **Default**: If not specified, Kamal uses port from `EXPOSE` directive in Dockerfile
+
+**How it works:**
+Internet → kamal-proxy:443 → Rails container:3000
+
+### 3. Port Configuration Deep Dive
+
+#### Puma Port Configuration
+Rails uses Puma web server which reads port from environment:
+
+```ruby
+# config/puma.rb (your current setup)
+port ENV.fetch("PORT", 3000)  # Default: 3000
+```
+
+#### Port Scenarios
+
+**Scenario 1: Default Port (Your Current Setup)**
+```yaml
+# config/deploy.yml
+proxy:
+  app_port: 3000  # ← Kamal forwards to container port 3000
+
+env:
+  # PORT not specified → Puma uses default 3000
+```
+
+**Result**: Puma listens on 3000, Kamal forwards to 3000 ✅
+
+**Scenario 2: Custom Port (For Multiple Apps)**
+```yaml
+# config/deploy.yml
+proxy:
+  app_port: 3001  # ← Kamal forwards to container port 3001
+
+env:
+  clear:
+    PORT: 3001    # ← Puma listens on 3001
+```
+
+**Result**: Puma listens on 3001, Kamal forwards to 3001 ✅
+
+**Scenario 3: Mismatch (BROKEN)**
+```yaml
+proxy:
+  app_port: 3000  # ← Kamal forwards to 3000
+
+env:
+  clear:
+    PORT: 3001    # ← Puma listens on 3001
+```
+
+**Result**: Kamal forwards to 3000, but Puma listens on 3001 ❌
+
+#### Multiple Rails Apps on Same Server
+
+For multiple Rails applications, use different ports:
+
+```yaml
+# App 1: Spree
+service: spree-staging
+proxy:
+  host: spree-staging.andrianoff.online
+  app_port: 3000
+env:
+  # PORT not specified → uses default 3000
+
+# App 2: Blog
+service: blog-staging
+proxy:
+  host: blog-staging.andrianoff.online
+  app_port: 3001
+env:
+  clear:
+    PORT: 3001
+
+# App 3: API
+service: api-staging
+proxy:
+  host: api-staging.andrianoff.online
+  app_port: 3002
+env:
+  clear:
+    PORT: 3002
+```
+
+### 4. Dockerfile Port Configuration
+
+Your current Dockerfile:
+```dockerfile
+EXPOSE 3000  # ← Documents the port (not enforced)
+CMD ["./bin/rails", "server"]  # ← Starts Puma, reads PORT from ENV
+```
+
+**Important Notes:**
+- `EXPOSE` is documentation only
+- Actual port is determined by `ENV["PORT"]` or Puma default
+- `app_port` in Kamal must match the actual listening port
+
+### 5. SSL Certificate Process
+
+When you deploy with `ssl: true`:
+
+1. **kamal-proxy starts** on ports 80 and 443
+2. **Let's Encrypt validation** via HTTP-01 challenge on port 80
+3. **Certificate obtained** for `staging.andrianoff.online`
+4. **HTTPS traffic** automatically handled on port 443
+5. **HTTP traffic** redirected to HTTPS
+6. **Certificate renewal** happens automatically
+
+**Requirements:**
+- Domain DNS points to server IP
+- Ports 80 and 443 open in firewall
+- No other services using these ports (stop Nginx first)
+
+### 6. Cloudflare Integration
+
+With Cloudflare in front of your server:
+User → Cloudflare → kamal-proxy → Rails App
+
+**Cloudflare settings:**
+- **SSL/TLS mode**: "Full" or "Full (strict)"
+- **Always Use HTTPS**: Enabled
+- **HTTP Strict Transport Security**: Enabled
+
+**Rails configuration:**
+```ruby
+# config/application.rb
+config.force_ssl = true
+config.assume_ssl = true
+
+# Trust Cloudflare IPs
+config.trusted_proxies = [
+  '173.245.48.0/20',
+  '103.21.244.0/22',
+  # ... other Cloudflare IP ranges
+].map { |proxy| IPAddr.new(proxy) }
+```
+
+### 7. Troubleshooting Port Issues
+
+**Problem**: Connection refused
+```bash
+# Check what's listening inside container
+kamal app exec "netstat -tlnp"
+
+# Check Puma process
+kamal app exec "ps aux | grep puma"
+
+# Check environment variables
+kamal app exec "printenv | grep PORT"
+```
+
+**Problem**: Wrong port forwarding
+```bash
+# Verify app_port matches Puma port
+kamal app details  # Shows port mapping
+
+# Test direct connection to container
+kamal app exec "curl localhost:3000"
+```
+
+**Problem**: SSL certificate issues
+```bash
+# Check kamal-proxy logs
+ssh deploy@95.217.223.50 "docker logs kamal-proxy"
+
+# Verify DNS resolution
+dig staging.andrianoff.online
+
+# Test Let's Encrypt connectivity
+curl -I http://staging.andrianoff.online/.well-known/acme-challenge/test
+```
 ```
 
 ### 2. Secrets File: `.kamal/secrets`
@@ -474,7 +685,41 @@ kamal app exec --config config/deploy.staging.yml "printenv | grep RAILS"
 # This error should no longer occur with the new deployment order
 ```
 
-#### 3. Credentials Error
+#### 3. SSH Host Key Fingerprint Error (SOLVED ✅)
+```bash
+# Error: Net::SSH::HostKeyMismatch: fingerprint SHA256:xxx does not match for "95.217.223.50"
+# This happens when server SSH keys change or known_hosts has conflicts
+
+# SOLUTION 1: Fix known_hosts (Recommended - Permanent Fix)
+ssh-keygen -R 95.217.223.50
+ssh-keyscan -t rsa,ecdsa,ed25519 95.217.223.50 >> ~/.ssh/known_hosts
+
+# SOLUTION 2: SSH Config (Global Fix)
+cat >> ~/.ssh/config << EOF
+
+Host 95.217.223.50
+    User deploy
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+    LogLevel ERROR
+EOF
+
+# SOLUTION 3: Environment Variable (Temporary)
+export KAMAL_SSH_OPTIONS="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+kamal deploy
+
+# Test connection after fix
+ssh deploy@95.217.223.50 "echo 'SSH connection successful'"
+kamal app details
+```
+
+**Important Notes:**
+- Kamal 2.x doesn't support `ssh: options:` syntax in deploy.yml
+- `SSH_OPTIONS` environment variable is from Kamal 1.x (doesn't work in 2.x)
+- Solution 1 (fixing known_hosts) is the most reliable approach
+- Always test SSH connection before running Kamal deploy
+
+#### 4. Credentials Error
 ```bash
 # Error: Missing credentials or secret_key_base
 # Solution: Ensure staging credentials are created
@@ -484,21 +729,21 @@ EDITOR="cursor --wait" rails credentials:edit --environment staging
 RAILS_ENV=staging rails credentials:show --environment staging
 ```
 
-#### 4. Database Connection Error (Local Testing)
+#### 5. Database Connection Error (Local Testing)
 ```bash
 # Error: Could not find table 'spree_addresses'
 # This is NORMAL when testing locally - staging database doesn't exist locally
 # Solution: Don't test with rails runner locally, deploy to server first
 ```
 
-#### 5. Docker Hub Authentication
+#### 6. Docker Hub Authentication
 ```bash
 # Error: Authentication failed
 # Solution: Verify Docker Hub credentials in Rails credentials
 rails credentials:show --environment staging
 ```
 
-#### 6. Solid Cache Configuration
+#### 7. Solid Cache Configuration
 ```bash
 # Error: Cache database not found
 # Solution: Ensure staging section exists in config/cache.yml
@@ -507,7 +752,7 @@ rails credentials:show --environment staging
 #   <<: *default
 ```
 
-#### 7. Asset Compilation Issues (Post-Deploy)
+#### 8. Asset Compilation Issues (Post-Deploy)
 ```bash
 # Error: Assets not found after deployment
 # Solution: Run asset compilation manually
@@ -517,7 +762,7 @@ kamal app exec --config config/deploy.staging.yml "bin/rails assets:precompile"
 kamal app exec --config config/deploy.staging.yml "ls -la app/frontend/spree/gem/"
 ```
 
-#### 8. Symlink Creation Issues
+#### 9. Symlink Creation Issues
 ```bash
 # Error: Symlinks not created properly
 # Solution: Run symlink setup manually
@@ -525,6 +770,25 @@ kamal app exec --config config/deploy.staging.yml "bin/rails spree:setup_symlink
 
 # Verify Spree gem path
 kamal app exec --config config/deploy.staging.yml "bundle show spree"
+```
+```
+
+Теперь также добавлю информацию в чеклист:Отлично! Теперь обновлю документацию с решением SSH fingerprint проблемы:
+
+```markdown
+## 📝  📝 ted ChecklistUpdated Checklistt
+
+### Pre-Deployment (COMPLETED Before Deployment
+
+### Pre-Deployment (COMPLETED environment configured (`configts/staging]iguration Kamal configurationdy (`config/eploy.staging.rets file configured ( Secrets file configured (/secrets`)
+-entials createStaging credentials create**Docker Hubdded to Rails credentials added to Rails** ng section added toStaging section added toche. [Dockerfile optimized (no asset compilation duringx] **Dockerfile optimized (no asset compilation duringd** ] **Hngerprint issue fingerprint issueved** er
+- [ ] Dockerand pushe image built and pusheble via SSH Server accessible via SSHed ( Domain DNS configured (ndrianonline)### SSHation Configuration
+-COMPLETED ✅)
+-wnSSH knownxe_hosts fixee `ssh-ke -R 17.223.217.223`
+- [Newx] **Newys host keys`ssh-keyscan -t rsa,d**: `ssh-keyscan -t rsa,217.2230 >>h/known ~/.ssh/known`- [x] connection **SSH connectioneploy@95.217d**: `ssh deploy@95.217on successful 'Connection successfulction verifiemal connection verifies details
+###yment
+- [ Deployment
+- [] Run `dockerild -t viandrianoffee-stagingrails8-stagingest .` ]docker push Run `docker pushianff/spreerails8-latest`staging:latest`al Run `kamalonfig config deploy --config configstaging ]y application starts successfully Verify application starts successfullyk database connectivitye Verify SSL certificate functionality
 ```
 
 ## 📊 Monitoring & Maintenance
@@ -679,3 +943,246 @@ kamal app logs --config config/deploy.staging.yml
 **Your deployment setup is now 100% ready and optimized!** 🚀
 
 The new approach eliminates JavaScript runtime and Spree symlink issues by compiling assets after deployment when all dependencies are properly available.
+
+## 📁 Kamal Configuration Files (UPDATED - WORKING VERSION)
+
+### 1. Main Deploy Config: `config/deploy.yml`
+
+**Working configuration with proper server structure:**
+
+```yaml
+# config/deploy.yml
+service: spree-rails8-staging
+image: viandrianoff/spree-rails8-staging
+
+# ARM64 architecture for Hetzner ARM server
+builder:
+  arch: arm64
+
+# SSH configuration
+ssh:
+  user: deploy
+
+# Server configuration (CRITICAL: Use hosts: structure)
+servers:
+  web:
+    hosts:  # ← REQUIRED: Use hosts: not direct list
+      - 95.217.223.50
+    options:
+      memory: 1g  # ← Container memory limit
+  job:
+    hosts:
+      - 95.217.223.50
+    cmd: bin/jobs  # ← Background job processing
+
+# Kamal-proxy with SSL and Cloudflare integration
+proxy:
+  ssl: true                    # ← Enable SSL (Let's Encrypt certificates)
+  forward_headers: true        # ← Forward Cloudflare headers to Rails
+  host: staging.andrianoff.online
+  app_port: 3000              # ← Port where Rails app listens inside container
+
+# Docker Hub registry
+registry:
+  username: viandrianoff
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+# Environment variables
+env:
+  clear:
+    RAILS_ENV: staging
+    PORT: 3000                 # ← Puma will listen on this port
+    DATABASE_URL: sqlite3:/rails/storage/databases/staging.sqlite3
+    SOLID_QUEUE_IN_PUMA: true
+    JOB_CONCURRENCY: 2
+    WEB_CONCURRENCY: 2
+  secret:
+    - RAILS_MASTER_KEY
+
+# Docker managed volume for persistent storage
+volumes:
+  - "spree_staging_storage:/rails/storage"
+```
+
+### 2. Server Configuration Explained (CRITICAL FIXES)
+
+#### ❌ Wrong Structure (Causes Rails Container Not Starting)
+```yaml
+# DON'T USE THIS - Rails container won't start
+servers:
+  web:
+    - deploy@95.217.223.50  # ← Wrong format
+```
+
+#### ✅ Correct Structure (Rails Container Starts)
+```yaml
+# USE THIS - Rails container will start properly
+servers:
+  web:
+    hosts:  # ← REQUIRED: hosts: key
+      - 95.217.223.50  # ← Just IP, user specified in ssh: section
+    options:
+      memory: 1g  # ← Container resource limits
+```
+
+#### Key Differences:
+1. **`hosts:` key is REQUIRED** - without it, Kamal won't create Rails container
+2. **User specified in `ssh:` section** - not in server list
+3. **`options:` for container settings** - memory, CPU limits
+4. **Job servers don't need `proxy: false`** - Kamal handles this automatically
+
+### 3. SSH Configuration
+```yaml
+ssh:
+  user: deploy  # ← SSH user for all servers
+  # port: 22   # ← Default port (can be customized)
+```
+
+**Why separate SSH config:**
+- **Consistency**: Same user for all servers
+- **Security**: Centralized SSH settings
+- **Flexibility**: Easy to change SSH options globally
+
+### 4. Container Options
+```yaml
+servers:
+  web:
+    hosts:
+      - 95.217.223.50
+    options:
+      memory: 1g      # ← RAM limit for Rails container
+      # cpus: "0.5"   # ← CPU limit (optional)
+      # restart: unless-stopped  # ← Restart policy (optional)
+```
+
+**Memory Guidelines:**
+- **Staging**: 1g is sufficient for Rails + SQLite
+- **Production**: 2g+ recommended for Rails + PostgreSQL
+- **Job workers**: 512m-1g depending on job complexity
+
+### 5. Volume Configuration Explained
+```yaml
+# Docker managed volume for persistent storage
+volumes:
+  - "spree_staging_storage:/rails/storage"
+```
+
+**Volume Mapping:**
+- **Host path**: `/home/deploy/app-*` (persistent on server)
+- **Container path**: `/rails/*` (inside Docker container)
+- **Purpose**: Data survives container restarts and deployments
+
+### 6. Environment Variables Deep Dive
+```yaml
+env:
+  clear:  # ← Visible in container, not sensitive
+    RAILS_ENV: staging
+    PORT: 3000                # ← Puma listens on this port
+    DATABASE_URL: sqlite3:/rails/storage/databases/staging.sqlite3
+    SOLID_QUEUE_IN_PUMA: true # ← Run background jobs in Puma process
+    JOB_CONCURRENCY: 2        # ← Number of job worker threads
+    WEB_CONCURRENCY: 2        # ← Number of Puma worker processes
+  secret:  # ← Encrypted, from .kamal/secrets
+    - RAILS_MASTER_KEY        # ← Rails credentials decryption key
+```
+
+**Environment Variable Types:**
+- **`clear:`** - Non-sensitive, visible in `docker inspect`
+- **`secret:`** - Sensitive, encrypted, from `.kamal/secrets` file
+
+### 7. Common Configuration Mistakes
+
+#### Mistake 1: Wrong Server Structure
+```yaml
+# ❌ This won't start Rails container
+servers:
+  web:
+    - deploy@95.217.223.50
+```
+
+#### Mistake 2: Missing SSH User
+```yaml
+# ❌ Will use root user (security risk)
+servers:
+  web:
+    hosts:
+      - deploy@95.217.223.50  # User in hostname (deprecated)
+# Missing ssh: user: deploy
+```
+
+#### Mistake 3: Incorrect Volume Paths
+```yaml
+# ❌ Wrong paths - data won't persist
+volumes:
+  - "app-storage:/rails/storage"  # Relative path (won't work)
+```
+
+### 8. Troubleshooting Server Configuration
+
+#### Problem: Rails Container Not Starting
+```bash
+# Check if container was created at all
+ssh deploy@95.217.223.50 "docker ps -a | grep spree"
+
+# If no container exists, check server structure in deploy.yml
+# Must use hosts: format, not direct list
+```
+
+#### Problem: SSH Connection Issues
+```bash
+# Test SSH connection
+ssh deploy@95.217.223.50 "echo 'SSH works'"
+
+# Check SSH user in deploy.yml
+# Should match actual SSH user on server
+```
+
+#### Problem: Volume Mount Issues
+```bash
+# Check if host directories exist
+ssh deploy@95.217.223.50 "ls -la /home/deploy/"
+
+# Create directories if missing
+ssh deploy@95.217.223.50 "mkdir -p /home/deploy/{app-storage,app-db,app-log}"
+```
+
+### 9. Deployment Commands with New Config
+
+```bash
+# Deploy with corrected configuration
+kamal deploy
+
+# Check Rails container started
+ssh deploy@95.217.223.50 "docker ps | grep spree"
+
+# View Rails logs
+kamal app logs
+
+# Execute commands in Rails container
+kamal app exec "bin/rails console"
+```
+
+### 10. Multi-Server Scaling (Future)
+
+```yaml
+# When scaling to multiple servers
+servers:
+  web:
+    hosts:
+      - 95.217.223.50   # Server 1
+      - 95.217.223.51   # Server 2
+    options:
+      memory: 2g
+  job:
+    hosts:
+      - 95.217.223.52   # Dedicated job server
+    cmd: bin/jobs
+    options:
+      memory: 1g
+```
+
+**Scaling Benefits:**
+- **Load distribution**: Multiple web servers
+- **Dedicated job processing**: Separate job servers
+- **High availability**: Redundancy across servers
