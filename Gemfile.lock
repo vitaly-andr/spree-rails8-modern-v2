@@ -435,7 +435,6 @@ GEM
       frozen_record
       railties (>= 5.0)
       sassc-rails
-    pg (1.5.9)
     phonelib (0.10.11)
     popper_js (1.16.1)
     pp (0.6.2)
@@ -720,7 +719,6 @@ DEPENDENCIES
   devise
   jbuilder
   kamal
-  pg (~> 1.1)
   puma (>= 5.0)
   rails (~> 8.0.2)
   rubocop-rails-omakase

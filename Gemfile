@@ -6,8 +6,8 @@ gem "rails", "~> 8.0.2"
 gem "vite_rails"
 gem "slim-rails"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
-# Use postgresql as the database for Active Record
-gem "pg", "~> 1.1"
+# Use postgresql as the database for Active Record (COMMENTED OUT - using SQLite)
+# gem "pg", "~> 1.1"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
