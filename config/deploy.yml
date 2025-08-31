@@ -5,7 +5,8 @@ image: viandrianoff/spree-rails8-staging
 # ARM64 architecture for Hetzner ARM server
 builder:
   arch: arm64
-
+  secrets:
+   - RAILS_MASTER_KEY
 # Deploy to our staging server with deploy user
 # SSH configuration
 ssh:
@@ -47,6 +48,8 @@ env:
     SOLID_QUEUE_IN_PUMA: true
     JOB_CONCURRENCY: 2
     WEB_CONCURRENCY: 2
+    RAILS_LOG_LEVEL: debug
+
   secret:
     - RAILS_MASTER_KEY
 
