@@ -1,0 +1,45 @@
+#!/bin/sh
+
+# A sample post-deploy hook
+#
+# These environment variables are available:
+# KAMAL_RECORDED_AT
+# KAMAL_PERFORMER
+# KAMAL_VERSION
+# KAMAL_HOSTS
+# KAMAL_ROLES (if set)
+# KAMAL_DESTINATION (if set)
+# KAMAL_RUNTIME
+
+#!/bin/sh
+
+# Post-deploy hook for database initialization
+# This runs after the application is deployed and containers are running
+
+echo "🚀 Post-deploy hook started by $KAMAL_PERFORMER for version $KAMAL_VERSION"
+
+# Run database migrations on the primary web server
+echo "📊 Running database migrations..."
+kamal app exec --primary --role web "rails db:migrate"
+
+# Create and migrate solid cache database
+echo "💾 Setting up Solid Cache database..."
+kamal app exec --primary --role web "rails solid_cache:install:migrations"
+kamal app exec --primary --role web "rails db:migrate"
+
+# Create and migrate solid queue database  
+echo "⚡ Setting up Solid Queue database..."
+kamal app exec --primary --role web "rails solid_queue:install:migrations"
+kamal app exec --primary --role web "rails db:migrate"
+
+# Create and migrate solid cable database
+echo "📡 Setting up Solid Cable database..."
+kamal app exec --primary --role web "rails solid_cable:install:migrations"
+kamal app exec --primary --role web "rails db:migrate"
+
+# Optionally run seeds (uncomment if needed)
+# echo "🌱 Running database seeds..."
+# kamal app exec --primary --role web "rails db:seed"
+
+echo "✅ Post-deploy hook completed successfully!"
+echo "📈 Deployment stats: $KAMAL_PERFORMER deployed $KAMAL_VERSION to $KAMAL_DESTINATION in $KAMAL_RUNTIME seconds"
