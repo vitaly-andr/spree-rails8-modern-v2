@@ -1,6 +1,6 @@
 # config/deploy.yml
 service: spree-rails8-staging
-image: viandrianoff/spree-rails8-staging-v2
+image: viandrianoff/spree-rails8-staging
 
 # ARM64 architecture for Hetzner ARM server
 builder:
