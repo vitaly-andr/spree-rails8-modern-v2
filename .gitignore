@@ -27,7 +27,6 @@ yarn-error.log
 /vendor/bundle
 .bundle/
 /config/master.key
-/config/credentials.yml.enc
 
 # Vite Ruby
 /public/vite*
