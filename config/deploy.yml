@@ -59,12 +59,8 @@ volumes:
 
 # Команды после деплоя
 boot:
-  limit: 10
-  wait: 2
-
-# Увеличиваем timeout для Rails + Spree запуска
-deploy:
-  timeout: 60s
+  limit: 60
+  wait: 5
 
 
 
