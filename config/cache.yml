@@ -16,5 +16,5 @@ production:
   <<: *default
 
 staging:
-  database: cache
+  database: solid_cache
   <<: *default
