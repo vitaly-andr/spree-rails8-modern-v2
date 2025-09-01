@@ -76,8 +76,9 @@ ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
 # Add healthcheck
 HEALTHCHECK --interval=10s --timeout=3s --start-period=60s --retries=3 \
-  CMD curl -f http://localhost:80/up || exit 1
+  CMD curl -f http://localhost:3000/up || exit 1
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
 CMD ["./bin/thrust", "./bin/rails", "server"]
+# Force rebuild Mon Sep  1 20:04:21 MSK 2025
