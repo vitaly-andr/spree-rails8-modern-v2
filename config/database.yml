@@ -49,18 +49,15 @@ staging:
   primary:
     <<: *default
     database: storage/databases/staging.sqlite3
-  solid_queue:
+  queue:
     adapter: sqlite3
-    database: storage/databases/solid_queue_staging.sqlite3
-  solid_cable:
+    database: storage/databases/queue_staging.sqlite3
+  cable:
     adapter: sqlite3
-    database: storage/databases/solid_cable_staging.sqlite3
-  solid_cache:
-    adapter: sqlite3
-    database: storage/databases/solid_cache_staging.sqlite3
+    database: storage/databases/cable_staging.sqlite3
   cache:
     adapter: sqlite3
-    database: storage/databases/solid_cache_staging.sqlite3
+    database: storage/databases/cache_staging.sqlite3
 
 test:
   primary:

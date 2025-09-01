@@ -11,17 +11,17 @@ if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
   echo "🚀 Preparing databases..."
   ./bin/rails db:prepare
   
-  echo "💾 Setting up Solid Cache database..."
-  ./bin/rails db:create:solid_cache
-  ./bin/rails db:migrate:solid_cache
+  echo "💾 Setting up Cache database..."
+  ./bin/rails db:create:cache
+  ./bin/rails db:migrate:cache
   
-  echo "⚡ Setting up Solid Queue database..."
-  ./bin/rails db:create:solid_queue
-  ./bin/rails db:migrate:solid_queue
+  echo "⚡ Setting up Queue database..."
+  ./bin/rails db:create:queue
+  ./bin/rails db:migrate:queue
   
-  echo "📡 Setting up Solid Cable database..."
-  ./bin/rails db:create:solid_cable
-  ./bin/rails db:migrate:solid_cable
+  echo "📡 Setting up Cable database..."
+  ./bin/rails db:create:cable
+  ./bin/rails db:migrate:cable
   
   echo "✅ All databases ready!"
 fi
