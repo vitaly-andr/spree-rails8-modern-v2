@@ -2,6 +2,9 @@
 service: spree-rails8-staging
 image: viandrianoff/spree-rails8-staging
 
+# Timeout for Rails + Spree startup (default 30s)
+deploy_timeout: 60
+
 # ARM64 architecture for Hetzner ARM server
 builder:
   arch: arm64
@@ -59,8 +62,8 @@ volumes:
 
 # Команды после деплоя
 boot:
-  limit: 60
-  wait: 5
+  limit: 10
+  wait: 2
 
 
 
