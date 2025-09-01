@@ -58,6 +58,9 @@ staging:
   solid_cache:
     adapter: sqlite3
     database: storage/databases/solid_cache_staging.sqlite3
+  cache:
+    adapter: sqlite3
+    database: storage/databases/solid_cache_staging.sqlite3
 
 test:
   primary:
