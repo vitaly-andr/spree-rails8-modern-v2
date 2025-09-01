@@ -31,6 +31,7 @@ proxy:
   forward_headers: true
   host: staging.andrianoff.online
   app_port: 3000
+  deploy_timeout: 60s
 
 
 # Registry configuration
@@ -61,5 +62,7 @@ volumes:
 boot:
   limit: 10
   wait: 2
+
+
 
 
