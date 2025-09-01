@@ -11,10 +11,10 @@ development:
 test:
   <<: *default
 
-production:
+staging:
   database: cache
   <<: *default
 
-staging:
+production:
   database: cache
   <<: *default

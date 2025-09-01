@@ -60,11 +60,6 @@ env:
 volumes:
   - "spree_staging_storage:/rails/storage"
 
-# Команды после деплоя
-boot:
-  limit: 10
-  wait: 2
-
 
 
 

@@ -49,15 +49,15 @@ staging:
   primary:
     <<: *default
     database: storage/databases/staging.sqlite3
+  cache:
+    <<: *default
+    database: storage/databases/cache_staging.sqlite3
   queue:
-    adapter: sqlite3
+    <<: *default
     database: storage/databases/queue_staging.sqlite3
   cable:
-    adapter: sqlite3
+    <<: *default
     database: storage/databases/cable_staging.sqlite3
-  cache:
-    adapter: sqlite3
-    database: storage/databases/cache_staging.sqlite3
 
 test:
   primary:
