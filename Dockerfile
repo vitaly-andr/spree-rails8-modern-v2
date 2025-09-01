@@ -24,7 +24,7 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y nodejs && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
-й провери# Set build environment - RAILS_ENV will be configured at runtime
+# Set build environment - RAILS_ENV will be configured at runtime
 ENV BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
     BUNDLE_WITHOUT="development"
