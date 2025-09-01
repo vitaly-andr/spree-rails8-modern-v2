@@ -24,9 +24,8 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y nodejs && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
-# Set production environment
-ENV RAILS_ENV="production" \
-    BUNDLE_DEPLOYMENT="1" \
+й провери# Set build environment - RAILS_ENV will be configured at runtime
+ENV BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
     BUNDLE_WITHOUT="development"
 
@@ -77,8 +76,8 @@ ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
 # Add healthcheck
 HEALTHCHECK --interval=10s --timeout=3s --start-period=30s --retries=3 \
-  CMD curl -f http://localhost:3000/up || exit 1
+  CMD curl -f http://localhost:80/up || exit 1
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-CMD ["./bin/rails", "server"]
+CMD ["./bin/thrust", "./bin/rails", "server"]
