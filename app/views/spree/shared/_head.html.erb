@@ -21,8 +21,11 @@
 <%# Keep wishlist data for Spree %>
 <%= javascript_tag "wishedVariantIds = #{(current_wishlist&.variant_ids&.map(&:to_s) || []).to_json.html_safe};" %>
 
-<%= stylesheet_link_tag "tailwind", defer: true, data: { turbo_track: 'reload' } %>
-<%= stylesheet_link_tag "storefront_page_builder", defer: true, data: { turbo_track: 'reload' } if page_builder_enabled? %>  
+<%# Vite для ваших CSS %>
+<%= vite_stylesheet_tag "application", data: { turbo_track: 'reload' } %>
+
+<%# Sprockets для CSS из gem'ов (автоматически подключается через manifest'ы) %>
+<%= stylesheet_link_tag "storefront_page_builder", defer: true, data: { turbo_track: 'reload' } if page_builder_enabled? %>
 
 <%= yield :head %>
 
