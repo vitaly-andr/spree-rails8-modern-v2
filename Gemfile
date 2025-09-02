@@ -64,9 +64,12 @@ end
 # ViewComponent for reusable UI components
 gem "view_component"
 
-# Spree Commerce Integration - Official Documentation
+# Spree Commerce Integration - зафиксировано на конкретном коммите
 gem 'devise'
-spree_opts = { 'github': 'spree/spree', 'branch': 'main' }
+spree_opts = { 
+  'github': 'spree/spree', 
+  'ref': 'c26eb9a1fe88e32691f4cbc2c629b6283525e9fe'  # Фиксируем коммит!
+}
 gem 'spree', spree_opts # core and API
 gem 'spree_admin', spree_opts # Admin panel (optional)
 gem 'spree_storefront', spree_opts # Storefront (optional)
