@@ -43,9 +43,9 @@ RUN bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
     bundle exec bootsnap precompile --gemfile
 
-# Install node modules
+# Install node modules - ИСПРАВЛЯЕМ: устанавливаем ВСЕ зависимости в build stage
 COPY package.json package-lock.json ./
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci && npm cache clean --force  # Убираем --only=production
 
 # Copy application code
 COPY . .
@@ -53,14 +53,12 @@ COPY . .
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
-# Build Vite assets for production
-# Увеличиваем память для Node.js и добавляем таймаут
-ENV NODE_OPTIONS="--max-old-space-size=4096"
+# Build Vite assets for production - используем bin/vite который работает через Ruby
 RUN echo "🔨 Starting Vite build..." && \
     echo "Node version: $(node -v)" && \
     echo "Available memory:" && free -h && \
-    timeout 600 npx vite build --logLevel info || \
-    (echo "❌ Vite build failed or timed out" && exit 1)
+    RAILS_ENV=production bin/vite build || \
+    (echo "❌ Vite build failed" && exit 1)
 
 # Alternative if above fails - try without timeout
 # RUN npx vite build --logLevel info
