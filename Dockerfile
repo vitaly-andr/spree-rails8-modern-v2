@@ -55,6 +55,10 @@ RUN bundle exec bootsnap precompile app/ lib/
 
 # Build Vite assets for production/staging - используем ARG для гибкости
 ARG RAILS_ENV=staging
+# Force rebuild - change this comment to break cache
+# Build timestamp: 2025-09-02 19:20:10
+
+# Build Vite assets for staging
 RUN echo "🔨 Starting Vite build for ${RAILS_ENV}..." && \
     echo "Node version: $(node -v)" && \
     echo "Available memory:" && free -h && \
