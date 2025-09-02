@@ -23,7 +23,8 @@ export default defineConfig({
       '@stimulus-components/scroll-to': resolve(__dirname, './node_modules/@stimulus-components/scroll-to'),
       'swiper/bundle': resolve(__dirname, './node_modules/swiper/swiper-bundle.mjs'),
       'photoswipe': resolve(__dirname, './node_modules/photoswipe'),
-      'photoswipe/lightbox': resolve(__dirname, './app/frontend/spree/gem/photoswipe--dist--photoswipe-lightbox.esm.js.js'),      'nouislider': resolve(__dirname, './node_modules/nouislider'),
+      'photoswipe/lightbox': resolve(__dirname, './app/frontend/spree/gem/photoswipe--dist--photoswipe-lightbox.esm.js.js'),  // ОСТАВЛЯЕМ!
+      'nouislider': resolve(__dirname, './node_modules/nouislider'),
       'card-validator': resolve(__dirname, './node_modules/card-validator'),
       'credit-card-type': resolve(__dirname, './node_modules/credit-card-type'),
       'headroom.js': resolve(__dirname, './node_modules/headroom.js'),

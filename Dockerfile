@@ -57,6 +57,7 @@ RUN bundle exec bootsnap precompile app/ lib/
 RUN echo "🔨 Starting Vite build..." && \
     echo "Node version: $(node -v)" && \
     echo "Available memory:" && free -h && \
+    SECRET_KEY_BASE=dummy_for_build \
     RAILS_ENV=production bin/vite build || \
     (echo "❌ Vite build failed" && exit 1)
 
