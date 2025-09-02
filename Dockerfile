@@ -71,6 +71,11 @@ RUN echo "🔨 Starting Vite build for ${RAILS_ENV}..." && \
 #     echo "✅ Vite build completed" && \
 #     ls -la public/vite/
 
+# Создаем пустую БД для Vite build
+RUN touch db/staging.sqlite3 && \
+    SECRET_KEY_BASE=dummy_for_build \
+    RAILS_ENV=staging bin/vite build
+
 # Final stage for app image
 FROM base
 
