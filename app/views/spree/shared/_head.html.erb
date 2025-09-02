@@ -21,10 +21,24 @@
 <%# Keep wishlist data for Spree %>
 <%= javascript_tag "wishedVariantIds = #{(current_wishlist&.variant_ids&.map(&:to_s) || []).to_json.html_safe};" %>
 
-<%# Vite для ваших CSS %>
-<%= vite_stylesheet_tag "application", data: { turbo_track: 'reload' } %>
+<%# Защищённый Vite CSS с диагностикой %>
+<% begin %>
+  <% Rails.logger.info "=== VITE CSS DEBUG ===" %>
+  <% Rails.logger.info "ViteRuby.instance: #{ViteRuby.instance.class}" %>
+  <% Rails.logger.info "Trying vite_stylesheet_tag..." %>
+  
+  <%= vite_stylesheet_tag "application", data: { turbo_track: 'reload' } %>
+  
+  <% Rails.logger.info "✅ vite_stylesheet_tag SUCCESS" %>
+<% rescue => e %>
+  <% Rails.logger.error "❌ VITE CSS ERROR: #{e.class}: #{e.message}" %>
+  <% Rails.logger.error e.backtrace.first(3).join("\n") %>
+  
+  <!-- Fallback: прямая ссылка на CSS -->
+  <link rel="stylesheet" href="/vite/assets/application-vdDDhdA8.css" data-turbo-track="reload">
+<% end %>
 
-<%# Sprockets для CSS из gem'ов (автоматически подключается через manifest'ы) %>
+<%# Sprockets для CSS из gem'ов %>
 <%= stylesheet_link_tag "storefront_page_builder", defer: true, data: { turbo_track: 'reload' } if page_builder_enabled? %>
 
 <%= yield :head %>
