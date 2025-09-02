@@ -167,6 +167,7 @@ GEM
       tzinfo
     execjs (2.10.0)
     ffaker (2.25.0)
+    ffi (1.17.2-aarch64-linux-gnu)
     ffi (1.17.2-arm64-darwin)
     friendly_id (5.4.2)
       activerecord (>= 4.0.0)
@@ -183,6 +184,9 @@ GEM
       csv (>= 3.0.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    google-protobuf (4.32.0-aarch64-linux-gnu)
+      bigdecimal
+      rake (>= 13)
     google-protobuf (4.32.0-arm64-darwin)
       bigdecimal
       rake (>= 13)
@@ -296,6 +300,8 @@ GEM
       net-protocol
     net-ssh (7.3.0)
     nio4r (2.7.4)
+    nokogiri (1.18.9-aarch64-linux-gnu)
+      racc (~> 1.4)
     nokogiri (1.18.9-arm64-darwin)
       racc (~> 1.4)
     orm_adapter (0.5.0)
@@ -419,6 +425,8 @@ GEM
       logger
     rubyzip (3.0.2)
     safely_block (0.5.0)
+    sass-embedded (1.91.0-aarch64-linux-gnu)
+      google-protobuf (~> 4.31)
     sass-embedded (1.91.0-arm64-darwin)
       google-protobuf (~> 4.31)
     sassc (2.4.0)
@@ -564,6 +572,7 @@ GEM
       actionpack (>= 6.1)
       activesupport (>= 6.1)
       sprockets (>= 3.0.0)
+    sqlite3 (2.7.3-aarch64-linux-gnu)
     sqlite3 (2.7.3-arm64-darwin)
     sshkit (1.24.0)
       base64
@@ -586,9 +595,11 @@ GEM
     tailwindcss-rails (3.3.2)
       railties (>= 7.0.0)
       tailwindcss-ruby (~> 3.0)
+    tailwindcss-ruby (3.4.17-aarch64-linux)
     tailwindcss-ruby (3.4.17-arm64-darwin)
     temple (0.10.4)
     thor (1.4.0)
+    thruster (0.1.15-aarch64-linux)
     thruster (0.1.15-arm64-darwin)
     tilt (2.6.1)
     timeout (0.4.3)
@@ -640,6 +651,7 @@ GEM
     zeitwerk (2.7.3)
 
 PLATFORMS
+  aarch64-linux
   arm64-darwin
 
 DEPENDENCIES
