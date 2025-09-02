@@ -1,5 +1,5 @@
 import { Controller } from '@hotwired/stimulus'
-import PhotoSwipeLightbox from 'photoswipe/lightbox'
+import PhotoSwipeLightbox from 'photoswipe/dist/photoswipe-lightbox.esm.js'
 
 const closeSVG = `
 <svg class="pswp__icn" width="24" height="24" viewBox="0 0 24 24" fill="none">
