@@ -4,8 +4,7 @@
 console.log('📚 Loading Spree vendor libraries...')
 
 // Rails request library for AJAX calls (from CDN)
-import 'https://ga.jspm.io/npm:@rails/request.js@0.0.8/src/index.js'
-
+import './rails-request.js'
 // Core libraries that Spree uses
 import 'swiper/bundle'
 import 'photoswipe'
