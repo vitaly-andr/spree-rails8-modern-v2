@@ -55,7 +55,7 @@ RUN bundle exec bootsnap precompile app/ lib/
 
 # Build Vite assets for production with verbose output
 RUN echo "🔨 Starting Vite build..." && \
-    bin/vite build --logLevel info && \
+    bin/vite build && \
     echo "✅ Vite build completed" && \
     ls -la public/vite/
 
