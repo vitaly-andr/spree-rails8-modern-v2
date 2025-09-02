@@ -54,7 +54,16 @@ COPY . .
 RUN bundle exec bootsnap precompile app/ lib/
 
 # Build Vite assets for production
-RUN bin/vite build
+# Увеличиваем память для Node.js и добавляем таймаут
+ENV NODE_OPTIONS="--max-old-space-size=4096"
+RUN echo "🔨 Starting Vite build..." && \
+    echo "Node version: $(node -v)" && \
+    echo "Available memory:" && free -h && \
+    timeout 600 npx vite build --logLevel info || \
+    (echo "❌ Vite build failed or timed out" && exit 1)
+
+# Alternative if above fails - try without timeout
+# RUN npx vite build --logLevel info
 
 # Assets will be built by Kamal hooks, not in Docker
 # RUN echo "🔨 Starting Vite build..." && \
