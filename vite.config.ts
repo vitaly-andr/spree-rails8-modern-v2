@@ -37,7 +37,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         application: './app/frontend/entrypoints/application.js',
-        'application-css': './app/frontend/entrypoints/application.css',  // Добавляем CSS entrypoint
+
         spree: './app/frontend/entrypoints/spree.js'
       }
     }

@@ -29,8 +29,8 @@ ActiveStorage.start()
 // Импортируем и запускаем Stimulus контроллеры через index.js
 import "../controllers/index.js"
 
-// Импортируйте CSS, если ещё не импортирован
-import "../application.css"
+// Импортируем CSS в JS entrypoint
+import '../application.css'
 
 // Импортируем GSAP и анимации для Ceramir страницы
 import { gsap } from 'gsap'
