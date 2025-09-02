@@ -23,7 +23,9 @@ export default defineConfig({
       '@stimulus-components/scroll-to': resolve(__dirname, './node_modules/@stimulus-components/scroll-to'),
       'swiper/bundle': resolve(__dirname, './node_modules/swiper/swiper-bundle.mjs'),
       'photoswipe': resolve(__dirname, './node_modules/photoswipe'),
-      'photoswipe/lightbox': resolve(__dirname, './app/frontend/spree/gem/photoswipe--dist--photoswipe-lightbox.esm.js.js'),  // ОСТАВЛЯЕМ!
+      // Меняем алиас - указываем напрямую на файл из node_modules
+      'photoswipe/lightbox.js': resolve(__dirname, './node_modules/photoswipe/lightbox.js'),
+      'photoswipe/lightbox': resolve(__dirname, './node_modules/photoswipe/lightbox.js'),
       'nouislider': resolve(__dirname, './node_modules/nouislider'),
       'card-validator': resolve(__dirname, './node_modules/card-validator'),
       'credit-card-type': resolve(__dirname, './node_modules/credit-card-type'),
