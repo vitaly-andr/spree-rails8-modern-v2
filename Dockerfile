@@ -53,12 +53,13 @@ COPY . .
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
-# Build Vite assets for production - используем bin/vite который работает через Ruby
-RUN echo "🔨 Starting Vite build..." && \
+# Build Vite assets for production/staging - используем ARG для гибкости
+ARG RAILS_ENV=staging
+RUN echo "🔨 Starting Vite build for ${RAILS_ENV}..." && \
     echo "Node version: $(node -v)" && \
     echo "Available memory:" && free -h && \
     SECRET_KEY_BASE=dummy_for_build \
-    RAILS_ENV=production bin/vite build || \
+    RAILS_ENV=${RAILS_ENV} bin/vite build || \
     (echo "❌ Vite build failed" && exit 1)
 
 # Alternative if above fails - try without timeout
