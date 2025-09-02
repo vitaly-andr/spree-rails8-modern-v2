@@ -3,7 +3,7 @@
 //
 //    <%= vite_client_tag %>
 //    <%= vite_javascript_tag 'application' %>
-console.log('Vite ⚡️ Rails')
+console.log('🎨 Application JavaScript loaded via Vite')
 
 // If using a TypeScript entrypoint file:
 //     <%= vite_typescript_tag 'application' %>
@@ -28,9 +28,6 @@ ActiveStorage.start()
 // import '~/index.css'
 // Импортируем и запускаем Stimulus контроллеры через index.js
 import "../controllers/index.js"
-
-// Импортируем CSS в JS entrypoint
-import '../application.css'
 
 // Импортируем GSAP и анимации для Ceramir страницы
 import { gsap } from 'gsap'

@@ -16,14 +16,14 @@
 
 <%# Replace Importmaps with Vite %>
 <%= vite_client_tag %>
-<%= vite_javascript_tag "application" %>  <%# Добавляем! %>
+<%= vite_javascript_tag "application" %>
 <%= vite_javascript_tag "spree" %>
+
+<%# Отдельный CSS entrypoint %>
+<%= vite_stylesheet_tag "styles" %>
 
 <%# Keep wishlist data for Spree %>
 <%= javascript_tag "wishedVariantIds = #{(current_wishlist&.variant_ids&.map(&:to_s) || []).to_json.html_safe};" %>
-
-<%# CSS автоматически подключается через JS entrypoint - НЕ нужен vite_stylesheet_tag! %>
-<%# Убираем всю диагностику %>
 
 <%# Sprockets для CSS из gem'ов %>
 <%= stylesheet_link_tag "storefront_page_builder", defer: true, data: { turbo_track: 'reload' } if page_builder_enabled? %>

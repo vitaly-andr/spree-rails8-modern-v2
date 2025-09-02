@@ -34,10 +34,11 @@ export default defineConfig({
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.json']
   },
   build: {
+    cssCodeSplit: true,  // ← ДОБАВЛЯЕМ ЭТО!
     rollupOptions: {
       input: {
         application: './app/frontend/entrypoints/application.js',
-
+        styles: './app/frontend/entrypoints/application.css',  // ← ОТДЕЛЬНЫЙ CSS ENTRYPOINT
         spree: './app/frontend/entrypoints/spree.js'
       }
     }

@@ -3,6 +3,7 @@
 
 console.log('🛒 Spree Commerce JavaScript loaded via Vite')
 
+
 // Import Hotwire libraries (required by Spree)
 import * as Turbo from '@hotwired/turbo'
 import { Application } from '@hotwired/stimulus'
