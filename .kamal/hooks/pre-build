@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+
+echo "🔨 Building Vite assets locally before Docker build..."
+
+# Собираем assets для production
+bin/vite build
+
+echo "✅ Vite assets built successfully"
+echo "📦 Assets ready for Docker build"
+
+# Показываем что собралось
+ls -la public/vite/ | head -5

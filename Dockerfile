@@ -53,11 +53,11 @@ COPY . .
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
-# Build Vite assets for production with verbose output
-RUN echo "🔨 Starting Vite build..." && \
-    bin/vite build && \
-    echo "✅ Vite build completed" && \
-    ls -la public/vite/
+# Assets will be built by Kamal hooks, not in Docker
+# RUN echo "🔨 Starting Vite build..." && \
+#     bin/vite build && \
+#     echo "✅ Vite build completed" && \
+#     ls -la public/vite/
 
 # Final stage for app image
 FROM base

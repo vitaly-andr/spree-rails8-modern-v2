@@ -8,6 +8,8 @@ deploy_timeout: 60
 # ARM64 architecture for Hetzner ARM server
 builder:
   arch: arm64
+  args:
+    progress: plain
   secrets:
    - RAILS_MASTER_KEY
 # Deploy to our staging server with deploy user
