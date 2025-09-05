@@ -1,9 +1,11 @@
 import '@hotwired/turbo-rails'
 import { Application } from '@hotwired/stimulus'
 
+// Импортируем основной CSS с Tailwind и Spree стилями
+import '../application.css'
+
 // Импортируем CSS gem'а
 import '../stylesheets/storefront_page_builder.css'
-
 let application
 
 if (typeof window.Stimulus === "undefined") {
