@@ -1,8 +1,8 @@
 @import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
-/* ИМПОРТИРУЕМ SPREE СТИЛИ */
-@import "../../assets/stylesheets/application.tailwind.css";
+/* ИМПОРТИРУЕМ SPREE СТИЛИ - ИСПРАВЛЯЕМ ПУТЬ */
+@import "../assets/stylesheets/application.tailwind.css";
 
 /* ВСЕ @import ДОЛЖНЫ БЫТЬ В НАЧАЛЕ */
 @import "./styles/navbar.css";
