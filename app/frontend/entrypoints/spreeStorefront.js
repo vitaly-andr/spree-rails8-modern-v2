@@ -1,7 +1,7 @@
 import '@hotwired/turbo-rails'
 import { Application } from '@hotwired/stimulus'
 
-// Импортируем основной CSS с Tailwind и Spree стилями
+// Импортируем основной CSS с Tailwind - КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ!
 import '../application.css'
 
 // Импортируем CSS gem'а

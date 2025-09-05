@@ -24,11 +24,13 @@ servers:
     hosts:  
       - 95.217.223.50
     options:
-      memory: 1g
+      memory: 4g  # Увеличиваем с 1g до 4g.
   job:
     hosts:
       - 95.217.223.50
     cmd: bin/jobs
+    options:
+      memory: 2g  # Добавляем лимит для job
 
 # SSL is handled by Nginx (configured by Ansible)
 proxy:
