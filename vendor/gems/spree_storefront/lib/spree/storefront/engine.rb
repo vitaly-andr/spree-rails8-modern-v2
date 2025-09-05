@@ -32,15 +32,19 @@ module Spree
         app.config.assets.precompile += %w[spree_storefront_manifest]
       end
 
-      initializer 'spree.storefront.importmap', before: 'importmap' do |app|
-        app.config.importmap.paths << root.join('config/importmap.rb')
-        # https://github.com/rails/importmap-rails?tab=readme-ov-file#sweeping-the-cache-in-development-and-test
-        app.config.importmap.cache_sweepers << root.join('app/javascript')
-      end
+      # Remove importmap initializer - no longer needed with Vite
+      # initializer 'spree.storefront.importmap', before: 'importmap' do |app|
+      #   app.config.importmap.paths << root.join('config/importmap.rb')
+      #   app.config.importmap.cache_sweepers << root.join('app/javascript')
+      # end
 
       # we need to set the path to the storefront so that tailwind can find the views
       initializer 'spree.storefront.tailwind_views_path' do
         ENV['SPREE_STOREFRONT_PATH'] = root.to_s
+      end
+
+      initializer 'spree.storefront.turbo_stream_actions' do
+        require_relative '../../../app/helpers/spree/turbo_stream_actions_helper'
       end
 
       config.after_initialize do

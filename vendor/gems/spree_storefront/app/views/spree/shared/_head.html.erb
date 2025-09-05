@@ -14,10 +14,9 @@
 <%= render 'spree/shared/css_variables' %>
 <%= render 'spree/shared/fonts' %>
 
-<%= javascript_importmap_tags "application-spree-storefront" %>
-<% if Rails.application.importmap.packages["application"].present? %>
-  <%= javascript_import_module_tag "application" %>
-<% end %>
+<%# Replace importmap with Vite %>
+<%= vite_client_tag %>
+<%= vite_javascript_tag 'spreeStorefront' %>
 
 <%= javascript_tag "wishedVariantIds = #{(current_wishlist&.variant_ids&.map(&:to_s) || []).to_json.html_safe};" %>
 

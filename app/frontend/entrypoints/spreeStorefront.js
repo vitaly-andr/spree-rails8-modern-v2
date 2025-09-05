@@ -2,7 +2,7 @@ import '@hotwired/turbo-rails'
 import { Application } from '@hotwired/stimulus'
 
 // Импортируем CSS gem'а
-import '../../assets/stylesheets/storefront_page_builder.css'
+import '../stylesheets/storefront_page_builder.css'
 
 let application
 
@@ -20,67 +20,29 @@ application.register('toggle', Toggle)
 
 
 // We need to preload the carousel controller, otherwise it causes a huge layout shift when it's loaded.
-import CarouselController from 'spree/storefront/controllers/carousel_controller'
+import CarouselController from '../controllers/spree/storefront/carousel_controller'
 application.register('carousel', CarouselController)
 
-// We need to make allow list of controllers to be loaded, this is needed because by default Stimulus will try to load all the controllers that it encounters in the DOM.
-// Since Spree Storefront can be extended with custom views/partials, we need to be able to control which controllers can be loaded from our application.
+// Автоматически импортируем ВСЕ контроллеры из storefront
+const storefrontControllers = import.meta.glob('../controllers/spree/storefront/*_controller.js', { eager: true })
 
-const controllers = [
-  'accordion',
-  'account-nav',
-  'address-autocomplete',
-  'address-form',
-  'auto-submit',
-  'card-validation',
-  'cart',
-  'checkout-address-book',
-  'checkout-delivery',
-  'checkout-promotions',
-  'checkout-summary',
-  'clear-input',
-  'copy-input',
-  'dropdown',
-  'enable-button',
-  'header',
-  'infinite-scroll',
-  'lightbox',
-  'mobile-nav',
-  'modal',
-  'no-ui-slider',
-  'pdp-desktop-gallery',
-  'plp-variant-picker',
-  'product-form',
-  'quantity-picker',
-  'read-more',
-  'reveal',
-  'scroll-to',
-  'search-suggestions',
-  'searchable-list',
-  'slideover-account',
-  'slideover',
-  'sticky-button',
-  'toggle-menu',
-  'turbo-stream-form',
-  'wished-item',
-]
+// Автоматически импортируем ВСЕ контроллеры из core  
+const coreControllers = import.meta.glob('../controllers/spree/core/*_controller.js', { eager: true })
 
+// Регистрируем все контроллеры автоматически
+Object.entries(storefrontControllers).forEach(([path, module]) => {
+  const name = path.split('/').pop().replace('_controller.js', '').replace(/_/g, '-')
+  application.register(name, module.default)
+})
 
-// Manifest is needed to load controllers that names don't match the controller filename, or are not in the controllers directory.
-const manifest = {
-  "auto-submit": "@stimulus-components/auto-submit",
-  "address-form": "spree/core/controllers/address_form_controller",
-  "address-autocomplete": "spree/core/controllers/address_autocomplete_controller",
-  "enable-button": "spree/core/controllers/enable_button_controller",
-  "slideover-account": "spree/storefront/controllers/slideover_controller",
-  "reveal": "stimulus-reveal-controller",
-  "scroll-to": "stimulus-scroll-to",
-  "read-more": "stimulus-read-more",
-}
+Object.entries(coreControllers).forEach(([path, module]) => {
+  const name = path.split('/').pop().replace('_controller.js', '').replace(/_/g, '-')
+  application.register(name, module.default)
+})
 
-import { lazyLoadControllersFromManifest } from "spree/storefront/helpers/lazy_load_controllers_with_manifest"
-
-lazyLoadControllersFromManifest(controllers, "spree/storefront/controllers", application, manifest)
+// СПЕЦИАЛЬНЫЕ ALIAS'Ы - НУЖНЫ для Spree!
+// Spree использует slideover-account в HTML, но у нас контроллер называется slideover
+application.register('slideover-account', storefrontControllers['../controllers/spree/storefront/slideover_controller.js'].default)
 
 
 const scrollToOverlay = (overlay) => {

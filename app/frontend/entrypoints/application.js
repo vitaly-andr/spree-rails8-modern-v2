@@ -40,3 +40,6 @@ window.ScrollTrigger = ScrollTrigger
 window.LocomotiveScroll = LocomotiveScroll
 
 import "../../javascript/ceramir_animations.js"
+
+// Import main application CSS
+import '../application.css'  // ← ПРАВИЛЬНЫЙ ПУТЬ
