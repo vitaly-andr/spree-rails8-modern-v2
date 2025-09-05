@@ -1,5 +1,5 @@
-/* Используем локальные пакеты вместо CDN */
-@import "swiper/swiper-bundle.min.css";
+/* Используем основной CSS вместо bundle */
+@import "swiper/swiper.min.css";
 @import "flag-icons/css/flag-icons.min.css";
 
 @import "tailwindcss";
