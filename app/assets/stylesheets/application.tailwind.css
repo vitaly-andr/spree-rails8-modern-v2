@@ -1,5 +1,5 @@
-/* Используем основной CSS вместо bundle */
-@import "swiper/swiper.min.css";
+/* Используем правильные exports из package.json */
+@import "swiper/css/bundle";
 @import "flag-icons/css/flag-icons.min.css";
 
 @import "tailwindcss";
