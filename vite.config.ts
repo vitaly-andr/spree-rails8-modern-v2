@@ -39,7 +39,7 @@ export default defineConfig({
       input: {
         application: './app/frontend/entrypoints/application.js',
         styles: './app/frontend/entrypoints/application.css',  // ← ОТДЕЛЬНЫЙ CSS ENTRYPOINT
-        spree: './app/frontend/entrypoints/spree.js'
+        // Убираем spree entrypoint - теперь gem сам управляет assets
       }
     }
   },
