@@ -2,8 +2,8 @@
 service: spree-rails8-staging
 image: viandrianoff/spree-rails8-staging
 
-# Timeout for Rails + Spree startup (default 30s)
-deploy_timeout: 60
+# Увеличиваем таймаут для Spree (много миграций)
+deploy_timeout: 180
 
 # ARM64 architecture for Hetzner ARM server
 builder:
@@ -12,6 +12,7 @@ builder:
     progress: plain
   secrets:
    - RAILS_MASTER_KEY
+
 # Deploy to our staging server with deploy user
 # SSH configuration
 ssh:
@@ -29,14 +30,12 @@ servers:
       - 95.217.223.50
     cmd: bin/jobs
 
-
 # SSL is handled by Nginx (configured by Ansible)
 proxy:
   ssl: true
   forward_headers: true
   host: staging.andrianoff.online
   app_port: 3000
-
 
 # Registry configuration
 registry:

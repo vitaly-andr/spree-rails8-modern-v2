@@ -20,7 +20,7 @@
 
 <%= javascript_tag "wishedVariantIds = #{(current_wishlist&.variant_ids&.map(&:to_s) || []).to_json.html_safe};" %>
 
-<%= stylesheet_link_tag "tailwind", defer: true, data: { turbo_track: 'reload' } %>
+<%# CSS загружается через Vite в spreeStorefront.js - stylesheet_link_tag не нужен %>
 <%= stylesheet_link_tag "storefront_page_builder", defer: true, data: { turbo_track: 'reload' } if page_builder_enabled? %>  
 
 <%= yield :head %>

@@ -13,11 +13,6 @@
 @import "../components/media_gallery/media_gallery_component.css";
 @import "./temp/_ceramir_landing.css";
 
-/* Tailwind v4 @source для автоматического сканирования классов */
-@source "./app/views/**/*.slim";
-@source "./app/views/**/*.erb"; 
-@source "./app/components/**/*.slim";
-@source "./app/frontend/**/*.js";
 :root {
   --gray-background: #e9e7e8;
   --black: #111;
