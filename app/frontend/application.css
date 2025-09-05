@@ -79,3 +79,26 @@ body {
   font-family: var(--font-navbar);
 }
 
+/* Исправление прозрачности боковых панелей */
+#slideover-cart,
+#slideover-account {
+  background-color: white !important;
+}
+
+/* Стили для полей ввода в боковых панелях */
+#slideover-account input[type="email"],
+#slideover-account input[type="password"], 
+#slideover-account input[type="text"],
+#slideover-account textarea {
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  padding: 0.75rem;
+  background-color: white;
+  font-size: 1rem;
+}
+
+#slideover-account input:focus {
+  border-color: #3b82f6;
+  outline: none;
+}
+
