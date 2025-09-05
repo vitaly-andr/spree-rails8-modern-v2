@@ -1,3 +1,21 @@
+PATH
+  remote: vendor/gems/spree_storefront
+  specs:
+    spree_storefront (5.1.5)
+      active_link_to
+      canonical-rails (~> 0.2.14)
+      heroicon
+      importmap-rails
+      local_time (~> 3.0)
+      mail_form
+      payment_icons
+      spree_core (>= 5.1.5)
+      sprockets (>= 4.0)
+      stimulus-rails
+      tailwindcss-rails
+      tailwindcss-ruby (~> 3.4.17)
+      turbo-rails
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -106,7 +124,7 @@ GEM
     bcrypt (3.1.20)
     bcrypt_pbkdf (1.1.1)
     benchmark (0.4.1)
-    bigdecimal (3.2.2)
+    bigdecimal (3.2.3)
     bindex (0.8.1)
     bootsnap (1.18.6)
       msgpack (~> 1.2)
@@ -550,20 +568,6 @@ GEM
     spree_sample (5.1.5)
       ffaker (~> 2.9)
       spree_core (>= 5.1.5)
-    spree_storefront (5.1.5)
-      active_link_to
-      canonical-rails (~> 0.2.14)
-      heroicon
-      importmap-rails
-      local_time (~> 3.0)
-      mail_form
-      payment_icons
-      spree_core (>= 5.1.5)
-      sprockets (>= 4.0)
-      stimulus-rails
-      tailwindcss-rails
-      tailwindcss-ruby (~> 3.4.17)
-      turbo-rails
     sprockets (4.2.2)
       concurrent-ruby (~> 1.0)
       logger
@@ -595,7 +599,6 @@ GEM
     tailwindcss-rails (3.3.2)
       railties (>= 7.0.0)
       tailwindcss-ruby (~> 3.0)
-    tailwindcss-ruby (3.4.17-aarch64-linux)
     tailwindcss-ruby (3.4.17-arm64-darwin)
     temple (0.10.4)
     thor (1.4.0)
@@ -660,6 +663,7 @@ DEPENDENCIES
   capybara
   debug
   devise
+  image_processing (~> 1.2)
   jbuilder
   kamal
   puma (>= 5.0)
@@ -675,7 +679,7 @@ DEPENDENCIES
   spree_emails (~> 5.1.5)
   spree_i18n
   spree_sample (~> 5.1.5)
-  spree_storefront (~> 5.1.5)
+  spree_storefront!
   sqlite3
   thruster
   turbo-rails

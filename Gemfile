@@ -33,7 +33,7 @@ gem "kamal", require: false
 gem "thruster", require: false
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-# gem "image_processing", "~> 1.2"
+gem "image_processing", "~> 1.2"
 gem "turbo-rails"
 
 # Pagination
@@ -68,7 +68,7 @@ gem "view_component"
 gem 'devise'
 gem 'spree', '~> 5.1.5'                    # Стабильная версия из RubyGems!
 gem 'spree_admin', '~> 5.1.5'              
-gem 'spree_storefront', '~> 5.1.5'         
+gem 'spree_storefront', path: './vendor/gems/spree_storefront'         
 gem 'spree_emails', '~> 5.1.5'             
 gem 'spree_sample', '~> 5.1.5'             
 gem 'spree_i18n'                           # Internationalization support
