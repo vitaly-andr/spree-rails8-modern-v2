@@ -56,15 +56,20 @@ if Spree.admin_user_class.count == 1
   # Remove default Spree admin user
   Spree.admin_user_class.first.destroy
 
-  # Create our admin user
+  # Create our admin user with admin role
   admin_user = Spree.admin_user_class.create!(
     email: "admin@bau-portal.online",
     password: "password123",
     password_confirmation: "password123"
   )
 
+  # Assign admin role
+  admin_role = Spree::Role.find_or_create_by!(name: 'admin')
+  admin_user.spree_roles << admin_role unless admin_user.spree_roles.include?(admin_role)
+
   puts "✅ Admin user created: #{admin_user.email}"
   puts "   Password: password123"
+  puts "   Role: admin"
 end
 
 puts "🎉 Bau-portal.online Spree setup complete for #{Rails.env}!"
