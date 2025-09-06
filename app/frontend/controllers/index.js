@@ -14,6 +14,7 @@ import CarouselComponentController from "../../components/carousel/carousel_comp
 import CatalogCardComponentController from "../../components/catalog_card/catalog_card_component_controller"
 import MediaGalleryComponentController from "../../components/media_gallery/media_gallery_component_controller"
 import ProductDetailComponentController from "../../components/product_detail/product_detail_component_controller"
+import WebsiteCeramirController from "./websiteceramir_controller"
 
 // Создаем приложение Stimulus
 const application = Application.start()
@@ -27,6 +28,7 @@ application.register("navbar-component", NavbarComponentController)
 application.register("sidebar-menu", SidebarMenuController)
 application.register("locomotive", LocomotiveController)
 application.register("slideover", SlideoverController)           
+application.register("websiteceramir", WebsiteCeramirController)
 
 // Регистрируем ViewComponent контроллеры
 application.register("carousel--carousel-component", CarouselComponentController)
