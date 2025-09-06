@@ -1,0 +1,20 @@
+<!-- Left off-canvas sidebar -->
+<div class="bs-canvas bs-canvas-left position-fixed h-100 bg-light border-right">
+  <!-- Add close button header -->
+  <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+    <h6 class="mb-0 text-muted"><%= Spree.t(:menu) %></h6>
+    <button type="button" class="btn btn-sm btn-light bs-canvas-close" aria-label="<%= Spree.t(:close) %>">
+      <%= icon('x') %>
+    </button>
+  </div>
+  
+  <div class="bs-canvas-content px-2">
+    <% if try_spree_current_user.present? %>
+      <% if defined?(current_vendor) && current_vendor.present? %>
+        <%= render 'spree/admin/shared/sidebar/vendor_nav' %>
+      <% elsif defined?(current_store) && current_store&.present? %>
+        <%= render 'spree/admin/shared/sidebar/store_nav' %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
