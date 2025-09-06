@@ -1,117 +1,118 @@
-nav.navbar-storefront.w-full.fixed.top-0.left-0.z-50.bg-gray-100.border-b.border-black data-navbar-component-target="container"
-  .nav-container.max-w-screen-xl.mx-auto.flex.justify-between.items-center.px-4.py-3
+div.navbar-wrapper.w-full.fixed.top-0.left-0.z-50
+  nav.navbar-storefront.w-full.fixed.top-0.left-0.z-50.bg-gray-100.border-b.border-black data-navbar-component-target="container"
+    .nav-container.max-w-screen-xl.mx-auto.flex.justify-between.items-center.px-4.py-3
+      
+      .left-column-navbar.flex.items-center
+        a.brand.mr-10.transition-none href="/" data-navbar-component-target="brand"
+          img.logo.h-8 src="https://cdn.prod.website-files.com/66e83267028497a1351f7717/66eab46919d059fd7608e505_Logo.svg" alt="logo"
+        
+        nav.nav-menu.hidden.lg:flex.items-center role="navigation"
+          
+          .nav-dropdown.relative(
+            data-controller="modern-dropdown" 
+            data-modern-dropdown-target="container" 
+            data-action="click@window->modern-dropdown#hide"
+          )
+            button.nav-dropdown-toggle.flex.items-center.px-4.py-2.text-gray-700.hover:text-black.transition-colors(
+              data-modern-dropdown-target="trigger" 
+              data-action="click->modern-dropdown#toggle"
+            )
+              .nav-text-wrap.flex.flex-col.items-start
+                span.footer-link.text-sm.font-medium Demos
+                .nav-line.h-px.bg-black.w-0.transition-all.duration-300(data-modern-dropdown-target="line")
+              svg.nav-dropdown-icon.ml-2.w-4.h-4.transform.transition-transform.duration-200(
+                data-modern-dropdown-target="icon"
+                viewBox="0 0 20 20" 
+                fill="currentColor"
+              )
+                path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"
+            
+            .nav-dropdown-list.absolute.top-full.left-0.mt-1.bg-white.border.border-gray-200.rounded-lg.shadow-lg.min-w-48.opacity-0.invisible.transform.scale-95.transition-all.duration-200(
+              data-modern-dropdown-target="menu"
+            )
+              .nav-dropdown-link-wrapper.p-2
+                a.navbar-link-item.block.px-4.py-2.text-gray-700.hover:bg-gray-100.rounded.transition-colors href="#"
+                  .nav-text-wrap
+                    .navbar-link.text-sm Home 1
+                a.navbar-link-item.block.px-4.py-2.text-gray-700.hover:bg-gray-100.rounded.transition-colors href="#"
+                  .nav-text-wrap
+                    .navbar-link.text-sm Home 2
+                a.navbar-link-item.block.px-4.py-2.text-gray-700.hover:bg-gray-100.rounded.transition-colors.bg-gray-100 href="#"
+                  .nav-text-wrap
+                    .navbar-link.text-sm.font-medium Home 3
+          
+          a.navbar-link-item.navbar-link-item-home.px-4.py-2.text-gray-700.hover:text-black.transition-colors href="#"
+            .nav-text-wrap.flex.flex-col.items-start
+              span.footer-link.text-sm.font-medium About Us
+              .nav-line.h-px.bg-black.w-0.transition-all.duration-300
+          
+          a.navbar-link-item.navbar-link-item-home.px-4.py-2.text-gray-700.hover:text-black.transition-colors href="#"
+            .nav-text-wrap.flex.flex-col.items-start
+              span.footer-link.text-sm.font-medium Projects
+              .nav-line.h-px.bg-black.w-0.transition-all.duration-300
+          
+          a.navbar-link-item.navbar-link-item-home.px-4.py-2.text-gray-700.hover:text-black.transition-colors href="#"
+            .nav-text-wrap.flex.flex-col.items-start
+              span.footer-link.text-sm.font-medium Shop
+              .nav-line.h-px.bg-black.w-0.transition-all.duration-300
+          
+          .nav-dropdown.relative(
+            data-controller="modern-dropdown" 
+            data-modern-dropdown-target="container" 
+            data-action="click@window->modern-dropdown#hide"
+          )
+            button.nav-dropdown-toggle.flex.items-center.px-4.py-2.text-gray-700.hover:text-black.transition-colors(
+              data-modern-dropdown-target="trigger" 
+              data-action="click->modern-dropdown#toggle"
+            )
+              .nav-text-wrap.flex.flex-col.items-start
+                span.footer-link.text-sm.font-medium All Pages
+                .nav-line.h-px.bg-black.w-0.transition-all.duration-300(data-modern-dropdown-target="line")
+              svg.nav-dropdown-icon.ml-2.w-4.h-4.transform.transition-transform.duration-200(
+                data-modern-dropdown-target="icon"
+                viewBox="0 0 20 20" 
+                fill="currentColor"
+              )
+                path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"
+            
+            .nav-dropdown-list.megamenu.absolute.top-full.left-0.mt-1.bg-white.border.border-gray-200.rounded-lg.shadow-lg.w-96.opacity-0.invisible.transform.scale-95.transition-all.duration-200(
+              data-modern-dropdown-target="menu"
+            )
+              .flex.p-4
+                .nav-dropdown-column.flex-1.pr-4
+                  .nav-dropdown-link-wrapper
+                    a.navbar-link-item.block.px-2.py-2.text-gray-700.hover:bg-gray-100.rounded.transition-colors href="#"
+                      .nav-text-wrap
+                        .navbar-link.text-sm Home 1
+                    a.navbar-link-item.block.px-2.py-2.text-gray-700.hover:bg-gray-100.rounded.transition-colors href="#"
+                      .nav-text-wrap
+                        .navbar-link.text-sm About Us
+                    a.navbar-link-item.block.px-2.py-2.text-gray-700.hover:bg-gray-100.rounded.transition-colors href="#"
+                      .nav-text-wrap
+                        .navbar-link.text-sm Testimonials
+                
+                .nav-dropdown-column.flex-1.pl-4
+                  .nav-dropdown-link-wrapper
+                    a.navbar-link-item.block.px-2.py-2.text-gray-700.hover:bg-gray-100.rounded.transition-colors href="#"
+                      .nav-text-wrap
+                        .navbar-link.text-sm Pricing
+                    a.navbar-link-item.block.px-2.py-2.text-gray-700.hover:bg-gray-100.rounded.transition-colors href="#"
+                      .nav-text-wrap
+                        .navbar-link.text-sm FAQ
+                    a.navbar-link-item.block.px-2.py-2.text-gray-700.hover:text-black.transition-colors href="#"
+                      .nav-text-wrap
+                        .navbar-link.text-sm Contact Us
+
     
-    .left-column-navbar.flex.items-center
-      a.brand.mr-10.transition-none href="/" data-navbar-component-target="brand"
-        img.logo.h-8 src="https://cdn.prod.website-files.com/66e83267028497a1351f7717/66eab46919d059fd7608e505_Logo.svg" alt="logo"
-      
-      nav.nav-menu.hidden.lg:flex.items-center role="navigation"
+      .right-column-navbar.flex.items-center
+        .cart-wrapper.mr-4
+          a.cart-button.flex.items-center.p-2.text-gray-700.hover:text-black.transition-colors href="#" data-navbar-component-target="cart"
+            img.cart-icon.w-5.h-5 src="https://cdn.prod.website-files.com/66e83267028497a1351f7717/66f1278a12fe2c1ba53a553e_solar_cart-4-outline.svg" alt="cart"
         
-        .nav-dropdown.relative(
-          data-controller="modern-dropdown" 
-          data-modern-dropdown-target="container" 
-          data-action="click@window->modern-dropdown#hide"
-        )
-          button.nav-dropdown-toggle.flex.items-center.px-4.py-2.text-gray-700.hover:text-black.transition-colors(
-            data-modern-dropdown-target="trigger" 
-            data-action="click->modern-dropdown#toggle"
-          )
-            .nav-text-wrap.flex.flex-col.items-start
-              span.footer-link.text-sm.font-medium Demos
-              .nav-line.h-px.bg-black.w-0.transition-all.duration-300(data-modern-dropdown-target="line")
-            svg.nav-dropdown-icon.ml-2.w-4.h-4.transform.transition-transform.duration-200(
-              data-modern-dropdown-target="icon"
-              viewBox="0 0 20 20" 
-              fill="currentColor"
-            )
-              path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"
-          
-          .nav-dropdown-list.absolute.top-full.left-0.mt-1.bg-white.border.border-gray-200.rounded-lg.shadow-lg.min-w-48.opacity-0.invisible.transform.scale-95.transition-all.duration-200(
-            data-modern-dropdown-target="menu"
-          )
-            .nav-dropdown-link-wrapper.p-2
-              a.navbar-link-item.block.px-4.py-2.text-gray-700.hover:bg-gray-100.rounded.transition-colors href="#"
-                .nav-text-wrap
-                  .navbar-link.text-sm Home 1
-              a.navbar-link-item.block.px-4.py-2.text-gray-700.hover:bg-gray-100.rounded.transition-colors href="#"
-                .nav-text-wrap
-                  .navbar-link.text-sm Home 2
-              a.navbar-link-item.block.px-4.py-2.text-gray-700.hover:bg-gray-100.rounded.transition-colors.bg-gray-100 href="#"
-                .nav-text-wrap
-                  .navbar-link.text-sm.font-medium Home 3
-        
-        a.navbar-link-item.navbar-link-item-home.px-4.py-2.text-gray-700.hover:text-black.transition-colors href="#"
-          .nav-text-wrap.flex.flex-col.items-start
-            span.footer-link.text-sm.font-medium About Us
-            .nav-line.h-px.bg-black.w-0.transition-all.duration-300
-        
-        a.navbar-link-item.navbar-link-item-home.px-4.py-2.text-gray-700.hover:text-black.transition-colors href="#"
-          .nav-text-wrap.flex.flex-col.items-start
-            span.footer-link.text-sm.font-medium Projects
-            .nav-line.h-px.bg-black.w-0.transition-all.duration-300
-        
-        a.navbar-link-item.navbar-link-item-home.px-4.py-2.text-gray-700.hover:text-black.transition-colors href="#"
-          .nav-text-wrap.flex.flex-col.items-start
-            span.footer-link.text-sm.font-medium Shop
-            .nav-line.h-px.bg-black.w-0.transition-all.duration-300
-        
-        .nav-dropdown.relative(
-          data-controller="modern-dropdown" 
-          data-modern-dropdown-target="container" 
-          data-action="click@window->modern-dropdown#hide"
-        )
-          button.nav-dropdown-toggle.flex.items-center.px-4.py-2.text-gray-700.hover:text-black.transition-colors(
-            data-modern-dropdown-target="trigger" 
-            data-action="click->modern-dropdown#toggle"
-          )
-            .nav-text-wrap.flex.flex-col.items-start
-              span.footer-link.text-sm.font-medium All Pages
-              .nav-line.h-px.bg-black.w-0.transition-all.duration-300(data-modern-dropdown-target="line")
-            svg.nav-dropdown-icon.ml-2.w-4.h-4.transform.transition-transform.duration-200(
-              data-modern-dropdown-target="icon"
-              viewBox="0 0 20 20" 
-              fill="currentColor"
-            )
-              path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"
-          
-          .nav-dropdown-list.megamenu.absolute.top-full.left-0.mt-1.bg-white.border.border-gray-200.rounded-lg.shadow-lg.w-96.opacity-0.invisible.transform.scale-95.transition-all.duration-200(
-            data-modern-dropdown-target="menu"
-          )
-            .flex.p-4
-              .nav-dropdown-column.flex-1.pr-4
-                .nav-dropdown-link-wrapper
-                  a.navbar-link-item.block.px-2.py-2.text-gray-700.hover:bg-gray-100.rounded.transition-colors href="#"
-                    .nav-text-wrap
-                      .navbar-link.text-sm Home 1
-                  a.navbar-link-item.block.px-2.py-2.text-gray-700.hover:bg-gray-100.rounded.transition-colors href="#"
-                    .nav-text-wrap
-                      .navbar-link.text-sm About Us
-                  a.navbar-link-item.block.px-2.py-2.text-gray-700.hover:bg-gray-100.rounded.transition-colors href="#"
-                    .nav-text-wrap
-                      .navbar-link.text-sm Testimonials
-              
-              .nav-dropdown-column.flex-1.pl-4
-                .nav-dropdown-link-wrapper
-                  a.navbar-link-item.block.px-2.py-2.text-gray-700.hover:bg-gray-100.rounded.transition-colors href="#"
-                    .nav-text-wrap
-                      .navbar-link.text-sm Pricing
-                  a.navbar-link-item.block.px-2.py-2.text-gray-700.hover:bg-gray-100.rounded.transition-colors href="#"
-                    .nav-text-wrap
-                      .navbar-link.text-sm FAQ
-                  a.navbar-link-item.block.px-2.py-2.text-gray-700.hover:text-black.transition-colors href="#"
-                    .nav-text-wrap
-                      .navbar-link.text-sm Contact Us
+        button.menu-button.block.lg:hidden.p-2.text-gray-900.relative.z-50.transition-all.duration-300.cursor-pointer data-navbar-component-target="menuButton" data-action="click->navbar-component#toggleMobileMenu"
+          svg.w-7.h-4.transform.transition-all.duration-300 data-navbar-component-target="hamburgerIcon" viewBox="0 0 28 17" fill="none" xmlns="http://www.w3.org/2000/svg"
+            path.transition-all.duration-300 data-navbar-component-target="line1" fill-rule="evenodd" clip-rule="evenodd" d="M26.7048 1.9946C26.7048 2.54688 26.2571 2.9946 25.7048 2.9946H9.29051C8.73823 2.9946 8.29051 2.54688 8.29051 1.9946V1.9946C8.29051 1.44231 8.73823 0.994598 9.29051 0.994598H25.7048C26.2571 0.994598 26.7048 1.44231 26.7048 1.9946V1.9946Z" fill="black"
+            path.transition-all.duration-300 data-navbar-component-target="line2" fill-rule="evenodd" clip-rule="evenodd" d="M26.7048 9.01617C26.7048 9.56846 26.2571 10.0162 25.7048 10.0162H4.08252C3.53023 10.0162 3.08252 9.56846 3.08252 9.01617V9.01617C3.08252 8.46389 3.53023 8.01617 4.08252 8.01617H25.7048C26.2571 8.01617 26.7048 8.46389 26.7048 9.01617V9.01617Z" fill="black"
+            path.transition-all.duration-300 data-navbar-component-target="line3" fill-rule="evenodd" clip-rule="evenodd" d="M26.7048 15.9448C26.7048 16.497 26.2571 16.9448 25.7048 16.9448H9.29051C8.73823 16.9448 8.29051 16.497 8.29051 15.9448V15.9448C8.29051 15.3925 8.73823 14.9448 9.29051 14.9448H25.7048C26.2571 14.9448 26.7048 15.3925 26.7048 15.9448V15.9448Z" fill="black"
 
-   
-    .right-column-navbar.flex.items-center
-      .cart-wrapper.mr-4
-        a.cart-button.flex.items-center.p-2.text-gray-700.hover:text-black.transition-colors href="#" data-navbar-component-target="cart"
-          img.cart-icon.w-5.h-5 src="https://cdn.prod.website-files.com/66e83267028497a1351f7717/66f1278a12fe2c1ba53a553e_solar_cart-4-outline.svg" alt="cart"
-      
-      button.menu-button.block.lg:hidden.p-2.text-gray-900.relative.z-50.transition-all.duration-300.cursor-pointer data-navbar-component-target="menuButton" data-action="click->navbar-component#toggleMobileMenu"
-        svg.w-7.h-4.transform.transition-all.duration-300 data-navbar-component-target="hamburgerIcon" viewBox="0 0 28 17" fill="none" xmlns="http://www.w3.org/2000/svg"
-          path.transition-all.duration-300 data-navbar-component-target="line1" fill-rule="evenodd" clip-rule="evenodd" d="M26.7048 1.9946C26.7048 2.54688 26.2571 2.9946 25.7048 2.9946H9.29051C8.73823 2.9946 8.29051 2.54688 8.29051 1.9946V1.9946C8.29051 1.44231 8.73823 0.994598 9.29051 0.994598H25.7048C26.2571 0.994598 26.7048 1.44231 26.7048 1.9946V1.9946Z" fill="black"
-          path.transition-all.duration-300 data-navbar-component-target="line2" fill-rule="evenodd" clip-rule="evenodd" d="M26.7048 9.01617C26.7048 9.56846 26.2571 10.0162 25.7048 10.0162H4.08252C3.53023 10.0162 3.08252 9.56846 3.08252 9.01617V9.01617C3.08252 8.46389 3.53023 8.01617 4.08252 8.01617H25.7048C26.2571 8.01617 26.7048 8.46389 26.7048 9.01617V9.01617Z" fill="black"
-          path.transition-all.duration-300 data-navbar-component-target="line3" fill-rule="evenodd" clip-rule="evenodd" d="M26.7048 15.9448C26.7048 16.497 26.2571 16.9448 25.7048 16.9448H9.29051C8.73823 16.9448 8.29051 16.497 8.29051 15.9448V15.9448C8.29051 15.3925 8.73823 14.9448 9.29051 14.9448H25.7048C26.2571 14.9448 26.7048 15.3925 26.7048 15.9448V15.9448Z" fill="black"
-
-= render 'shared/mobile_menu'
+  = render 'shared/mobile_menu'

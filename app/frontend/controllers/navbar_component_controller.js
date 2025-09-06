@@ -104,7 +104,7 @@ export default class extends Controller {
         const progress = Math.min(self.scroll() / 100, 1)
         gsap.to(this.containerTarget.parentElement, {
           backgroundColor: `rgba(243, 244, 246, ${0.8 + (0.2 * progress)})`,
-          // backdropFilter: `blur(${progress * 10}px)`,  ← УБИРАЕМ ТОЛЬКО ЭТО!
+          backdropFilter: `blur(${progress * 10}px)`,
           duration: 0.1
         })
       }
