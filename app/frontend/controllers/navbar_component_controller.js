@@ -193,6 +193,9 @@ export default class extends Controller {
   openMobileMenu() {
     if (this.mobileMenuOpen) return
     
+    // ✅ ДОБАВЛЯЕМ CSS КЛАСС ДЛЯ АКТИВАЦИИ ПРАВИЛ
+    document.body.classList.add('mobile-menu-open')
+    
     this.mobileMenuOpen = true
     
     this.setupMobileMenuLayout()
@@ -255,6 +258,9 @@ export default class extends Controller {
     if (!this.mobileMenuOpen) return
     
     this.mobileMenuOpen = false
+    
+    // ✅ УБИРАЕМ CSS КЛАСС  
+    document.body.classList.remove('mobile-menu-open')
     
     // 🔍 ОЧИЩАЕМ ДЕТЕКТИВА
     if (this.scrollObserver) {
@@ -420,19 +426,6 @@ export default class extends Controller {
     // Сохраняем текущую позицию скролла
     this.originalScrollY = window.scrollY
     
-    // ✅ ДИАГНОСТИКА СКРОЛЛА - добавьте это ПЕРЕД блокировкой
-    
-    // ✅ ДОБАВЛЯЕМ ДИАГНОСТИКУ ПО КЛИКУ НА MOBILE MENU
-    if (this.mobileMenuTarget) {
-        // Убираем старый listener если есть
-        this.mobileMenuTarget.removeEventListener('click', this.boundDiagnose)
-        
-        // Добавляем новый
-        this.boundDiagnose = () => {
-            setTimeout(() => this.diagnoseScroll(), 100) // Задержка для dropdown анимации
-        }
-        this.mobileMenuTarget.addEventListener('click', this.boundDiagnose)
-    }
     
     // Блокируем скролл страницы
     body.style.overflow = 'hidden'
