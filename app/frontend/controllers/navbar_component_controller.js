@@ -95,7 +95,7 @@ export default class extends Controller {
       }
     })
 
-    // Navbar background opacity on scroll
+    // ✅ ВОССТАНАВЛИВАЕМ ВТОРОЙ SCROLLTRIGGER НО БЕЗ BACKDROP-FILTER:
     ScrollTrigger.create({
       trigger: "body",
       start: "top top",
@@ -104,12 +104,12 @@ export default class extends Controller {
         const progress = Math.min(self.scroll() / 100, 1)
         gsap.to(this.containerTarget.parentElement, {
           backgroundColor: `rgba(243, 244, 246, ${0.8 + (0.2 * progress)})`,
-          backdropFilter: `blur(${progress * 10}px)`,
+          // backdropFilter: `blur(${progress * 10}px)`,  ← УБИРАЕМ ТОЛЬКО ЭТО!
           duration: 0.1
         })
       }
     })
-  }
+}
 
   setupHoverAnimations() {
     // Logo hover animation
