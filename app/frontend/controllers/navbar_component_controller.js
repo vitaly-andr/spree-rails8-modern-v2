@@ -15,11 +15,18 @@ export default class extends Controller {
   locomotiveContainer = null
 
   connect() {
-    console.log("Navbar Component connected")
     this.mobileMenuOpen = false // Track menu state reliably
     this.initializeNavbar()
     this.setupScrollAnimations()
     this.setupHoverAnimations()
+    
+    // ✅ ДОБАВЛЯЕМ ДИАГНОСТИКУ ПО КЛАВИШЕ
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'D' && e.ctrlKey) {  // Ctrl+D
+            e.preventDefault()
+            this.diagnoseScrollManual()
+        }
+    })
   }
 
   disconnect() {
@@ -175,28 +182,17 @@ export default class extends Controller {
   }
 
   toggleMobileMenu() {
-    console.log("🔍 Toggle clicked! Current state:", {
-      mobileMenuOpen: this.mobileMenuOpen,
-      buttonDisabled: this.menuButtonTarget.disabled,
-      hasTarget: this.hasMobileMenuTarget
-    })
     
     if (!this.hasMobileMenuTarget) {
       console.warn("❌ Mobile menu target not found")
       return
     }
     
-    if (this.menuButtonTarget.disabled) {
-      console.warn("❌ Button is disabled, ignoring click")
-      return
-    }
+    if (this.menuButtonTarget.disabled) return
     
-    // Use reliable state tracking instead of DOM inspection
     if (this.mobileMenuOpen) {
-      console.log("📱 Closing menu...")
       this.closeMobileMenu()
     } else {
-      console.log("📱 Opening menu...")
       this.openMobileMenu()
     }
   }
@@ -206,10 +202,6 @@ export default class extends Controller {
     
     this.mobileMenuOpen = true
     
-    console.log("🔄 Opening mobile menu...")
-    console.log("📱 Mobile menu element:", this.mobileMenuTarget)
-    
-    // 🔒 БЛОКИРУЕМ СКРОЛЛ И ФИКСИРУЕМ MOBILE MENU
     this.setupMobileMenuLayout()
     
     // ✅ ИСПРАВЛЕНИЕ: СБРАСЫВАЕМ ПОЗИЦИЮ NAVBAR
@@ -220,7 +212,6 @@ export default class extends Controller {
     
     // СОЗДАЕМ STACKING CONTEXT для navbar
     this.containerTarget.style.transform = 'translateZ(0)'
-    console.log("🆙 Navbar stacking context created")
     
     // ОСТАНАВЛИВАЕМ КАРУСЕЛЬ
     this.pauseCarousels()
@@ -232,7 +223,6 @@ export default class extends Controller {
     setTimeout(() => {
       this.menuButtonTarget.disabled = false
       this.menuButtonTarget.style.pointerEvents = 'auto'
-      console.log("🔓 Button re-enabled after timeout")
     }, 1000)
 
     // Animate hamburger to X and then hide completely
@@ -252,14 +242,11 @@ export default class extends Controller {
     if (this.hasMobileMenuTarget) {
       this.mobileMenuTarget.classList.remove('-translate-x-full')
       
-      console.log("📱 Removed Tailwind class, starting GSAP animation")
-      
       gsap.to(this.mobileMenuTarget, {
         x: "0%",
         duration: 0.4,
         ease: "power3.out",
         onComplete: () => {
-          console.log("✅ Mobile menu animation complete!")
         }
       })
 
@@ -273,11 +260,14 @@ export default class extends Controller {
     
     this.mobileMenuOpen = false
     
-    console.log("🔄 Closing mobile menu...")
+    // 🔍 ОЧИЩАЕМ ДЕТЕКТИВА
+    if (this.scrollObserver) {
+        this.scrollObserver.disconnect()
+        this.scrollObserver = null
+    }
     
     // УБИРАЕМ STACKING CONTEXT
     this.containerTarget.style.transform = ''
-    console.log("⬇️ Navbar stacking context removed")
     
     // ВОЗОБНОВЛЯЕМ КАРУСЕЛЬ
     this.resumeCarousels()
@@ -308,7 +298,6 @@ export default class extends Controller {
         onComplete: () => {
           // ВОЗВРАЩАЕМ Tailwind класс после анимации
           this.mobileMenuTarget.classList.add('-translate-x-full')
-          console.log("✅ Mobile menu closed, Tailwind class restored")
           
           // 🔓 ВОССТАНАВЛИВАЕМ LAYOUT ПОСЛЕ АНИМАЦИИ
           this.restoreMobileMenuLayout()
@@ -429,67 +418,194 @@ export default class extends Controller {
   }
 
   setupMobileMenuLayout() {
-    console.log("📦 Setting up mobile menu layout...")
-    
     const body = document.body
     this.locomotiveContainer = document.querySelector('[data-scroll-container]')
     
     // Сохраняем текущую позицию скролла
     this.originalScrollY = window.scrollY
     
-    // Если mobile menu внутри locomotive container - перемещаем его
-    if (this.locomotiveContainer && this.locomotiveContainer.contains(this.mobileMenuTarget)) {
-        // Сохраняем оригинальное расположение
-        this.originalParent = this.mobileMenuTarget.parentNode
-        this.originalNextSibling = this.mobileMenuTarget.nextSibling
-        
-        // Перемещаем в body
-        body.appendChild(this.mobileMenuTarget)
-        console.log("📦 Mobile menu moved outside locomotive container")
-    }
+    // ✅ ДИАГНОСТИКА СКРОЛЛА - добавьте это ПЕРЕД блокировкой
+    this.diagnoseScroll()
     
-    // Фиксируем mobile menu поверх всего
-    this.mobileMenuTarget.style.position = 'fixed'
-    this.mobileMenuTarget.style.top = '0'
-    this.mobileMenuTarget.style.left = '0' 
-    this.mobileMenuTarget.style.zIndex = '9999'
-    this.mobileMenuTarget.style.width = '320px'
-    this.mobileMenuTarget.style.height = '100vh'
-    this.mobileMenuTarget.style.background = 'rgba(255, 255, 255, 0.98)'
+    // ✅ ДОБАВЛЯЕМ ДИАГНОСТИКУ ПО КЛИКУ НА MOBILE MENU
+    if (this.mobileMenuTarget) {
+        // Убираем старый listener если есть
+        this.mobileMenuTarget.removeEventListener('click', this.boundDiagnose)
+        
+        // Добавляем новый
+        this.boundDiagnose = () => {
+            setTimeout(() => this.diagnoseScroll(), 100) // Задержка для dropdown анимации
+        }
+        this.mobileMenuTarget.addEventListener('click', this.boundDiagnose)
+    }
     
     // Блокируем скролл страницы
     body.style.overflow = 'hidden'
-    body.style.position = 'fixed'
-    body.style.width = '100%'
-    body.style.top = `-${this.originalScrollY}px`
     
-    // Блокируем locomotive container
+    // Блокируем locomotive container  
     if (this.locomotiveContainer) {
         this.locomotiveContainer.style.overflow = 'hidden'
         this.locomotiveContainer.style.position = 'fixed'
         this.locomotiveContainer.style.height = '100vh'
+        
+        // ✅ ФИКСИРУЕМ MOBILE MENU НА ВСЮ ВЫСОТУ VIEWPORT
+        this.mobileMenuTarget.style.height = '100vh'
+        this.mobileMenuTarget.style.overflow = 'visible'
+        
+        // ✅ MOBILE CONTENT СКРОЛЛИТСЯ ВНУТРИ
+        const mobileContent = this.mobileMenuTarget.querySelector('.mobile-content')
+        if (mobileContent) {
+            mobileContent.style.height = 'calc(100vh - 100px)'
+            mobileContent.style.overflowY = 'auto'
+            mobileContent.style.overflow = 'auto'
+            mobileContent.style.pointerEvents = 'auto'
+            mobileContent.style.touchAction = 'pan-y'
+            mobileContent.style.webkitOverflowScrolling = 'touch'
+            
+            // ✅ ИСПРАВЛЯЕМ СКРОЛЛ МЫШКОЙ (блокируем Locomotive)
+            mobileContent.addEventListener('wheel', (e) => {
+                e.preventDefault() // Блокируем Locomotive Scroll
+                mobileContent.scrollTop += e.deltaY // Скроллим вручную
+            })
+            
+            // ✅ ИСПРАВЛЯЕМ TOUCH СКРОЛЛ ДЛЯ МОБИЛЬНЫХ
+            let touchStartY = 0
+            mobileContent.addEventListener('touchstart', (e) => {
+                touchStartY = e.touches[0].clientY
+            })
+            
+            mobileContent.addEventListener('touchmove', (e) => {
+                const touchY = e.touches[0].clientY
+                const deltaY = touchStartY - touchY
+                mobileContent.scrollTop += deltaY
+                touchStartY = touchY
+                e.preventDefault() // Блокируем системный скролл
+            })
+            
+            // ✅ ТЕСТ СКРОЛЛА ВРУЧНУЮ
+            mobileContent.addEventListener('wheel', (e) => {
+                console.log("🖱️ Wheel event detected:", e.deltaY)
+                
+                // ✅ ПРИНУДИТЕЛЬНО СКРОЛЛИМ ПРОГРАММНО
+                e.preventDefault() // Блокируем обычный скролл
+                mobileContent.scrollTop += e.deltaY // Скроллим вручную
+                console.log("📜 Scroll position:", mobileContent.scrollTop)
+            })
+            
+            mobileContent.addEventListener('touchstart', (e) => {
+                console.log("👆 Touch start detected")
+            })
+            
+            // ✅ ДЕТЕКТИВ: КТО МЕНЯЕТ OVERFLOW?
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                        const currentOverflow = mobileContent.style.overflow
+                        if (currentOverflow !== 'auto') {
+                            console.error("🚨 FOUND THE CULPRIT!")
+                            console.error("📍 Overflow changed to:", currentOverflow)
+                            console.error("📍 Stack trace:")
+                            console.trace()
+                            
+                            // Немедленно исправляем
+                            mobileContent.style.overflow = 'auto'
+                            mobileContent.style.overflowY = 'auto'
+                        }
+                    }
+                })
+            })
+            
+            observer.observe(mobileContent, {
+                attributes: true,
+                attributeFilter: ['style']
+            })
+            
+            // Сохраняем для очистки
+            this.scrollObserver = observer
+            
+            // ✅ ИСПРАВЛЯЕМ ВСЕ РОДИТЕЛЕЙ С OVERFLOW: HIDDEN
+            let parent = mobileContent.parentElement
+            let level = 0
+            while (parent && level < 10) {
+                const styles = window.getComputedStyle(parent)
+                if (styles.overflow === 'hidden') {
+                    parent.style.overflow = 'visible'
+                    console.log(`🔧 Fixed overflow for parent ${level}: ${parent.className}`)
+                }
+                parent = parent.parentElement
+                level++
+            }
+        }
     }
     
-    console.log("✅ Mobile menu layout configured")
+    // ✅ ДИАГНОСТИКА СКРОЛЛА - и ПОСЛЕ блокировки
+    setTimeout(() => this.diagnoseScroll(), 100)
+}
+
+// ✅ ДОБАВЬТЕ ЭТОТ МЕТОД:
+diagnoseScroll() {
+    console.log("🔍 === SCROLL DIAGNOSIS ===")
+    
+    const mobileMenu = this.mobileMenuTarget
+    const mobileContent = mobileMenu?.querySelector('.mobile-content')
+    
+    if (mobileMenu) {
+        const menuStyles = window.getComputedStyle(mobileMenu)
+        console.log("📱 Mobile Menu:")
+        console.log("  - scrollHeight:", mobileMenu.scrollHeight, "vs clientHeight:", mobileMenu.clientHeight)
+        console.log("  - overflow:", menuStyles.overflow)
+        console.log("  - position:", menuStyles.position)
+        console.log("  - height:", menuStyles.height)
+        console.log("  - maxHeight:", menuStyles.maxHeight)
+    }
+    
+    if (mobileContent) {
+        const contentStyles = window.getComputedStyle(mobileContent)
+        console.log("📄 Mobile Content:")
+        console.log("  - scrollHeight:", mobileContent.scrollHeight, "vs clientHeight:", mobileContent.clientHeight)
+        console.log("  - overflow:", contentStyles.overflow, contentStyles.overflowY)
+        console.log("  - height:", contentStyles.height)
+        console.log("  - maxHeight:", contentStyles.maxHeight)
+        
+        // Проверяем родителей
+        let parent = mobileContent.parentElement
+        let level = 0
+        while (parent && level < 5) {
+            const parentStyles = window.getComputedStyle(parent)
+            console.log(`📦 Parent ${level} (${parent.className}):`)
+            console.log(`  - overflow: ${parentStyles.overflow}`)
+            console.log(`  - position: ${parentStyles.position}`)
+            console.log(`  - height: ${parentStyles.height}`)
+            parent = parent.parentElement
+            level++
+        }
+    }
+    
+    console.log("🔍 === END DIAGNOSIS ===")
+}
+
+diagnoseScrollManual() {
+    if (this.mobileMenuOpen) {
+        this.diagnoseScroll()
+    }
 }
 
 restoreMobileMenuLayout() {
-    console.log("📦 Restoring mobile menu layout...")
     
     const body = document.body
     
     // Разблокируем скролл страницы
     body.style.overflow = ''
-    body.style.position = ''
-    body.style.width = ''
-    body.style.top = ''
     
+    // ❌ ЗАКОММЕНТИРУЙТЕ И ЭТОТ БЛОК:
+    /*
     // Восстанавливаем locomotive container
     if (this.locomotiveContainer) {
         this.locomotiveContainer.style.overflow = ''
         this.locomotiveContainer.style.position = ''
         this.locomotiveContainer.style.height = ''
     }
+    */
     
     // Восстанавливаем позицию скролла
     if (this.originalScrollY) {
@@ -515,7 +631,6 @@ restoreMobileMenuLayout() {
                 this.originalParent.appendChild(this.mobileMenuTarget)
             }
             
-            console.log("📦 Mobile menu returned to original position")
         }
         
         // Сбрасываем переменные
@@ -526,6 +641,5 @@ restoreMobileMenuLayout() {
         
     }, 100) // Небольшая задержка для завершения анимации
     
-    console.log("✅ Mobile menu layout restored")
 }
 }
