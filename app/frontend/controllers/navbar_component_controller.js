@@ -8,6 +8,12 @@ gsap.registerPlugin(ScrollTrigger)
 export default class extends Controller {
   static targets = ["container", "brand", "cart", "menuButton", "hamburgerIcon", "line1", "line2", "line3", "mobileMenu", "overlay"]
 
+  // Переменные для управления mobile menu layout
+  originalParent = null
+  originalNextSibling = null  
+  originalScrollY = 0
+  locomotiveContainer = null
+
   connect() {
     console.log("Navbar Component connected")
     this.mobileMenuOpen = false // Track menu state reliably
@@ -61,6 +67,11 @@ export default class extends Controller {
       end: "bottom bottom",
       onUpdate: (self) => {
         const currentScrollY = self.scroll()
+        
+        // ✅ ИСПРАВЛЕНИЕ: НЕ АНИМИРУЕМ NAVBAR КОГДА MOBILE MENU ОТКРЫТО
+        if (this.mobileMenuOpen) {
+          return // Пропускаем анимацию если mobile menu открыто
+        }
         
         if (currentScrollY > lastScrollY && currentScrollY > 100) {
           // Scrolling down - hide navbar
@@ -191,12 +202,21 @@ export default class extends Controller {
   }
 
   openMobileMenu() {
-    if (this.mobileMenuOpen) return // Prevent double opening
+    if (this.mobileMenuOpen) return
     
     this.mobileMenuOpen = true
     
     console.log("🔄 Opening mobile menu...")
     console.log("📱 Mobile menu element:", this.mobileMenuTarget)
+    
+    // 🔒 БЛОКИРУЕМ СКРОЛЛ И ФИКСИРУЕМ MOBILE MENU
+    this.setupMobileMenuLayout()
+    
+    // ✅ ИСПРАВЛЕНИЕ: СБРАСЫВАЕМ ПОЗИЦИЮ NAVBAR
+    gsap.set(this.containerTarget, {
+      y: 0,
+      opacity: 1
+    })
     
     // СОЗДАЕМ STACKING CONTEXT для navbar
     this.containerTarget.style.transform = 'translateZ(0)'
@@ -213,7 +233,7 @@ export default class extends Controller {
       this.menuButtonTarget.disabled = false
       this.menuButtonTarget.style.pointerEvents = 'auto'
       console.log("🔓 Button re-enabled after timeout")
-    }, 1000) // Разблокируем через 1 секунду в любом случае
+    }, 1000)
 
     // Animate hamburger to X and then hide completely
     this.animateHamburgerToX()
@@ -221,7 +241,7 @@ export default class extends Controller {
     // Show overlay with increased opacity
     if (this.hasOverlayTarget) {
       gsap.to(this.overlayTarget, {
-        opacity: 0.6, // Увеличили в 2 раза: с 0.3 до 0.6
+        opacity: 0.6,
         visibility: "visible",
         duration: 0.3,
         ease: "power2.out"
@@ -249,7 +269,7 @@ export default class extends Controller {
   }
 
   closeMobileMenu() {
-    if (!this.mobileMenuOpen) return // Prevent double closing
+    if (!this.mobileMenuOpen) return
     
     this.mobileMenuOpen = false
     
@@ -289,6 +309,9 @@ export default class extends Controller {
           // ВОЗВРАЩАЕМ Tailwind класс после анимации
           this.mobileMenuTarget.classList.add('-translate-x-full')
           console.log("✅ Mobile menu closed, Tailwind class restored")
+          
+          // 🔓 ВОССТАНАВЛИВАЕМ LAYOUT ПОСЛЕ АНИМАЦИИ
+          this.restoreMobileMenuLayout()
         }
       })
 
@@ -404,4 +427,105 @@ export default class extends Controller {
   resumeCarousels() {
     // Пока убираем
   }
+
+  setupMobileMenuLayout() {
+    console.log("📦 Setting up mobile menu layout...")
+    
+    const body = document.body
+    this.locomotiveContainer = document.querySelector('[data-scroll-container]')
+    
+    // Сохраняем текущую позицию скролла
+    this.originalScrollY = window.scrollY
+    
+    // Если mobile menu внутри locomotive container - перемещаем его
+    if (this.locomotiveContainer && this.locomotiveContainer.contains(this.mobileMenuTarget)) {
+        // Сохраняем оригинальное расположение
+        this.originalParent = this.mobileMenuTarget.parentNode
+        this.originalNextSibling = this.mobileMenuTarget.nextSibling
+        
+        // Перемещаем в body
+        body.appendChild(this.mobileMenuTarget)
+        console.log("📦 Mobile menu moved outside locomotive container")
+    }
+    
+    // Фиксируем mobile menu поверх всего
+    this.mobileMenuTarget.style.position = 'fixed'
+    this.mobileMenuTarget.style.top = '0'
+    this.mobileMenuTarget.style.left = '0' 
+    this.mobileMenuTarget.style.zIndex = '9999'
+    this.mobileMenuTarget.style.width = '320px'
+    this.mobileMenuTarget.style.height = '100vh'
+    this.mobileMenuTarget.style.background = 'rgba(255, 255, 255, 0.98)'
+    
+    // Блокируем скролл страницы
+    body.style.overflow = 'hidden'
+    body.style.position = 'fixed'
+    body.style.width = '100%'
+    body.style.top = `-${this.originalScrollY}px`
+    
+    // Блокируем locomotive container
+    if (this.locomotiveContainer) {
+        this.locomotiveContainer.style.overflow = 'hidden'
+        this.locomotiveContainer.style.position = 'fixed'
+        this.locomotiveContainer.style.height = '100vh'
+    }
+    
+    console.log("✅ Mobile menu layout configured")
+}
+
+restoreMobileMenuLayout() {
+    console.log("📦 Restoring mobile menu layout...")
+    
+    const body = document.body
+    
+    // Разблокируем скролл страницы
+    body.style.overflow = ''
+    body.style.position = ''
+    body.style.width = ''
+    body.style.top = ''
+    
+    // Восстанавливаем locomotive container
+    if (this.locomotiveContainer) {
+        this.locomotiveContainer.style.overflow = ''
+        this.locomotiveContainer.style.position = ''
+        this.locomotiveContainer.style.height = ''
+    }
+    
+    // Восстанавливаем позицию скролла
+    if (this.originalScrollY) {
+        window.scrollTo(0, this.originalScrollY)
+    }
+    
+    // Возвращаем mobile menu в исходное место (с задержкой)
+    setTimeout(() => {
+        if (this.originalParent && this.mobileMenuTarget) {
+            // Сбрасываем принудительные стили
+            this.mobileMenuTarget.style.position = ''
+            this.mobileMenuTarget.style.top = ''
+            this.mobileMenuTarget.style.left = ''
+            this.mobileMenuTarget.style.zIndex = ''
+            this.mobileMenuTarget.style.width = ''
+            this.mobileMenuTarget.style.height = ''
+            this.mobileMenuTarget.style.background = ''
+            
+            // Возвращаем в DOM
+            if (this.originalNextSibling) {
+                this.originalParent.insertBefore(this.mobileMenuTarget, this.originalNextSibling)
+            } else {
+                this.originalParent.appendChild(this.mobileMenuTarget)
+            }
+            
+            console.log("📦 Mobile menu returned to original position")
+        }
+        
+        // Сбрасываем переменные
+        this.originalParent = null
+        this.originalNextSibling = null
+        this.originalScrollY = 0
+        this.locomotiveContainer = null
+        
+    }, 100) // Небольшая задержка для завершения анимации
+    
+    console.log("✅ Mobile menu layout restored")
+}
 }
