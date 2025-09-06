@@ -116,17 +116,22 @@ namespace :theme do
 
   def generate_block_content(block)
     text_content = block.text.present? ? block.text.body.to_s : ""
+    plain_text = block.text.present? ? block.text.to_plain_text : ""
 
     <<~RUBY
 
       # Block: #{block.name}
-      block = section.blocks.find_or_create_by!(name: #{block.name.inspect}) do |b|
+      block = section.blocks.find_or_initialize_by(name: #{block.name.inspect}) do |b|
         b.type = #{block.type.inspect}
       end
 
-      # Update block text if present
-      if #{!text_content.empty?}
-        block.update!(text: #{text_content.inspect})
+      # Update ActionText content properly
+      if #{!plain_text.empty?}
+        if block.text.present?
+          block.text.update!(body: #{plain_text.inspect})
+        else
+          block.update!(text: #{plain_text.inspect})
+        end
       end
 
     RUBY

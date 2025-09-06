@@ -1,12 +1,13 @@
 # Theme Content Seeds
-# Generated on 2025-09-06 02:43:32 UTC
+# Generated on 2025-09-06 04:10:30 UTC
 
 puts "🎨 Loading theme content..."
 
-store = Spree::Store.find_by(code: 'bauportal') || Spree::Store.default
+store = Spree::Store.find_by(code: 'shop') || Spree::Store.default
 
-# Обновляем только настройки локализации и валют
+# Update store settings
 store.update!(
+  name: "Shop",
   default_locale: "ru",
   supported_locales: "ru,en",
   default_currency: "RUB",
@@ -179,35 +180,47 @@ end
 
 
 # Block: Heading
-block = section.blocks.find_or_create_by!(name: "Heading") do |b|
+block = section.blocks.find_or_initialize_by(name: "Heading") do |b|
   b.type = "Spree::PageBlocks::Heading"
 end
 
-# Update block text if present
+# Update ActionText content properly
 if true
-  block.update!(text: "<!-- BEGIN app/views/layouts/action_text/contents/_content.html.erb --><div class=\"trix-content\">\n  <!-- BEGIN /Users/vitaly/.rvm/gems/ruby-3.4.1/gems/actiontext-8.0.2.1/app/views/action_text/contents/_content.html.erb -->Opening soon\n<!-- END /Users/vitaly/.rvm/gems/ruby-3.4.1/gems/actiontext-8.0.2.1/app/views/action_text/contents/_content.html.erb --></div>\n<!-- END app/views/layouts/action_text/contents/_content.html.erb -->")
+  if block.text.present?
+    block.text.update!(body: "Opening soon")
+  else
+    block.update!(text: "Opening soon")
+  end
 end
 
 
 # Block: Text
-block = section.blocks.find_or_create_by!(name: "Text") do |b|
+block = section.blocks.find_or_initialize_by(name: "Text") do |b|
   b.type = "Spree::PageBlocks::Text"
 end
 
-# Update block text if present
+# Update ActionText content properly
 if true
-  block.update!(text: "<!-- BEGIN app/views/layouts/action_text/contents/_content.html.erb --><div class=\"trix-content\">\n  <!-- BEGIN /Users/vitaly/.rvm/gems/ruby-3.4.1/gems/actiontext-8.0.2.1/app/views/action_text/contents/_content.html.erb -->Be the first one to know when we launch.\n<!-- END /Users/vitaly/.rvm/gems/ruby-3.4.1/gems/actiontext-8.0.2.1/app/views/action_text/contents/_content.html.erb --></div>\n<!-- END app/views/layouts/action_text/contents/_content.html.erb -->")
+  if block.text.present?
+    block.text.update!(body: "Be the first one to know when we launch.")
+  else
+    block.update!(text: "Be the first one to know when we launch.")
+  end
 end
 
 
 # Block: Newsletter Form
-block = section.blocks.find_or_create_by!(name: "Newsletter Form") do |b|
+block = section.blocks.find_or_initialize_by(name: "Newsletter Form") do |b|
   b.type = "Spree::PageBlocks::NewsletterForm"
 end
 
-# Update block text if present
+# Update ActionText content properly
 if false
-  block.update!(text: "")
+  if block.text.present?
+    block.text.update!(body: "")
+  else
+    block.update!(text: "")
+  end
 end
 
 
@@ -272,35 +285,47 @@ end
 
 
 # Block: Heading
-block = section.blocks.find_or_create_by!(name: "Heading") do |b|
+block = section.blocks.find_or_initialize_by(name: "Heading") do |b|
   b.type = "Spree::PageBlocks::Heading"
 end
 
-# Update block text if present
+# Update ActionText content properly
 if true
-  block.update!(text: "<!-- BEGIN app/views/layouts/action_text/contents/_content.html.erb --><div class=\"trix-content\">\n  <!-- BEGIN /Users/vitaly/.rvm/gems/ruby-3.4.1/gems/actiontext-8.0.2.1/app/views/action_text/contents/_content.html.erb --><div>Добро пожаловать!</div>\n<!-- END /Users/vitaly/.rvm/gems/ruby-3.4.1/gems/actiontext-8.0.2.1/app/views/action_text/contents/_content.html.erb --></div>\n<!-- END app/views/layouts/action_text/contents/_content.html.erb -->")
+  if block.text.present?
+    block.text.update!(body: "Добро пожаловать!")
+  else
+    block.update!(text: "Добро пожаловать!")
+  end
 end
 
 
 # Block: Text
-block = section.blocks.find_or_create_by!(name: "Text") do |b|
+block = section.blocks.find_or_initialize_by(name: "Text") do |b|
   b.type = "Spree::PageBlocks::Text"
 end
 
-# Update block text if present
+# Update ActionText content properly
 if true
-  block.update!(text: "<!-- BEGIN app/views/layouts/action_text/contents/_content.html.erb --><div class=\"trix-content\">\n  <!-- BEGIN /Users/vitaly/.rvm/gems/ruby-3.4.1/gems/actiontext-8.0.2.1/app/views/action_text/contents/_content.html.erb --><div>Предлагаем Вам керамогранит из Индии</div>\n<!-- END /Users/vitaly/.rvm/gems/ruby-3.4.1/gems/actiontext-8.0.2.1/app/views/action_text/contents/_content.html.erb --></div>\n<!-- END app/views/layouts/action_text/contents/_content.html.erb -->")
+  if block.text.present?
+    block.text.update!(body: "Предлагаем Вам керамогранит из Индии")
+  else
+    block.update!(text: "Предлагаем Вам керамогранит из Индии")
+  end
 end
 
 
 # Block: Buttons
-block = section.blocks.find_or_create_by!(name: "Buttons") do |b|
+block = section.blocks.find_or_initialize_by(name: "Buttons") do |b|
   b.type = "Spree::PageBlocks::Buttons"
 end
 
-# Update block text if present
+# Update ActionText content properly
 if false
-  block.update!(text: "")
+  if block.text.present?
+    block.text.update!(body: "")
+  else
+    block.update!(text: "")
+  end
 end
 
 
@@ -323,24 +348,32 @@ end
 
 
 # Block: Heading
-block = section.blocks.find_or_create_by!(name: "Heading") do |b|
+block = section.blocks.find_or_initialize_by(name: "Heading") do |b|
   b.type = "Spree::PageBlocks::Heading"
 end
 
-# Update block text if present
+# Update ActionText content properly
 if true
-  block.update!(text: "<!-- BEGIN app/views/layouts/action_text/contents/_content.html.erb --><div class=\"trix-content\">\n  <!-- BEGIN /Users/vitaly/.rvm/gems/ruby-3.4.1/gems/actiontext-8.0.2.1/app/views/action_text/contents/_content.html.erb -->About us\n<!-- END /Users/vitaly/.rvm/gems/ruby-3.4.1/gems/actiontext-8.0.2.1/app/views/action_text/contents/_content.html.erb --></div>\n<!-- END app/views/layouts/action_text/contents/_content.html.erb -->")
+  if block.text.present?
+    block.text.update!(body: "About us")
+  else
+    block.update!(text: "About us")
+  end
 end
 
 
 # Block: Text
-block = section.blocks.find_or_create_by!(name: "Text") do |b|
+block = section.blocks.find_or_initialize_by(name: "Text") do |b|
   b.type = "Spree::PageBlocks::Text"
 end
 
-# Update block text if present
+# Update ActionText content properly
 if true
-  block.update!(text: "<!-- BEGIN app/views/layouts/action_text/contents/_content.html.erb --><div class=\"trix-content\">\n  <!-- BEGIN /Users/vitaly/.rvm/gems/ruby-3.4.1/gems/actiontext-8.0.2.1/app/views/action_text/contents/_content.html.erb -->Welcome to our shop! We carefully curate high-quality products that we believe in. Our process involves rigorous testing and selection to ensure we only offer items that meet our standards. We're passionate about delivering exceptional value and service to our customers.\n<!-- END /Users/vitaly/.rvm/gems/ruby-3.4.1/gems/actiontext-8.0.2.1/app/views/action_text/contents/_content.html.erb --></div>\n<!-- END app/views/layouts/action_text/contents/_content.html.erb -->")
+  if block.text.present?
+    block.text.update!(body: "Welcome to our shop! We carefully curate high-quality products that we believe in. Our process involves rigorous testing and selection to ensure we only offer items that meet our standards. We're passionate about delivering exceptional value and service to our customers.")
+  else
+    block.update!(text: "Welcome to our shop! We carefully curate high-quality products that we believe in. Our process involves rigorous testing and selection to ensure we only offer items that meet our standards. We're passionate about delivering exceptional value and service to our customers.")
+  end
 end
 
 
