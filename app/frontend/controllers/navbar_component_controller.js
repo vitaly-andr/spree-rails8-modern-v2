@@ -20,13 +20,6 @@ export default class extends Controller {
     this.setupScrollAnimations()
     this.setupHoverAnimations()
     
-    // ✅ ДОБАВЛЯЕМ ДИАГНОСТИКУ ПО КЛАВИШЕ
-    window.addEventListener('keydown', (e) => {
-        if (e.key === 'D' && e.ctrlKey) {  // Ctrl+D
-            e.preventDefault()
-            this.diagnoseScrollManual()
-        }
-    })
   }
 
   disconnect() {
@@ -240,13 +233,16 @@ export default class extends Controller {
 
     // УБИРАЕМ КОНФЛИКТ: удаляем Tailwind класс и используем только GSAP
     if (this.hasMobileMenuTarget) {
+      
       this.mobileMenuTarget.classList.remove('-translate-x-full')
+      
       
       gsap.to(this.mobileMenuTarget, {
         x: "0%",
         duration: 0.4,
         ease: "power3.out",
         onComplete: () => {
+          
         }
       })
 
@@ -425,7 +421,6 @@ export default class extends Controller {
     this.originalScrollY = window.scrollY
     
     // ✅ ДИАГНОСТИКА СКРОЛЛА - добавьте это ПЕРЕД блокировкой
-    this.diagnoseScroll()
     
     // ✅ ДОБАВЛЯЕМ ДИАГНОСТИКУ ПО КЛИКУ НА MOBILE MENU
     if (this.mobileMenuTarget) {
@@ -445,7 +440,7 @@ export default class extends Controller {
     // Блокируем locomotive container  
     if (this.locomotiveContainer) {
         this.locomotiveContainer.style.overflow = 'hidden'
-        this.locomotiveContainer.style.position = 'fixed'
+        // this.locomotiveContainer.style.position = 'fixed'
         this.locomotiveContainer.style.height = '100vh'
         
         // ✅ ФИКСИРУЕМ MOBILE MENU НА ВСЮ ВЫСОТУ VIEWPORT
@@ -460,56 +455,6 @@ export default class extends Controller {
         }
     }
     
-    // ✅ ДИАГНОСТИКА СКРОЛЛА - и ПОСЛЕ блокировки
-    setTimeout(() => this.diagnoseScroll(), 100)
-}
-
-// ✅ ДОБАВЬТЕ ЭТОТ МЕТОД:
-diagnoseScroll() {
-    console.log("🔍 === SCROLL DIAGNOSIS ===")
-    
-    const mobileMenu = this.mobileMenuTarget
-    const mobileContent = mobileMenu?.querySelector('.mobile-content')
-    
-    if (mobileMenu) {
-        const menuStyles = window.getComputedStyle(mobileMenu)
-        console.log("📱 Mobile Menu:")
-        console.log("  - scrollHeight:", mobileMenu.scrollHeight, "vs clientHeight:", mobileMenu.clientHeight)
-        console.log("  - overflow:", menuStyles.overflow)
-        console.log("  - position:", menuStyles.position)
-        console.log("  - height:", menuStyles.height)
-        console.log("  - maxHeight:", menuStyles.maxHeight)
-    }
-    
-    if (mobileContent) {
-        const contentStyles = window.getComputedStyle(mobileContent)
-        console.log("📄 Mobile Content:")
-        console.log("  - scrollHeight:", mobileContent.scrollHeight, "vs clientHeight:", mobileContent.clientHeight)
-        console.log("  - overflow:", contentStyles.overflow, contentStyles.overflowY)
-        console.log("  - height:", contentStyles.height)
-        console.log("  - maxHeight:", contentStyles.maxHeight)
-        
-        // Проверяем родителей
-        let parent = mobileContent.parentElement
-        let level = 0
-        while (parent && level < 5) {
-            const parentStyles = window.getComputedStyle(parent)
-            console.log(`📦 Parent ${level} (${parent.className}):`)
-            console.log(`  - overflow: ${parentStyles.overflow}`)
-            console.log(`  - position: ${parentStyles.position}`)
-            console.log(`  - height: ${parentStyles.height}`)
-            parent = parent.parentElement
-            level++
-        }
-    }
-    
-    console.log("🔍 === END DIAGNOSIS ===")
-}
-
-diagnoseScrollManual() {
-    if (this.mobileMenuOpen) {
-        this.diagnoseScroll()
-    }
 }
 
 restoreMobileMenuLayout() {
@@ -519,15 +464,12 @@ restoreMobileMenuLayout() {
     // Разблокируем скролл страницы
     body.style.overflow = ''
     
-    // ❌ ЗАКОММЕНТИРУЙТЕ И ЭТОТ БЛОК:
-    /*
     // Восстанавливаем locomotive container
     if (this.locomotiveContainer) {
         this.locomotiveContainer.style.overflow = ''
-        this.locomotiveContainer.style.position = ''
+        // this.locomotiveContainer.style.position = ''
         this.locomotiveContainer.style.height = ''
     }
-    */
     
     // Восстанавливаем позицию скролла
     if (this.originalScrollY) {

@@ -5,9 +5,10 @@ export default class extends Controller {
   static targets = ["container", "trigger", "menu", "icon", "line"]
 
   connect() {
-    console.log("Dropdown controller connected")
-    console.log("🖥️ Window width:", window.innerWidth, "Hover enabled:", window.innerWidth >= 1024)
-    console.log("🔍 Available methods:", Object.getOwnPropertyNames(Object.getPrototypeOf(this)))  // ← ДОБАВЬТЕ
+    // Убираем ВСЕ логи:
+    // console.log("Dropdown controller connected")
+    // console.log("🖥️ Window width:", window.innerWidth, "Hover enabled:", window.innerWidth >= 1024)
+    // console.log("🔍 Available methods:", Object.getOwnPropertyNames(Object.getPrototypeOf(this)))
     this.isOpen = false
     this.setupEventListeners()
     this.initializeDropdown()
@@ -32,7 +33,7 @@ export default class extends Controller {
     // Close dropdown when clicking outside
     document.addEventListener('click', this.handleClickOutside.bind(this))
     
-    console.log("🖥️ Window width:", window.innerWidth, "Hover enabled:", window.innerWidth >= 1024)  // ← ДОБАВЬТЕ ЭТО
+    // console.log("🖥️ Window width:", window.innerWidth, "Hover enabled:", window.innerWidth >= 1024)  ← УБРАТЬ
     
     // Handle hover events for desktop
     this.containerTarget.addEventListener('mouseenter', () => {
@@ -43,15 +44,15 @@ export default class extends Controller {
 
     this.containerTarget.addEventListener('mouseleave', (e) => {
       if (window.innerWidth >= 1024) { // lg breakpoint
-        console.log('🖱️ Mouse leaving container, related target:', e.relatedTarget)
+        // console.log('🖱️ Mouse leaving container, related target:', e.relatedTarget)  ← УБРАТЬ
         // Небольшая задержка чтобы проверить, не вошла ли мышка в dropdown
         setTimeout(() => {
           // Проверяем, действительно ли мышка вышла из всего dropdown области
           if (!this.containerTarget.matches(':hover') && !this.menuTarget.matches(':hover')) {
-            console.log('✅ Confirmed mouse left dropdown area, closing')
+            // console.log('✅ Confirmed mouse left dropdown area, closing')  ← УБРАТЬ
             this.close()
           } else {
-            console.log('❌ Mouse still in dropdown area, keeping open')
+            // console.log('❌ Mouse still in dropdown area, keeping open')  ← УБРАТЬ
           }
         }, 50) // 50ms задержка
       }
@@ -80,7 +81,7 @@ export default class extends Controller {
   open() {
     if (this.isOpen) return
     
-    console.log("🔽 Opening dropdown")
+    // console.log("🔽 Opening dropdown")  ← УБРАТЬ
     this.isOpen = true
     
     // Animate icon rotation
@@ -126,7 +127,7 @@ export default class extends Controller {
   close() {
     if (!this.isOpen) return
     
-    console.log("🔼 Closing dropdown")
+    // console.log("🔼 Closing dropdown")  ← УБРАТЬ
     this.isOpen = false
 
     // Animate icon rotation back
@@ -186,5 +187,11 @@ export default class extends Controller {
     setTimeout(() => {
       this.close()
     }, 150)
+  }
+
+  hide(event) {
+    if (!this.element.contains(event.target) && this.isOpen) {
+      this.close()
+    }
   }
 }
