@@ -5,7 +5,9 @@ export default class extends Controller {
   static targets = ["container", "trigger", "menu", "icon", "line"]
 
   connect() {
-    console.log("Dropdown connected")
+    console.log("Dropdown controller connected")
+    console.log("🖥️ Window width:", window.innerWidth, "Hover enabled:", window.innerWidth >= 1024)
+    console.log("🔍 Available methods:", Object.getOwnPropertyNames(Object.getPrototypeOf(this)))  // ← ДОБАВЬТЕ
     this.isOpen = false
     this.setupEventListeners()
     this.initializeDropdown()
@@ -29,6 +31,8 @@ export default class extends Controller {
   setupEventListeners() {
     // Close dropdown when clicking outside
     document.addEventListener('click', this.handleClickOutside.bind(this))
+    
+    console.log("🖥️ Window width:", window.innerWidth, "Hover enabled:", window.innerWidth >= 1024)  // ← ДОБАВЬТЕ ЭТО
     
     // Handle hover events for desktop
     this.containerTarget.addEventListener('mouseenter', () => {
@@ -76,6 +80,7 @@ export default class extends Controller {
   open() {
     if (this.isOpen) return
     
+    console.log("🔽 Opening dropdown")
     this.isOpen = true
     
     // Animate icon rotation
@@ -93,7 +98,7 @@ export default class extends Controller {
       opacity: 1,
       visibility: "visible",
       scale: 1,
-      zIndex: 99999, // Намного выше всех элементов
+      zIndex: 99999,
       duration: 0.3,
       ease: "back.out(1.7)"
     })
@@ -121,7 +126,7 @@ export default class extends Controller {
   close() {
     if (!this.isOpen) return
     
-    console.log('🔽 Closing dropdown')
+    console.log("🔼 Closing dropdown")
     this.isOpen = false
 
     // Animate icon rotation back
@@ -131,7 +136,7 @@ export default class extends Controller {
       ease: "power2.out"
     })
 
-    // Всегда сбрасываем underline при закрытии - убираем проблемную проверку
+    // Reset underline
     this.animateHover(false)
 
     // Animate dropdown menu

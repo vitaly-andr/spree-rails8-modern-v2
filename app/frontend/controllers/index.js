@@ -3,6 +3,7 @@ import { Application } from "@hotwired/stimulus"
 
 // Импортируем контроллеры напрямую
 import DropdownController from "./spree/storefront/dropdown_controller"
+import ModernDropdownController from "./modern_dropdown_controller"
 import SwitchImageController from "./switch_image_controller" 
 import CounterController from "./counter_controller"
 import NavbarComponentController from "./navbar_component_controller"
@@ -19,6 +20,7 @@ const application = Application.start()
 
 // Регистрируем контроллеры
 application.register("dropdown", DropdownController)
+application.register("modern-dropdown", ModernDropdownController)
 application.register("switch-image", SwitchImageController) 
 application.register("counter", CounterController)
 application.register("navbar-component", NavbarComponentController)
