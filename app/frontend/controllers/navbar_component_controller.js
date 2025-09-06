@@ -452,89 +452,11 @@ export default class extends Controller {
         this.mobileMenuTarget.style.height = '100vh'
         this.mobileMenuTarget.style.overflow = 'visible'
         
-        // ✅ MOBILE CONTENT СКРОЛЛИТСЯ ВНУТРИ
+        // ✅ ПЛАВНЫЙ СКРОЛЛ ВНУТРИ MOBILE MENU
         const mobileContent = this.mobileMenuTarget.querySelector('.mobile-content')
         if (mobileContent) {
             mobileContent.style.height = 'calc(100vh - 100px)'
-            mobileContent.style.overflowY = 'auto'
-            mobileContent.style.overflow = 'auto'
-            mobileContent.style.pointerEvents = 'auto'
-            mobileContent.style.touchAction = 'pan-y'
-            mobileContent.style.webkitOverflowScrolling = 'touch'
-            
-            // ✅ ИСПРАВЛЯЕМ СКРОЛЛ МЫШКОЙ (блокируем Locomotive)
-            mobileContent.addEventListener('wheel', (e) => {
-                e.preventDefault() // Блокируем Locomotive Scroll
-                mobileContent.scrollTop += e.deltaY // Скроллим вручную
-            })
-            
-            // ✅ ИСПРАВЛЯЕМ TOUCH СКРОЛЛ ДЛЯ МОБИЛЬНЫХ
-            let touchStartY = 0
-            mobileContent.addEventListener('touchstart', (e) => {
-                touchStartY = e.touches[0].clientY
-            })
-            
-            mobileContent.addEventListener('touchmove', (e) => {
-                const touchY = e.touches[0].clientY
-                const deltaY = touchStartY - touchY
-                mobileContent.scrollTop += deltaY
-                touchStartY = touchY
-                e.preventDefault() // Блокируем системный скролл
-            })
-            
-            // ✅ ТЕСТ СКРОЛЛА ВРУЧНУЮ
-            mobileContent.addEventListener('wheel', (e) => {
-                console.log("🖱️ Wheel event detected:", e.deltaY)
-                
-                // ✅ ПРИНУДИТЕЛЬНО СКРОЛЛИМ ПРОГРАММНО
-                e.preventDefault() // Блокируем обычный скролл
-                mobileContent.scrollTop += e.deltaY // Скроллим вручную
-                console.log("📜 Scroll position:", mobileContent.scrollTop)
-            })
-            
-            mobileContent.addEventListener('touchstart', (e) => {
-                console.log("👆 Touch start detected")
-            })
-            
-            // ✅ ДЕТЕКТИВ: КТО МЕНЯЕТ OVERFLOW?
-            const observer = new MutationObserver((mutations) => {
-                mutations.forEach((mutation) => {
-                    if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
-                        const currentOverflow = mobileContent.style.overflow
-                        if (currentOverflow !== 'auto') {
-                            console.error("🚨 FOUND THE CULPRIT!")
-                            console.error("📍 Overflow changed to:", currentOverflow)
-                            console.error("📍 Stack trace:")
-                            console.trace()
-                            
-                            // Немедленно исправляем
-                            mobileContent.style.overflow = 'auto'
-                            mobileContent.style.overflowY = 'auto'
-                        }
-                    }
-                })
-            })
-            
-            observer.observe(mobileContent, {
-                attributes: true,
-                attributeFilter: ['style']
-            })
-            
-            // Сохраняем для очистки
-            this.scrollObserver = observer
-            
-            // ✅ ИСПРАВЛЯЕМ ВСЕ РОДИТЕЛЕЙ С OVERFLOW: HIDDEN
-            let parent = mobileContent.parentElement
-            let level = 0
-            while (parent && level < 10) {
-                const styles = window.getComputedStyle(parent)
-                if (styles.overflow === 'hidden') {
-                    parent.style.overflow = 'visible'
-                    console.log(`🔧 Fixed overflow for parent ${level}: ${parent.className}`)
-                }
-                parent = parent.parentElement
-                level++
-            }
+            mobileContent.style.scrollBehavior = 'smooth' // Плавный нативный скролл
         }
     }
     
