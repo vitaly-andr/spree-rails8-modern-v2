@@ -48,6 +48,9 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  # I18n tasks for finding missing translations
+  gem "i18n-tasks", "~> 1.0.14"
 end
 
 group :development do

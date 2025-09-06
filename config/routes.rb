@@ -14,7 +14,13 @@ Rails.application.routes.draw do
         router_name: :spree
       )
     end
+
+    # Admin locale switching
+    namespace :admin do
+      patch "/set_locale", to: "locales#set", as: :set_locale
+    end
   end
+
   # Admin authentication
   devise_for :admin_users,
     class_name: "Spree::AdminUser",
@@ -27,8 +33,6 @@ Rails.application.routes.draw do
 
   # This line mounts Spree's routes at the root of your application.
   mount Spree::Core::Engine, at: "/"
-
-
 
   # rails-way: тестовый маршрут для проверки frontend-стека
   get "/test_frontend" => "pages#test_frontend"

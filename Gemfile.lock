@@ -218,6 +218,17 @@ GEM
       activesupport (>= 7.1)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
+    i18n-tasks (1.0.15)
+      activesupport (>= 4.0.2)
+      ast (>= 2.1.0)
+      erubi
+      highline (>= 2.0.0)
+      i18n
+      parser (>= 3.2.2.1)
+      rails-i18n
+      rainbow (>= 2.2.2, < 4.0)
+      ruby-progressbar (~> 1.8, >= 1.8.1)
+      terminal-table (>= 1.5.1)
     i18n_data (1.1.0)
       simple_po_parser (~> 1.1)
     image_processing (1.14.0)
@@ -599,8 +610,11 @@ GEM
     tailwindcss-rails (3.3.2)
       railties (>= 7.0.0)
       tailwindcss-ruby (~> 3.0)
+    tailwindcss-ruby (3.4.17-aarch64-linux)
     tailwindcss-ruby (3.4.17-arm64-darwin)
     temple (0.10.4)
+    terminal-table (4.0.0)
+      unicode-display_width (>= 1.1.1, < 4)
     thor (1.4.0)
     thruster (0.1.15-aarch64-linux)
     thruster (0.1.15-arm64-darwin)
@@ -663,6 +677,7 @@ DEPENDENCIES
   capybara
   debug
   devise
+  i18n-tasks (~> 1.0.14)
   image_processing (~> 1.2)
   jbuilder
   kamal

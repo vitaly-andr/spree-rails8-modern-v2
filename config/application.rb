@@ -11,6 +11,11 @@ module BauPortalOnline
     # Prevent this deprecation message: https://github.com/svenfuchs/i18n/commit/3b6e56e
     I18n.enforce_available_locales = true
 
+    # Configure supported locales
+    config.i18n.available_locales = [ :en, :ru ]
+    config.i18n.default_locale = :ru
+    config.i18n.fallbacks = [ I18n.default_locale ]
+
     config.to_prepare do
       # Load application's model / class decorators
       Dir.glob(File.join(File.dirname(__FILE__), "../app/**/*_decorator*.rb")) do |c|

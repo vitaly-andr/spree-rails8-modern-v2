@@ -13,9 +13,8 @@
 # More on configuring Spree preferences can be found at:
 # https://docs.spreecommerce.org/developer/customization
 Spree.config do |config|
-  # Example:
-  # Uncomment to stop tracking inventory levels in the application
-  # config.track_inventory_levels = false
+  # Enable user-specific locale selection
+  config.use_user_locale = true
 end
 
 # Background job queue names
@@ -83,16 +82,35 @@ Rails.application.config.after_initialize do
   # Rails.application.config.spree.page_blocks << Spree::PageBlocks::BigRedButtonToCallSales
 
   # Rails.application.config.spree_storefront.head_partials << 'spree/shared/that_js_snippet_that_marketing_forced_me_to_include'
+
+  # Добавляем русский в supported_locales для работы админки
+  begin
+    if Spree::Store.default
+      current_locales = Spree::Store.default.supported_locales || "en"
+      unless current_locales.include?("ru")
+        Spree::Store.default.update!(supported_locales: "#{current_locales},ru")
+        Rails.logger.info "Added Russian locale to store: #{Spree::Store.default.supported_locales}"
+      end
+    end
+  rescue => e
+    Rails.logger.warn "Could not update store locales: #{e.message}"
+  end
+
+  # Add locale dropdown to admin user menu
+  Rails.application.config.spree_admin.user_dropdown_partials << "spree/admin/shared/locale_dropdown"
+
+  # Add custom CSS to hide audit log
+  Rails.application.config.spree_admin.head_partials << "spree/admin/shared/custom_styles"
 end
 
 Spree.user_class = "Spree::User"
 # Use a different class for admin users
-Spree.admin_user_class = 'Spree::AdminUser'
+Spree.admin_user_class = "Spree::AdminUser"
 
-            Rails.application.config.to_prepare do
-              require_dependency 'spree/authentication_helpers'
-            end
+Rails.application.config.to_prepare do
+  require_dependency "spree/authentication_helpers"
+end
 
-            if defined?(Devise) && Devise.respond_to?(:parent_controller)
-              Devise.parent_controller = "Spree::BaseController"
-            end
+if defined?(Devise) && Devise.respond_to?(:parent_controller)
+  Devise.parent_controller = "Spree::BaseController"
+end
