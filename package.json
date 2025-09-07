@@ -2,13 +2,17 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docs:dev": "cd doc/spree && mintlify dev --port 4000",
+    "docs:build": "mintlify build doc/spree --out public/doc",
+    "docs:preview": "mintlify preview doc/spree"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.13",
     "tailwindcss": "^4.1.7",
     "vite": "^6.3.5",
-    "vite-plugin-ruby": "^5.1.1"
+    "vite-plugin-ruby": "^5.1.1",
+    "mintlify": "^4.0.0"
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
