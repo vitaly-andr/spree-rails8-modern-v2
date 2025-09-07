@@ -67,6 +67,11 @@ RUN echo "🔨 Starting Vite build for ${RAILS_ENV}..." && \
     RAILS_ENV=${RAILS_ENV} bin/vite build || \
     (echo "❌ Vite build failed" && exit 1)
 
+# Build Mintlify documentation
+RUN echo "📚 Building Mintlify documentation..." && \
+    npm run docs:build || \
+    (echo "⚠️ Documentation build failed, continuing without docs" && mkdir -p public/doc)
+
 # Alternative if above fails - try without timeout
 # RUN npx vite build --logLevel info
 
