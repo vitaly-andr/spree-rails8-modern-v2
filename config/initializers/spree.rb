@@ -99,9 +99,14 @@ Rails.application.config.after_initialize do
   # Add locale dropdown to admin user menu
   Rails.application.config.spree_admin.user_dropdown_partials << "spree/admin/shared/locale_dropdown"
 
-  # Add custom CSS to hide audit log
-  Rails.application.config.spree_admin.head_partials << "spree/admin/shared/custom_styles"
-end
+    # Add custom CSS to hide audit log
+    Rails.application.config.spree_admin.head_partials << "spree/admin/shared/custom_styles"
+  end
+
+  # Add documentation menu item
+  Rails.application.config.after_initialize do
+    Rails.application.config.spree_admin.store_nav_partials << "spree/admin/shared/documentation_nav"
+  end
 
 Spree.user_class = "Spree::User"
 # Use a different class for admin users

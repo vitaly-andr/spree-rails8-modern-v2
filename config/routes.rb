@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  # Documentation routes - proxy to Mintlify
+  get "/doc", to: "documentation#show"
+  get "/doc/*path", to: "documentation#show"
+
   Spree::Core::Engine.add_routes do
     # Storefront routes
     scope "(:locale)", locale: /#{Spree.available_locales.join('|')}/, defaults: { locale: nil } do

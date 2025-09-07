@@ -11,3 +11,5 @@ ru:
       invalid_locale: Недопустимый язык
       locale_changed: Язык интерфейса изменен
     language: Язык
+    user_documentation: "Документация для пользователей"
+    developer_documentation: "Документация для разработчиков"

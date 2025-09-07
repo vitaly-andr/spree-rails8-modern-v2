@@ -1,0 +1,4 @@
+<%= nav_item(Spree.t(:user_documentation), "/doc/user/what-is-spree-commerce", icon: 'book-open', data: { target: '_blank' }) %>
+<% if current_user.respond_to?(:spree_admin?) && current_user.spree_admin? %>
+  <%= nav_item(Spree.t(:developer_documentation), "/doc/developer/getting-started/quickstart", icon: 'code', data: { target: '_blank' }) %>
+<% end %>

@@ -6,3 +6,6 @@ en:
   about_us: "About us"
   newsletter_subscribe: "Subscribe to our newsletter"
   newsletter_thanks: "Thank you for choosing us as your trusted partner."
+  spree:
+    user_documentation: "User Documentation"
+    developer_documentation: "Developer Documentation"
