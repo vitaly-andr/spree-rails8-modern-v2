@@ -1,0 +1,57 @@
+---
+# Security configuration tasks
+
+- name: Update package cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+  tags: [security]
+
+- name: Install security packages
+  apt:
+    name:
+      - fail2ban
+      - unattended-upgrades
+      - logwatch
+    state: present
+  tags: [security]
+
+- name: Configure SSH security
+  template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    backup: yes
+  notify: restart ssh
+  tags: [security]
+
+- name: Enable and start fail2ban
+  systemd:
+    name: fail2ban
+    state: started
+    enabled: yes
+  tags: [security]
+
+- name: Configure fail2ban
+  template:
+    src: jail.local.j2
+    dest: /etc/fail2ban/jail.local
+    backup: yes
+  notify: restart fail2ban
+  tags: [security]
+
+- name: Configure unattended upgrades
+  template:
+    src: 20auto-upgrades.j2
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    backup: yes
+  tags: [security]
+
+- name: Configure logwatch
+  template:
+    src: logwatch.conf.j2
+    dest: /etc/logwatch/conf/logwatch.conf
+    backup: yes
+  tags: [security]
+
+# Note: UFW is disabled since external Hetzner firewall is used
+# Ports 22 (SSH), 80 (HTTP), 443 (HTTPS), 3000 (App) should be open in Hetzner firewall

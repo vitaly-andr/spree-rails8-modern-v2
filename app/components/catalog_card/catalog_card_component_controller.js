@@ -13,13 +13,13 @@ export default class extends Controller {
   }
 
   connect() {
-    console.log('🔌 Catalog card controller connecting...')
-    console.log('🏷️ Element:', this.element)
-    console.log('📦 Product values:', {
-      id: this.productIdValue,
-      name: this.productNameValue,
-      price: this.productPriceValue
-    })
+    // console.log('🔌 Catalog card controller connecting...')
+    // console.log('🏷️ Element:', this.element)
+    // console.log('📦 Product values:', {
+    //   id: this.productIdValue,
+    //   name: this.productNameValue,
+    //   price: this.productPriceValue
+    // })
     
     // Initialize component state
     this.isInWishlist = false
@@ -27,20 +27,20 @@ export default class extends Controller {
     
     // Add component-specific CSS class for styling isolation
     this.element.classList.add(`catalog-card-${this.productIdValue || 'default'}`)
-    console.log('🎨 Added CSS class:', `catalog-card-${this.productIdValue || 'default'}`)
+    // console.log('🎨 Added CSS class:', `catalog-card-${this.productIdValue || 'default'}`)
     
     // Setup Locomotive Scroll image animations
     this.setupScrollAnimations()
     
-    console.log(`✅ Catalog card connected: ${this.productNameValue || 'Unknown Product'}`)
+    // console.log(`✅ Catalog card connected: ${this.productNameValue || 'Unknown Product'}`)
   }
 
   setupScrollAnimations() {
     const image = this.element.querySelector('.catalog-image')
-    console.log('🔍 Setting up ScrollTrigger animations for:', this.productNameValue || 'Unknown Product')
+    // console.log('🔍 Setting up ScrollTrigger animations for:', this.productNameValue || 'Unknown Product')
     
     if (!image) {
-      console.error('❌ No image element found in catalog card')
+      // console.error('❌ No image element found in catalog card')
       return
     }
 
@@ -53,7 +53,7 @@ export default class extends Controller {
       end: "bottom 20%", // Когда низ элемента достигает 20% viewport
       
       onEnter: () => {
-        console.log(`✅ ${productName} - ENTERING viewport (ScrollTrigger)`)
+        // console.log(`✅ ${productName} - ENTERING viewport (ScrollTrigger)`)
         gsap.to(image, {
           scale: 1.08,
           duration: 0.8,
@@ -62,7 +62,7 @@ export default class extends Controller {
       },
       
       onLeave: () => {
-        console.log(`❌ ${productName} - LEAVING viewport (ScrollTrigger)`)
+        // console.log(`❌ ${productName} - LEAVING viewport (ScrollTrigger)`)
         gsap.to(image, {
           scale: 0.95,
           duration: 0.8,
@@ -71,7 +71,7 @@ export default class extends Controller {
       },
       
       onEnterBack: () => {
-        console.log(`🔄 ${productName} - ENTERING BACK viewport (ScrollTrigger)`)
+        // console.log(`🔄 ${productName} - ENTERING BACK viewport (ScrollTrigger)`)
         gsap.to(image, {
           scale: 1.08,
           duration: 0.8,
@@ -80,7 +80,7 @@ export default class extends Controller {
       },
       
       onLeaveBack: () => {
-        console.log(`🔄 ${productName} - LEAVING BACK viewport (ScrollTrigger)`)
+        // console.log(`🔄 ${productName} - LEAVING BACK viewport (ScrollTrigger)`)
         gsap.to(image, {
           scale: 0.95,
           duration: 0.8,
@@ -89,7 +89,7 @@ export default class extends Controller {
       }
     })
 
-    console.log('🚀 ScrollTrigger initialized for:', productName)
+    // console.log('🚀 ScrollTrigger initialized for:', productName)
     
     // Добавляем плавные hover анимации
     this.setupHoverAnimations(image)
@@ -152,7 +152,7 @@ export default class extends Controller {
       this.element.removeEventListener('mouseleave', this.handleMouseLeave)
     }
     
-    console.log(`🔌 Catalog card disconnected: ${this.productNameValue || 'Unknown Product'}`)
+    // console.log(`🔌 Catalog card disconnected: ${this.productNameValue || 'Unknown Product'}`)
   }
 
   // Quick View Modal
@@ -223,7 +223,7 @@ export default class extends Controller {
     btnSpinner.style.display = 'flex'
     button.disabled = true
     
-    console.log(`🛒 Adding to cart: ${this.productNameValue}`)
+    // console.log(`🛒 Adding to cart: ${this.productNameValue}`)
     
     try {
       // Simulate API call
@@ -244,7 +244,7 @@ export default class extends Controller {
       }, 2000)
       
     } catch (error) {
-      console.error('❌ Failed to add to cart:', error)
+      // console.error('❌ Failed to add to cart:', error)
       
       // Error state
       btnText.textContent = 'Try Again'

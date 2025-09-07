@@ -1,0 +1,22 @@
+<h6 class="dropdown-header mt-2">
+  <%= Spree.t(:language) %>
+</h6>
+
+<% I18n.available_locales.each do |locale| %>
+  <% locale_name = case locale.to_s
+                   when 'ru' then 'Русский'
+                   when 'en' then 'English'
+                   else locale.to_s.upcase
+                   end %>
+  
+  <%= link_to spree.admin_set_locale_path(locale: locale), 
+              class: "dropdown-item #{'active' if I18n.locale == locale}",
+              data: { turbo_method: :patch } do %>
+    <% if I18n.locale == locale %>
+      <i class="fas fa-check text-success me-2"></i>
+    <% else %>
+      <span class="me-4"></span>
+    <% end %>
+    <%= locale_name %>
+  <% end %>
+<% end %>

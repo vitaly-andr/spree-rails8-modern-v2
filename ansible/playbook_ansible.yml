@@ -1,0 +1,60 @@
+---
+- name: Setup Spree Rails 8 Staging Server
+  hosts: staging
+  become: yes
+  gather_facts: yes
+  
+  vars_files:
+    - group_vars/all.yml
+    - group_vars/staging.yml
+  
+  handlers:
+    - name: restart ssh
+      systemd:
+        name: ssh
+        state: restarted
+    
+    - name: restart fail2ban
+      systemd:
+        name: fail2ban
+        state: restarted
+    
+    - name: restart docker
+      systemd:
+        name: docker
+        state: restarted
+    
+    - name: restart nginx
+      systemd:
+        name: nginx
+        state: restarted
+    
+    - name: reload systemd
+      systemd:
+        daemon_reload: yes
+  
+  pre_tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+      tags: [system]
+
+  roles:
+    - system
+    - security
+    - docker
+    - user
+    - ssl
+    - nginx
+
+  post_tasks:
+    - name: Display setup information
+      debug:
+        msg: |
+          ✅ Staging server setup completed!
+          🌐 URL: https://{{ server_name }} (Full SSL with Cloudflare)
+          👤 SSH: ssh {{ app_user }}@{{ ansible_host }}
+          🐳 Docker: Ready for Kamal deployment
+          📝 Next: Use Kamal to deploy the application
+      tags: [verify]

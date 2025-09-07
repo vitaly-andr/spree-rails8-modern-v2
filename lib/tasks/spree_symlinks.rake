@@ -26,7 +26,8 @@ namespace :spree do
     puts "🔗 Setting up Spree symlinks..."
 
     begin
-      spree_path = spree_gem_path
+      # ИСПРАВЛЕНО: Используем SpreeGemPath.path вместо spree_gem_path
+      spree_path = SpreeGemPath.path
       puts "🔍 Spree gem path: #{spree_path}"
 
       # Создаем директорию для symlink'ов

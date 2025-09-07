@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
+/* ИМПОРТИРУЕМ SPREE СТИЛИ - ИСПРАВЛЯЕМ ПУТЬ */
+@import "../assets/stylesheets/application.tailwind.css";
+
 /* ВСЕ @import ДОЛЖНЫ БЫТЬ В НАЧАЛЕ */
 @import "./styles/navbar.css";
 @import "./styles/mobile-sidebar.css";
@@ -10,11 +13,6 @@
 @import "../components/media_gallery/media_gallery_component.css";
 @import "./temp/_ceramir_landing.css";
 
-/* Tailwind v4 @source для автоматического сканирования классов */
-@source "./app/views/**/*.slim";
-@source "./app/views/**/*.erb"; 
-@source "./app/components/**/*.slim";
-@source "./app/frontend/**/*.js";
 :root {
   --gray-background: #e9e7e8;
   --black: #111;
@@ -79,5 +77,28 @@ body {
 /* Класс для навбара и подписей */
 .font-navbar {
   font-family: var(--font-navbar);
+}
+
+/* Исправление прозрачности боковых панелей */
+#slideover-cart,
+#slideover-account {
+  background-color: white !important;
+}
+
+/* Стили для полей ввода в боковых панелях */
+#slideover-account input[type="email"],
+#slideover-account input[type="password"], 
+#slideover-account input[type="text"],
+#slideover-account textarea {
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  padding: 0.75rem;
+  background-color: white;
+  font-size: 1rem;
+}
+
+#slideover-account input:focus {
+  border-color: #3b82f6;
+  outline: none;
 }
 

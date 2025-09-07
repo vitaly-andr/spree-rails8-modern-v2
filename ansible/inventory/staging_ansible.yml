@@ -1,0 +1,13 @@
+all:
+  children:
+    staging:
+      hosts:
+        staging-server:
+          ansible_host: 95.217.223.50
+          ansible_user: root
+          ansible_ssh_private_key_file: ~/.ssh/id_rsa
+          server_name: staging.andrianoff.online
+          app_name: spree-rails8-staging
+          app_user: deploy
+          docker_registry_username: your-dockerhub-username
+          rails_env: staging

@@ -3,13 +3,12 @@
 
 console.log('📚 Loading Spree vendor libraries...')
 
-// Rails request library for AJAX calls
+// Rails request library for AJAX calls (required by Spree controllers)
 import '@rails/request.js'
 
 // Core libraries that Spree uses
 import 'swiper/bundle'
 import 'photoswipe'
-import 'photoswipe/lightbox'
 import 'nouislider'
 
 // Credit card validation libraries

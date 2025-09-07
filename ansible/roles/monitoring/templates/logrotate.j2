@@ -1,0 +1,12 @@
+{{ app_directory }}/logs/*.log {
+    daily
+    missingok
+    rotate 7
+    compress
+    delaycompress
+    notifempty
+    create 644 {{ app_user }} {{ app_user }}
+    postrotate
+        docker exec {{ app_name }} kill -USR1 1 2>/dev/null || true
+    endscript
+}

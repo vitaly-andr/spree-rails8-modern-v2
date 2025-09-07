@@ -8,12 +8,18 @@ gsap.registerPlugin(ScrollTrigger)
 export default class extends Controller {
   static targets = ["container", "brand", "cart", "menuButton", "hamburgerIcon", "line1", "line2", "line3", "mobileMenu", "overlay"]
 
+  // Переменные для управления mobile menu layout
+  originalParent = null
+  originalNextSibling = null  
+  originalScrollY = 0
+  locomotiveContainer = null
+
   connect() {
-    console.log("Navbar Component connected")
     this.mobileMenuOpen = false // Track menu state reliably
     this.initializeNavbar()
     this.setupScrollAnimations()
     this.setupHoverAnimations()
+    
   }
 
   disconnect() {
@@ -62,6 +68,11 @@ export default class extends Controller {
       onUpdate: (self) => {
         const currentScrollY = self.scroll()
         
+        // ✅ ИСПРАВЛЕНИЕ: НЕ АНИМИРУЕМ NAVBAR КОГДА MOBILE MENU ОТКРЫТО
+        if (this.mobileMenuOpen) {
+          return // Пропускаем анимацию если mobile menu открыто
+        }
+        
         if (currentScrollY > lastScrollY && currentScrollY > 100) {
           // Scrolling down - hide navbar
           gsap.to(this.containerTarget, {
@@ -84,7 +95,7 @@ export default class extends Controller {
       }
     })
 
-    // Navbar background opacity on scroll
+    // ✅ ВОССТАНАВЛИВАЕМ ВТОРОЙ SCROLLTRIGGER НО БЕЗ BACKDROP-FILTER:
     ScrollTrigger.create({
       trigger: "body",
       start: "top top",
@@ -98,7 +109,7 @@ export default class extends Controller {
         })
       }
     })
-  }
+}
 
   setupHoverAnimations() {
     // Logo hover animation
@@ -164,43 +175,39 @@ export default class extends Controller {
   }
 
   toggleMobileMenu() {
-    console.log("🔍 Toggle clicked! Current state:", {
-      mobileMenuOpen: this.mobileMenuOpen,
-      buttonDisabled: this.menuButtonTarget.disabled,
-      hasTarget: this.hasMobileMenuTarget
-    })
     
     if (!this.hasMobileMenuTarget) {
       console.warn("❌ Mobile menu target not found")
       return
     }
     
-    if (this.menuButtonTarget.disabled) {
-      console.warn("❌ Button is disabled, ignoring click")
-      return
-    }
+    if (this.menuButtonTarget.disabled) return
     
-    // Use reliable state tracking instead of DOM inspection
     if (this.mobileMenuOpen) {
-      console.log("📱 Closing menu...")
       this.closeMobileMenu()
     } else {
-      console.log("📱 Opening menu...")
       this.openMobileMenu()
     }
   }
 
   openMobileMenu() {
-    if (this.mobileMenuOpen) return // Prevent double opening
+    if (this.mobileMenuOpen) return
+    
+    // ✅ ДОБАВЛЯЕМ CSS КЛАСС ДЛЯ АКТИВАЦИИ ПРАВИЛ
+    document.body.classList.add('mobile-menu-open')
     
     this.mobileMenuOpen = true
     
-    console.log("🔄 Opening mobile menu...")
-    console.log("📱 Mobile menu element:", this.mobileMenuTarget)
+    this.setupMobileMenuLayout()
+    
+    // ✅ ИСПРАВЛЕНИЕ: СБРАСЫВАЕМ ПОЗИЦИЮ NAVBAR
+    gsap.set(this.containerTarget, {
+      y: 0,
+      opacity: 1
+    })
     
     // СОЗДАЕМ STACKING CONTEXT для navbar
     this.containerTarget.style.transform = 'translateZ(0)'
-    console.log("🆙 Navbar stacking context created")
     
     // ОСТАНАВЛИВАЕМ КАРУСЕЛЬ
     this.pauseCarousels()
@@ -212,8 +219,7 @@ export default class extends Controller {
     setTimeout(() => {
       this.menuButtonTarget.disabled = false
       this.menuButtonTarget.style.pointerEvents = 'auto'
-      console.log("🔓 Button re-enabled after timeout")
-    }, 1000) // Разблокируем через 1 секунду в любом случае
+    }, 1000)
 
     // Animate hamburger to X and then hide completely
     this.animateHamburgerToX()
@@ -221,7 +227,7 @@ export default class extends Controller {
     // Show overlay with increased opacity
     if (this.hasOverlayTarget) {
       gsap.to(this.overlayTarget, {
-        opacity: 0.6, // Увеличили в 2 раза: с 0.3 до 0.6
+        opacity: 0.6,
         visibility: "visible",
         duration: 0.3,
         ease: "power2.out"
@@ -230,16 +236,16 @@ export default class extends Controller {
 
     // УБИРАЕМ КОНФЛИКТ: удаляем Tailwind класс и используем только GSAP
     if (this.hasMobileMenuTarget) {
+      
       this.mobileMenuTarget.classList.remove('-translate-x-full')
       
-      console.log("📱 Removed Tailwind class, starting GSAP animation")
       
       gsap.to(this.mobileMenuTarget, {
         x: "0%",
         duration: 0.4,
         ease: "power3.out",
         onComplete: () => {
-          console.log("✅ Mobile menu animation complete!")
+          
         }
       })
 
@@ -249,15 +255,21 @@ export default class extends Controller {
   }
 
   closeMobileMenu() {
-    if (!this.mobileMenuOpen) return // Prevent double closing
+    if (!this.mobileMenuOpen) return
     
     this.mobileMenuOpen = false
     
-    console.log("🔄 Closing mobile menu...")
+    // ✅ УБИРАЕМ CSS КЛАСС  
+    document.body.classList.remove('mobile-menu-open')
+    
+    // 🔍 ОЧИЩАЕМ ДЕТЕКТИВА
+    if (this.scrollObserver) {
+        this.scrollObserver.disconnect()
+        this.scrollObserver = null
+    }
     
     // УБИРАЕМ STACKING CONTEXT
     this.containerTarget.style.transform = ''
-    console.log("⬇️ Navbar stacking context removed")
     
     // ВОЗОБНОВЛЯЕМ КАРУСЕЛЬ
     this.resumeCarousels()
@@ -288,7 +300,9 @@ export default class extends Controller {
         onComplete: () => {
           // ВОЗВРАЩАЕМ Tailwind класс после анимации
           this.mobileMenuTarget.classList.add('-translate-x-full')
-          console.log("✅ Mobile menu closed, Tailwind class restored")
+          
+          // 🔓 ВОССТАНАВЛИВАЕМ LAYOUT ПОСЛЕ АНИМАЦИИ
+          this.restoreMobileMenuLayout()
         }
       })
 
@@ -404,4 +418,85 @@ export default class extends Controller {
   resumeCarousels() {
     // Пока убираем
   }
+
+  setupMobileMenuLayout() {
+    const body = document.body
+    this.locomotiveContainer = document.querySelector('[data-scroll-container]')
+    
+    // Сохраняем текущую позицию скролла
+    this.originalScrollY = window.scrollY
+    
+    
+    // Блокируем скролл страницы
+    body.style.overflow = 'hidden'
+    
+    // Блокируем locomotive container  
+    if (this.locomotiveContainer) {
+        this.locomotiveContainer.style.overflow = 'hidden'
+        // this.locomotiveContainer.style.position = 'fixed'
+        this.locomotiveContainer.style.height = '100vh'
+        
+        // ✅ ФИКСИРУЕМ MOBILE MENU НА ВСЮ ВЫСОТУ VIEWPORT
+        this.mobileMenuTarget.style.height = '100vh'
+        this.mobileMenuTarget.style.overflow = 'visible'
+        
+        // ✅ ПЛАВНЫЙ СКРОЛЛ ВНУТРИ MOBILE MENU
+        const mobileContent = this.mobileMenuTarget.querySelector('.mobile-content')
+        if (mobileContent) {
+            mobileContent.style.height = 'calc(100vh - 100px)'
+            mobileContent.style.scrollBehavior = 'smooth' // Плавный нативный скролл
+        }
+    }
+    
+}
+
+restoreMobileMenuLayout() {
+    
+    const body = document.body
+    
+    // Разблокируем скролл страницы
+    body.style.overflow = ''
+    
+    // Восстанавливаем locomotive container
+    if (this.locomotiveContainer) {
+        this.locomotiveContainer.style.overflow = ''
+        // this.locomotiveContainer.style.position = ''
+        this.locomotiveContainer.style.height = ''
+    }
+    
+    // Восстанавливаем позицию скролла
+    if (this.originalScrollY) {
+        window.scrollTo(0, this.originalScrollY)
+    }
+    
+    // Возвращаем mobile menu в исходное место (с задержкой)
+    setTimeout(() => {
+        if (this.originalParent && this.mobileMenuTarget) {
+            // Сбрасываем принудительные стили
+            this.mobileMenuTarget.style.position = ''
+            this.mobileMenuTarget.style.top = ''
+            this.mobileMenuTarget.style.left = ''
+            this.mobileMenuTarget.style.zIndex = ''
+            this.mobileMenuTarget.style.width = ''
+            this.mobileMenuTarget.style.height = ''
+            this.mobileMenuTarget.style.background = ''
+            
+            // Возвращаем в DOM
+            if (this.originalNextSibling) {
+                this.originalParent.insertBefore(this.mobileMenuTarget, this.originalNextSibling)
+            } else {
+                this.originalParent.appendChild(this.mobileMenuTarget)
+            }
+            
+        }
+        
+        // Сбрасываем переменные
+        this.originalParent = null
+        this.originalNextSibling = null
+        this.originalScrollY = 0
+        this.locomotiveContainer = null
+        
+    }, 100) // Небольшая задержка для завершения анимации
+    
+}
 }

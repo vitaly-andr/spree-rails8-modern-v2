@@ -46,7 +46,7 @@ export default class extends Controller {
     // Блокируем скролл на mobile-content во время анимации
     const mobileContent = this.element.querySelector('.mobile-content')
     if (mobileContent) {
-      mobileContent.style.overflow = 'hidden'
+      // mobileContent.style.overflow = 'hidden'
     }
 
     // Rotate arrow to point down with smooth easing
@@ -74,7 +74,7 @@ export default class extends Controller {
         contentTarget.style.height = 'auto'
         contentTarget.style.overflow = 'visible'
         if (mobileContent) {
-          mobileContent.style.overflow = 'auto'
+          // mobileContent.style.overflow = 'auto'
         }
       }
     })
@@ -114,7 +114,7 @@ export default class extends Controller {
     // Блокируем скролл на mobile-content во время анимации
     const mobileContent = this.element.querySelector('.mobile-content')
     if (mobileContent) {
-      mobileContent.style.overflow = 'hidden'
+      // mobileContent.style.overflow = 'hidden'
     }
 
     // Rotate arrow back to right
@@ -157,7 +157,7 @@ export default class extends Controller {
         
         // Восстанавливаем скролл
         if (mobileContent) {
-          mobileContent.style.overflow = 'auto'
+          // mobileContent.style.overflow = 'auto'
         }
         
         // Reset links

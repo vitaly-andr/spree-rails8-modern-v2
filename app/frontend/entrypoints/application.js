@@ -3,7 +3,7 @@
 //
 //    <%= vite_client_tag %>
 //    <%= vite_javascript_tag 'application' %>
-console.log('Vite ⚡️ Rails')
+console.log('🎨 Application JavaScript loaded via Vite')
 
 // If using a TypeScript entrypoint file:
 //     <%= vite_typescript_tag 'application' %>
@@ -29,9 +29,6 @@ ActiveStorage.start()
 // Импортируем и запускаем Stimulus контроллеры через index.js
 import "../controllers/index.js"
 
-// Импортируйте CSS, если ещё не импортирован
-import "../application.css"
-
 // Импортируем GSAP и анимации для Ceramir страницы
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -43,3 +40,6 @@ window.ScrollTrigger = ScrollTrigger
 window.LocomotiveScroll = LocomotiveScroll
 
 import "../../javascript/ceramir_animations.js"
+
+// Import main application CSS
+import '../application.css'  // ← ПРАВИЛЬНЫЙ ПУТЬ

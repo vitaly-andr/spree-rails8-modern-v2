@@ -6,8 +6,8 @@ gem "rails", "~> 8.0.2"
 gem "vite_rails"
 gem "slim-rails"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
-# Use postgresql as the database for Active Record
-gem "pg", "~> 1.1"
+# Use postgresql as the database for Active Record (COMMENTED OUT - using SQLite)
+# gem "pg", "~> 1.1"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
@@ -33,7 +33,7 @@ gem "kamal", require: false
 gem "thruster", require: false
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-# gem "image_processing", "~> 1.2"
+gem "image_processing", "~> 1.2"
 gem "turbo-rails"
 
 # Pagination
@@ -48,6 +48,9 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  # I18n tasks for finding missing translations
+  gem "i18n-tasks", "~> 1.0.14"
 end
 
 group :development do
@@ -64,12 +67,11 @@ end
 # ViewComponent for reusable UI components
 gem "view_component"
 
-# Spree Commerce Integration - Official Documentation
+# Spree Commerce Integration - СТАБИЛЬНАЯ версия
 gem 'devise'
-spree_opts = { 'github': 'spree/spree', 'branch': 'main' }
-gem 'spree', spree_opts # core and API
-gem 'spree_admin', spree_opts # Admin panel (optional)
-gem 'spree_storefront', spree_opts # Storefront (optional)
-gem 'spree_emails', spree_opts # transactional emails (optional)
-gem 'spree_sample', spree_opts # dummy data like products, taxons, etc (optional)
-gem 'spree_i18n' # Internationalization support
+gem 'spree', '~> 5.1.5'                    # Стабильная версия из RubyGems!
+gem 'spree_admin', '~> 5.1.5'              
+gem 'spree_storefront', path: './vendor/gems/spree_storefront'         
+gem 'spree_emails', '~> 5.1.5'             
+gem 'spree_sample', '~> 5.1.5'             
+gem 'spree_i18n'                           # Internationalization support

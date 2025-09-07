@@ -1,0 +1,22 @@
+base_locale: en
+locales: [ru]
+
+data:
+  read:
+    - config/locales/%{locale}.yml
+    - config/locales/**/%{locale}.yml
+  write:
+    - config/locales/%{locale}.yml
+
+search:
+  paths:
+    - app/
+    - vendor/gems/spree_storefront/
+  include:
+    - '*.rb'
+    - '*.erb'
+    - '*.slim'
+    - '*.yml'
+
+translation:
+  deepl_api_key: <%= ENV['DEEPL_API_KEY'] %>

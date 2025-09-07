@@ -1,0 +1,33 @@
+#!/bin/bash
+# Backup script for {{ app_name }}
+
+BACKUP_DIR="{{ backup_location }}"
+DATE=$(date +%Y%m%d_%H%M%S)
+BACKUP_FILE="${BACKUP_DIR}/{{ app_name }}_backup_${DATE}.tar.gz"
+
+echo "Starting backup at $(date)"
+
+# Create backup directory if it doesn't exist
+mkdir -p "${BACKUP_DIR}"
+
+# Stop application for consistent backup
+docker-compose -f {{ app_directory }}/docker-compose.yml stop
+
+# Create backup
+tar -czf "${BACKUP_FILE}" \
+    -C {{ app_directory }} \
+    storage/databases \
+    storage/active_storage \
+    .env
+
+# Restart application
+docker-compose -f {{ app_directory }}/docker-compose.yml start
+
+# Verify backup
+if [ -f "${BACKUP_FILE}" ]; then
+    echo "Backup completed successfully: ${BACKUP_FILE}"
+    echo "Backup size: $(du -h ${BACKUP_FILE} | cut -f1)"
+else
+    echo "ERROR: Backup failed!"
+    exit 1
+fi

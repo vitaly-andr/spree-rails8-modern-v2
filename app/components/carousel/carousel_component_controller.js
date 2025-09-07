@@ -212,7 +212,7 @@ export default class extends Controller {
     interactionEvents.forEach(eventType => {
       this.element.addEventListener(eventType, () => {
         this.handleUserInteraction()
-      })
+      }, { passive: true })
     })
     
     // Отслеживаем движение мыши с дебаунсингом

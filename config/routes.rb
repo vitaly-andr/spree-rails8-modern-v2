@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  # Documentation routes - proxy to Mintlify
+  get "/doc", to: "documentation#show"
+  get "/doc/*path", to: "documentation#show"
+
   Spree::Core::Engine.add_routes do
     # Storefront routes
     scope "(:locale)", locale: /#{Spree.available_locales.join('|')}/, defaults: { locale: nil } do
@@ -14,7 +18,13 @@ Rails.application.routes.draw do
         router_name: :spree
       )
     end
+
+    # Admin locale switching
+    namespace :admin do
+      patch "/set_locale", to: "locales#set", as: :set_locale
+    end
   end
+
   # Admin authentication
   devise_for :admin_users,
     class_name: "Spree::AdminUser",
@@ -28,8 +38,6 @@ Rails.application.routes.draw do
   # This line mounts Spree's routes at the root of your application.
   mount Spree::Core::Engine, at: "/"
 
-
-
   # rails-way: тестовый маршрут для проверки frontend-стека
   get "/test_frontend" => "pages#test_frontend"
 
@@ -41,6 +49,9 @@ Rails.application.routes.draw do
 
   # Product detail page
   get "/product/:id" => "pages#product_detail", as: :product_detail
+
+  # WebSite Ceramir documentation
+  get "/websiteceramir" => "pages#websiteceramir"
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

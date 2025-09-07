@@ -175,3 +175,7 @@ This will execute the `${workspaceRoot}/bin/debug.sh` script in VS Code's integr
 *   How to run the test suite (`rails test`, `rails test:system`)
 *   Services (job queues like Solid Queue, cache servers like Solid Cache)
 *   Deployment instructions
+
+
+
+kamal app logs --follow

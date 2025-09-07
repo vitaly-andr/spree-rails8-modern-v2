@@ -13,3 +13,4 @@ Spree::Auth::Engine.load_seed if defined?(Spree::Auth)
 
 # Load our custom Spree setup
 load Rails.root.join('db', 'seeds', 'spree_setup.rb')
+load Rails.root.join('db', 'seeds', 'theme_content.rb')

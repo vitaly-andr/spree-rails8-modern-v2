@@ -1,0 +1,14 @@
+all:
+  children:
+    production:
+      hosts:
+        production-server:
+          ansible_host: 95.217.223.50
+          ansible_user: root
+          ansible_ssh_private_key_file: ~/.ssh/id_rsa
+          server_name: production.yourdomain.com
+          app_name: spree-rails8-production
+          app_user: deploy
+          app_directory: /home/deploy/spree-rails8-production
+          docker_registry_username: your-dockerhub-username
+          rails_env: production

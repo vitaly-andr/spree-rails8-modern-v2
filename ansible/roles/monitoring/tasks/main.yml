@@ -1,0 +1,25 @@
+---
+- name: Install monitoring tools
+  apt:
+    name:
+      - htop
+      - iotop
+      - nethogs
+      - ncdu
+    state: present
+  tags: [monitoring]
+
+- name: Create monitoring script
+  template:
+    src: monitor.sh.j2
+    dest: "/home/{{ app_user }}/monitor.sh"
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    mode: '0755'
+  tags: [monitoring]
+
+- name: Setup log rotation for application logs
+  template:
+    src: logrotate.j2
+    dest: "/etc/logrotate.d/{{ app_name }}"
+  tags: [monitoring]

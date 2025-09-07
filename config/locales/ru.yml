@@ -1,0 +1,15 @@
+---
+ru:
+  hello: Привет мир
+  welcome_message: "Добро пожаловать в наш магазин!"
+  shop_description: "В нашем магазине мы предлагаем широкий ассортимент товаров для вашего дома и бизнеса."
+  about_us: "О нас"
+  newsletter_subscribe: "Подпишитесь на нашу рассылку"
+  newsletter_thanks: "Спасибо, что выбрали нас в качестве надежного партнера."
+  spree:
+    admin:
+      invalid_locale: Недопустимый язык
+      locale_changed: Язык интерфейса изменен
+    language: Язык
+    user_documentation: "Документация для пользователей"
+    developer_documentation: "Документация для разработчиков"

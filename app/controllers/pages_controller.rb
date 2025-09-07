@@ -17,4 +17,8 @@ class PagesController < ApplicationController
     @product_id = params[:id]
     # Static data for demo (later will be from Spree)
   end
+
+  def websiteceramir
+    # WebSite Ceramir documentation page
+  end
 end

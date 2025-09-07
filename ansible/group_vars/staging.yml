@@ -1,0 +1,17 @@
+---
+# Staging-specific variables
+app_environment: staging
+debug_mode: true
+log_level: info
+ssl_enabled: true
+lets_encrypt_email: admin@andrianoff.online
+
+# Resource limits for staging (optimized for CAX21: 4 vCPU, 8GB RAM)
+max_memory: "6g"
+max_cpus: "3.0"
+puma_workers: 2
+puma_threads: "1:8"
+
+# Backup settings
+backup_schedule: "0 2 * * *"  # Daily at 2 AM
+backup_location: "/home/{{ app_user }}/backups"

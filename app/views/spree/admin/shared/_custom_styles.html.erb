@@ -1,0 +1,16 @@
+<style>
+/* Hide audit log from admin navigation */
+.nav-link[href*="audits"] {
+  display: none !important;
+}
+
+/* Hide audit log enterprise badge */
+.nav-link[href*="spreecommerce.org/pricing"]:has(.badge) {
+  display: none !important;
+}
+
+/* Alternative selector for audit log enterprise link */
+li.nav-item:has(.nav-link[href*="spreecommerce.org/pricing"]) {
+  display: none !important;
+}
+</style>

@@ -1,19 +1,31 @@
 # Spree Setup Seeds
 # This file initializes basic Spree data: store, theme, and pages
 
-puts "🛒 Setting up Spree Commerce..."
+puts "🛒 Setting up Spree Commerce for #{Rails.env}..."
+
+# Determine URL based on environment
+store_url = case Rails.env
+when 'development'
+  'localhost:5100'
+when 'staging'
+  'staging.andrianoff.online'
+when 'production'
+  'production.andrianoff.online'
+else
+  'localhost:3000'
+end
 
 # Create default store if it doesn't exist
 store = Spree::Store.first_or_create!(
   name: "Bau-portal.online Store",
-  url: "localhost:5100",
+  url: store_url,
   mail_from_address: "noreply@bau-portal.online",
   default_currency: "USD",
   code: "bauportal",
   default: true
 )
 
-puts "✅ Store created: #{store.name}"
+puts "✅ Store created: #{store.name} (#{store.url})"
 
 # Create default theme if it doesn't exist
 theme = Spree::Theme.where(store: store).first_or_create!(
@@ -39,21 +51,30 @@ if theme.pages.empty?
   puts "✅ Homepage created: #{homepage.name}"
 end
 
-# Create default admin user if none exists
-if Spree.admin_user_class.count == 0
+# Create our admin user if there's only default Spree admin (count == 1)
+if Spree.admin_user_class.count == 1
+  # Remove default Spree admin user
+  Spree.admin_user_class.first.destroy
+
+  # Create our admin user with admin role
   admin_user = Spree.admin_user_class.create!(
     email: "admin@bau-portal.online",
     password: "password123",
     password_confirmation: "password123"
   )
 
+  # Assign admin role
+  admin_role = Spree::Role.find_or_create_by!(name: 'admin')
+  admin_user.spree_roles << admin_role unless admin_user.spree_roles.include?(admin_role)
+
   puts "✅ Admin user created: #{admin_user.email}"
   puts "   Password: password123"
+  puts "   Role: admin"
 end
 
-puts "🎉 Bau-portal.online Spree setup complete!"
+puts "🎉 Bau-portal.online Spree setup complete for #{Rails.env}!"
 puts ""
 puts "Next steps:"
-puts "1. Visit http://localhost:5100/admin to access admin panel"
+puts "1. Visit http://#{store_url}/admin to access admin panel"
 puts "2. Login with: admin@bau-portal.online / password123"
 puts "3. Configure your store settings"
