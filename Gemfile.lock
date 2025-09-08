@@ -187,6 +187,7 @@ GEM
     ffaker (2.25.0)
     ffi (1.17.2-aarch64-linux-gnu)
     ffi (1.17.2-arm64-darwin)
+    ffi (1.17.2-x86_64-linux-gnu)
     friendly_id (5.4.2)
       activerecord (>= 4.0.0)
     friendly_id-mobility (1.0.4)
@@ -206,6 +207,9 @@ GEM
       bigdecimal
       rake (>= 13)
     google-protobuf (4.32.0-arm64-darwin)
+      bigdecimal
+      rake (>= 13)
+    google-protobuf (4.32.0-x86_64-linux-gnu)
       bigdecimal
       rake (>= 13)
     groupdate (6.7.0)
@@ -333,6 +337,8 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.9-arm64-darwin)
       racc (~> 1.4)
+    nokogiri (1.18.9-x86_64-linux-gnu)
+      racc (~> 1.4)
     orm_adapter (0.5.0)
     ostruct (0.6.3)
     parallel (1.27.0)
@@ -355,7 +361,7 @@ GEM
       date
       stringio
     public_suffix (6.0.2)
-    puma (6.6.1)
+    puma (7.0.1)
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.8.1)
@@ -457,6 +463,8 @@ GEM
     sass-embedded (1.91.0-aarch64-linux-gnu)
       google-protobuf (~> 4.31)
     sass-embedded (1.91.0-arm64-darwin)
+      google-protobuf (~> 4.31)
+    sass-embedded (1.91.0-x86_64-linux-gnu)
       google-protobuf (~> 4.31)
     sassc (2.4.0)
       ffi (~> 1.9)
@@ -589,6 +597,7 @@ GEM
       sprockets (>= 3.0.0)
     sqlite3 (2.7.3-aarch64-linux-gnu)
     sqlite3 (2.7.3-arm64-darwin)
+    sqlite3 (2.7.3-x86_64-linux-gnu)
     sshkit (1.24.0)
       base64
       logger
@@ -612,12 +621,14 @@ GEM
       tailwindcss-ruby (~> 3.0)
     tailwindcss-ruby (3.4.17-aarch64-linux)
     tailwindcss-ruby (3.4.17-arm64-darwin)
+    tailwindcss-ruby (3.4.17-x86_64-linux)
     temple (0.10.4)
     terminal-table (4.0.0)
       unicode-display_width (>= 1.1.1, < 4)
     thor (1.4.0)
     thruster (0.1.15-aarch64-linux)
     thruster (0.1.15-arm64-darwin)
+    thruster (0.1.15-x86_64-linux)
     tilt (2.6.1)
     timeout (0.4.3)
     tinymce-rails (6.8.6.1)
@@ -670,6 +681,7 @@ GEM
 PLATFORMS
   aarch64-linux
   arm64-darwin
+  x86_64-linux
 
 DEPENDENCIES
   bootsnap
